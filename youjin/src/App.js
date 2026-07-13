@@ -3,6 +3,7 @@ import Home from "./pages/kiosk/Home";
 import Menu from "./pages/kiosk/Menu";
 import Cart from "./pages/kiosk/Cart";
 import Payment from "./pages/kiosk/Payment";
+import OrderComplete from "./pages/kiosk/OrderComplete";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/payment" element={<Payment />} />
+        <Route path="/complete" element={<OrderComplete />} />
       </Routes>
     </BrowserRouter>
   );

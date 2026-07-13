@@ -10,9 +10,10 @@ function Payment() {
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
   const setOrderNumber = useOrderStore((state) => state.setOrderNumber);
+  const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
 
   const [isPaying, setIsPaying] = useState(false);
-  const [failType, setFailType] = useState(null); // null | 'card-error' | 'declined'
+  const [failType, setFailType] = useState(null);
 
   const totalPrice = items.reduce((sum, item) => {
     const optionTotal = item.options.reduce((s, o) => s + o.option_price, 0);
@@ -30,6 +31,7 @@ function Payment() {
     if (result.status === "success") {
       const orderNumber = `A-${Math.floor(Math.random() * 900 + 100)}`;
       setOrderNumber(orderNumber);
+      setTotalPrice(totalPrice);
       clearCart();
       navigate("/complete");
     } else {

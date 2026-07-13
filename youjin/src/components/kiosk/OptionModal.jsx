@@ -23,6 +23,7 @@ function OptionModal({ menu, onClose, onAdd }) {
     onAdd({
       menu_id: menu.menu_id,
       menu_name: menu.menu_name,
+      image_url: menu.image_url,
       base_price: menu.price,
       quantity: 1,
       options: selectedOptions,

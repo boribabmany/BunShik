@@ -6,21 +6,33 @@ import AdminOptionsTable from "../../components/admin/AdminOptionsTable";
 export default function AdminMenu() {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+
+    navigate("/adminlogin");
+  };
+
   return (
     <div>
       <header>
         <h1>관리자 메뉴 관리</h1>
+
+        <button onClick={handleLogout}>
+          로그아웃
+        </button>
       </header>
+
       <main>
         {/* 왼쪽 영역 */}
         <section>
-          <AdminSummary onMoveOrder={() => navigate("/adminorder")}/>
+          <AdminSummary 
+            onMoveOrder={() => navigate("/adminorder")}
+          />
         </section>
         {/* 오른쪽 영역 */}
         <section>
-          {/* 메뉴 리스트 */}
           <AdminMenusTable />
-          {/* 옵션 리스트 */}
           <AdminOptionsTable />
         </section>
       </main>

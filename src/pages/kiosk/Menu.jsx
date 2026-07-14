@@ -5,6 +5,7 @@ import useCartStore from "../../store/useCartStore";
 import CategoryTabs from "../../components/kiosk/CategoryTabs";
 import MenuCard from "../../components/kiosk/MenuCard";
 import OptionModal from "../../components/kiosk/OptionModal";
+import CartBar from "../../components/kiosk/CartBar";
 
 function Menu() {
   const navigate = useNavigate();
@@ -63,13 +64,12 @@ function Menu() {
         ))}
       </div>
 
-      <div>
-        <span>장바구니 {cartCount}개</span>
-        <span>{cartTotal.toLocaleString()}원</span>
-        <button type="button" onClick={() => navigate("/cart")}>
-          주문 확인
-        </button>
-      </div>
+      <CartBar
+        count={cartCount}
+        total={cartTotal}
+        onCheckClick={() => navigate("/cart")}
+        disabled={cartCount === 0}
+      />
 
       {selectedMenu && (
         <OptionModal

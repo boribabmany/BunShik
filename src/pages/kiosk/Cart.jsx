@@ -10,6 +10,8 @@ function Cart() {
   const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
 
+  const isEmpty = items.length === 0;
+
   const totalPrice = items.reduce((sum, item) => {
     const optionTotal = item.options.reduce((s, o) => s + o.option_price, 0);
     return sum + (item.base_price + optionTotal) * item.quantity;
@@ -24,15 +26,19 @@ function Cart() {
         <span>삭제</span>
       </div>
 
-      {items.map((item, index) => (
-        <CartItem
-          key={index}
-          item={item}
-          onIncrease={() => increaseQuantity(index)}
-          onDecrease={() => decreaseQuantity(index)}
-          onRemove={() => removeItem(index)}
-        />
-      ))}
+      {isEmpty ? (
+        <p>장바구니가 비어있습니다</p>
+      ) : (
+        items.map((item, index) => (
+          <CartItem
+            key={index}
+            item={item}
+            onIncrease={() => increaseQuantity(index)}
+            onDecrease={() => decreaseQuantity(index)}
+            onRemove={() => removeItem(index)}
+          />
+        ))
+      )}
 
       <div>
         <span>총 금액</span>
@@ -43,7 +49,11 @@ function Cart() {
         메뉴 더 담기
       </button>
 
-      <button type="button" onClick={() => navigate("/payment")}>
+      <button
+        type="button"
+        onClick={() => navigate("/payment")}
+        disabled={isEmpty}
+      >
         주문 확인
       </button>
     </div>

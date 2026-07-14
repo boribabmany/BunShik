@@ -8,33 +8,22 @@ export default function AdminMenu() {
 
   return (
     <div>
-
       <header>
-        <h1>메뉴 관리</h1>
+        <h1>관리자 메뉴 관리</h1>
       </header>
-
       <main>
-
         {/* 왼쪽 영역 */}
         <section>
-          <AdminSummary
-            onMoveOrder={() => navigate("/adminorder")}
-          />
+          <AdminSummary onMoveOrder={() => navigate("/adminorder")}/>
         </section>
-
         {/* 오른쪽 영역 */}
         <section>
-
           {/* 메뉴 리스트 */}
           <AdminMenusTable />
-
           {/* 옵션 리스트 */}
           <AdminOptionsTable />
-
         </section>
-
       </main>
-
     </div>
   );
 }

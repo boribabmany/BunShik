@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/adminApi";
+import logo from "../../images/bunshiklogo.png";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -21,11 +22,7 @@ export default function AdminLogin() {
   return (
     <div>
       <div>
-
-        <div>
-          <p>맛있는 분식집</p>
-        </div>
-
+        <div><img src={logo} alt="분식 로고" width="150"/></div>
         <h1>
           관리자 로그인
         </h1>

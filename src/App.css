@@ -1,38 +1,136 @@
-.App {
-  text-align: center;
+/* ==========================================================
+   전역 변수 - 메인 컬러 및 공통 값
+========================================================== */
+:root {
+  --color-primary: #6da12f;
+  --color-primary-light: #eaf4de;
+  --color-text: #1a1a1a;
+  --color-text-sub: #4a4a4a;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  margin: 0;
+  font-family:
+    "Pretendard",
+    -apple-system,
+    sans-serif;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* ==========================================================
+   Home 화면
+   캔버스 기준: 1080 x 1920 (태블릿 세로)
+========================================================== */
+.home-screen {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  margin: 0 auto;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* 언어 선택 버튼 (한국어 / English) */
+.home-lang-buttons {
+  position: absolute;
+  top: 32px;
+  right: 48px;
   display: flex;
-  flex-direction: column;
+  gap: 16px; /* 간격 미정이라 임의로 16px 지정, 필요시 조정 */
+}
+
+.home-lang-button {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  overflow: hidden;
+}
+
+.home-lang-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 로고 */
+.home-logo {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 330px;
+  height: 330px;
+}
+
+/* 안내 문구 */
+.home-guide {
+  position: absolute;
+  top: 640px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* 매장에서 먹기 / 포장하기 버튼 공통 */
+.home-order-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 280px;
+  border-radius: 40px;
+  border: 2px solid var(--color-primary);
+  background: var(--color-primary-light);
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 24px;
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--color-text);
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.home-order-button:active {
+  background: var(--color-primary);
+  color: #ffffff;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* 버튼 안 아이콘 이미지 공통 */
+.home-order-icon {
+  object-fit: contain;
+}
+
+/* 매장에서 먹기 아이콘: 72 x 80 */
+.home-dine-in-icon {
+  width: 72px;
+  height: 80px;
+}
+
+/* 포장하기 아이콘: 72 x 67 */
+.home-takeout-icon {
+  width: 72px;
+  height: 67px;
+}
+
+/* 매장에서 먹기 */
+.home-dine-in {
+  top: 960px;
+}
+
+/* 포장하기 = 매장에서먹기(960) + 높이(280) + 간격(42) */
+.home-takeout {
+  top: 1282px;
 }

@@ -118,6 +118,7 @@ const handleAddOption = async () => {
         category: "",
         price: 0,
         is_available: true,
+        image_url: "",
       });
     }}
   >  + 메뉴 등록
@@ -163,13 +164,15 @@ const handleAddOption = async () => {
           </tbody>
         </table>
 
-        <h2>옵션 목록</h2>
 
+
+        <h2>옵션 목록</h2>
         <button onClick={() => {setEditMode("option"); setIsAddMode(true);setSelectedItem({
                 option_name: "",
                 option_price: 0,
-                option_is_available: true,});}}>+ 옵션 등록</button>
-                
+                option_is_available: true,
+                option_image: "",
+                });}}>+ 옵션 등록</button>    
         <table>
           <thead>
             <tr>
@@ -208,7 +211,19 @@ const handleAddOption = async () => {
         <button onClick={() => navigate("/adminmenu")}> 뒤로가기 </button>
       </div>
 
+
+
       <div>
+            <img src={ editMode === "menu" ? selectedItem?.image_url : selectedItem?.option_image}
+                  alt={ editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}
+                  width={250}
+                  height={250}
+                  style={{
+                        objectFit: "cover",
+                        borderRadius: "10px",
+                        border: "1px solid #ddd",
+                        marginBottom: "20px",}}/>
+
           <h3> {editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}</h3>
       </div>
 
@@ -216,6 +231,7 @@ const handleAddOption = async () => {
           <label>
             {editMode === "menu" ? "메뉴명" : "옵션명"}
           </label>
+
           <input name={editMode === "menu" ? "menu_name" : "option_name"}
                   value={editMode === "menu" ? selectedItem?.menu_name || "" : selectedItem?.option_name || ""}
                   onChange={handleInputChange}/>
@@ -228,6 +244,11 @@ const handleAddOption = async () => {
           <input type="number" name={editMode === "menu"? "price": "option_price"}
                               value={editMode === "menu" ? selectedItem?.price || 0 : selectedItem?.option_price || 0}
                               onChange={handleInputChange}/>
+
+          <label>사진</label>
+          <input type="text" name={editMode === "menu" ? "image_url" : "option_image"} placeholder="이미지 경로 입력"
+                  value={ editMode === "menu" ? selectedItem?.image_url || "" : selectedItem?.option_image || ""}
+                  onChange={handleInputChange}/>
 
           <label>상태</label>
           <select name={editMode === "menu" ? "is_available" : "option_is_available"}
@@ -248,7 +269,7 @@ const handleAddOption = async () => {
                       handleSaveOption();
                       }}}}>
   {editMode === "menu" ? isAddMode ? "메뉴 등록" : "메뉴 정보 수정" : isAddMode
-                                  ? "옵션 등록" : "옵션 정보 수정"}
+                                    ? "옵션 등록" : "옵션 정보 수정"}
           </button>
         </div>
       </div>

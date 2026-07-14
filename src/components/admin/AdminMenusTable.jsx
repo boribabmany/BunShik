@@ -33,7 +33,6 @@ export default function AdminMenusTable() {
     width={60}
     height={60}
   />
-  <div>{menu.image}</div> 
 </td>
       <td>{menu.menu_name}</td>
       <td>{menu.category}</td>

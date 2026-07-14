@@ -24,18 +24,29 @@ function Payment() {
     setIsPaying(true);
     setFailType(null);
 
-    const result = await submitPayment();
+    try {
+      const result = await submitPayment();
 
-    setIsPaying(false);
+      if (result.status === "success") {
+        const orderNumber = `A-${Math.floor(Math.random() * 900 + 100)}`;
+        setOrderNumber(orderNumber);
+        setTotalPrice(totalPrice);
+        clearCart();
+        navigate("/complete");
+      } else {
+        setFailType(result.status); // 'card-error' | 'declined'
+      }
+    } catch (error) {
+      console.error("결제 처리 중 오류 발생:", error);
 
-    if (result.status === "success") {
-      const orderNumber = `A-${Math.floor(Math.random() * 900 + 100)}`;
-      setOrderNumber(orderNumber);
-      setTotalPrice(totalPrice);
-      clearCart();
-      navigate("/complete");
-    } else {
-      setFailType(result.status);
+      // 에러 종류에 따라 다른 팝업 문구를 보여줌
+      if (error.message === "TIMEOUT") {
+        setFailType("timeout");
+      } else {
+        setFailType("system-error");
+      }
+    } finally {
+      setIsPaying(false);
     }
   };
 

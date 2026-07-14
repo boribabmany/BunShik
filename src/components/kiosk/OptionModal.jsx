@@ -41,7 +41,7 @@ function OptionModal({ menu, onClose, onAdd }) {
       </div>
 
       <div>
-        <p>토핑 추가 (최대 5개 선택)</p>
+        <p>토핑 추가 (최대 2개 선택)</p>
         {menu.options.map((option) => {
           const isSelected = selectedOptions.some(
             (o) => o.option_id === option.option_id,

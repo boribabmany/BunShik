@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {getOrders,updateOrderStatus,cancelOrder,} from "../../api/orderApi";
-
+import "../../styles/AdminOrder.css";
 export default function AdminOrder() {
 
   const navigate = useNavigate();
@@ -52,12 +52,12 @@ const data = await getOrders();
 setOrders(data);
 };
   return (
-    <div>
-      <header>
+    <div className="admin-order-page">
+      <header className="order-header">
         <h1>관리자 주문 관리</h1>
       </header>
       {/* 검색 영역 */}
-      <section>
+      <section className="search-area">
         <input type="date" value={date} onChange={(e)=>setDate(e.target.value)}/>
 
         <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -73,13 +73,14 @@ setOrders(data);
         <option>완료</option>
         <option>취소</option>
       </select>
-        <button>
+        <button className="search-btn">
           검색
         </button>
       </section>
 
       {/* 주문 테이블 */}
-      <table border="1">
+      <div className="order-table-box">
+      <table  className="order-table" /*border="1"*/>
         <thead>
           <tr>
             <th>주문번호</th>
@@ -104,13 +105,13 @@ setOrders(data);
       <td>{order.total_price.toLocaleString()}원</td>
 
       <td>
+        <div className="order-action">
         <button
           onClick={() => handleStatusChange(order.order_number)}
           disabled={
             order.order_status === "완료" ||
             order.order_status === "취소"
-          }
-        >
+          }>
           {order.order_status === "접수"
             ? "조리 시작"
             : order.order_status === "조리중"
@@ -118,24 +119,26 @@ setOrders(data);
             : "완료"}
         </button>
 
-        <button
-          onClick={() => handleCancel(order.order_number)}
-          disabled={
+        <button onClick={() => handleCancel(order.order_number)} disabled={
             order.order_status === "완료" ||
-            order.order_status === "취소"
-          }>
-          취소
+            order.order_status === "취소"}>
+              취소
         </button>
+        </div>
       </td>
     </tr>
   ))}
 </tbody>   
       </table>
       {/* 더보기 */}
-      <button> 더 보기 (Load More)</button>
+      <button className="load-more"> 더 보기 (Load More)</button>
       {/* 뒤로가기 */}
-      <button onClick={()=>navigate("/adminmenu")}> 뒤로가기 </button>
+      <div className="bottom-area">
+      <button  className="back-btn" onClick={()=>navigate("/adminmenu")}> 뒤로가기 </button>
+    </div>
+    </div>
     </div>
   );
 }
+
 //DB 적용되면 변경예정 임시, 더보기 기능은 db들어오고나서 조정이 수월하다판단

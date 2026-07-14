@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {getMenus,createMenu,updateMenu,deleteMenu,} from "../../api/menuApi";
 import {getOptions,createOption,updateOption,deleteOption,} from "../../api/optionApi";
+import "../../styles/AdminMenuEdit.css";
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
@@ -33,28 +34,27 @@ export default function AdminMenuEdit() {
   const handleDeleteMenu = async (menuId) => {
   if (!window.confirm("삭제하시겠습니까?")) return;
   await deleteMenu(menuId);
-const menus = await getMenus();
-setMenuList(menus);
-};
+  const menus = await getMenus();
+  setMenuList(menus);
+  };
   //메뉴수정(임시)
   const handleSave = async() => {
   await updateMenu(selectedItem);
 
-const menus = await getMenus();
-setMenuList(menus);
-
-alert("수정되었습니다.");
-};
+  const menus = await getMenus();
+  setMenuList(menus);
+  alert("수정되었습니다.");
+  };
 
   //메뉴등록(임시)
   const handleAddMenu = async() => {
   await createMenu(selectedItem);
 
-const menus = await getMenus();
-setMenuList(menus);
+  const menus = await getMenus();
+  setMenuList(menus);
 
-alert("등록되었습니다.");
-};
+  alert("등록되었습니다.");
+  };
   const handleEditClick = (type, item) => {
     setEditMode(type);
     setSelectedItem(item);
@@ -105,26 +105,39 @@ const handleAddOption = async () => {
 
 // ----------------------------------------------------------------
   return (
-    <div>
-      <div>
-        <h2>관리자 메뉴 목록(화면만 수정됨)</h2>
-        <div style={{ marginBottom: "10px" }}>
-  <button
-    onClick={() => {
-      setEditMode("menu");
-      setIsAddMode(true);
-      setSelectedItem({
-        menu_name: "",
-        category: "",
-        price: 0,
-        is_available: true,
-        image_url: "",
-      });
-    }}
-  >  + 메뉴 등록
-  </button>
-</div>
-        <table>
+  <div className="admin-edit-page">
+
+    {/* =========================
+        왼쪽 영역
+    ========================= */}
+    <div className="edit-left">
+
+      <h2 className="edit-title">
+        관리자 메뉴수정 및 등록
+      </h2>
+
+      <div style={{ marginBottom: "10px" }}>
+        <button
+          className="register-btn"
+          onClick={() => {
+            setEditMode("menu");
+            setIsAddMode(true);
+            setSelectedItem({
+              menu_name: "",
+              category: "",
+              price: 0,
+              is_available: true,
+              image_url: "",
+            });
+          }}
+        >
+          + 메뉴 등록
+        </button>
+      </div>
+
+      {/* 메뉴 테이블 */}
+      <div className="edit-table-box">
+        <table className="edit-table">
           <thead>
             <tr>
               <th>사진</th>
@@ -135,45 +148,65 @@ const handleAddOption = async () => {
               <th>관리</th>
             </tr>
           </thead>
+
           <tbody>
             {menuList.map((menu) => (
               <tr key={menu.menu_id}>
                 <td>
-        <img
-          src={menu.image_url}
-          alt={menu.menu_name}
-          width={60}
-          height={60}
-          style={{
-            objectFit: "cover",
-            borderRadius: "8px",
-          }}
-        />
-      </td>
+                  <img
+                    src={menu.image_url}
+                    alt={menu.menu_name}
+                    width={60}
+                    height={60}
+                    style={{
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                    }}
+                  />
+                </td>
+
                 <td>{menu.menu_name}</td>
                 <td>{menu.category}</td>
                 <td>{menu.price.toLocaleString()}원</td>
                 <td>{menu.is_available ? "판매중" : "품절"}</td>
 
                 <td>
-                  <button onClick={() => handleEditClick("menu", menu)}>수정(화면에서만)</button>
-                  <button onClick={() => handleDeleteMenu(menu.menu_id)}>삭제(화면에서만)</button>
+                  <button onClick={() => handleEditClick("menu", menu)}>
+                    수정
+                  </button>
+
+                  <button onClick={() => handleDeleteMenu(menu.menu_id)}>
+                    삭제
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
 
+      {/* 옵션 등록 버튼 */}
+      <div style={{ marginBottom: "10px" }}>
+        <button
+          className="register-btn"
+          onClick={() => {
+            setEditMode("option");
+            setIsAddMode(true);
+            setSelectedItem({
+              option_name: "",
+              option_price: 0,
+              option_is_available: true,
+              option_image: "",
+            });
+          }}
+        >
+          + 옵션 등록
+        </button>
+      </div>
 
-
-        <h2>옵션 목록</h2>
-        <button onClick={() => {setEditMode("option"); setIsAddMode(true);setSelectedItem({
-                option_name: "",
-                option_price: 0,
-                option_is_available: true,
-                option_image: "",
-                });}}>+ 옵션 등록</button>    
-        <table>
+      {/* 옵션 테이블 */}
+      <div className="edit-table-box">
+        <table className="edit-table">
           <thead>
             <tr>
               <th>사진</th>
@@ -183,8 +216,10 @@ const handleAddOption = async () => {
               <th>관리</th>
             </tr>
           </thead>
+
           <tbody>
-            {optionList.map((option) => (<tr key={option.option_id}>
+            {optionList.map((option) => (
+              <tr key={option.option_id}>
                 <td>
                   <img
                     src={option.option_image}
@@ -197,81 +232,171 @@ const handleAddOption = async () => {
                     }}
                   />
                 </td>
+
                 <td>{option.option_name}</td>
-                <td> +{option.option_price.toLocaleString()}원 </td>
-                <td> {option.option_is_available ? "판매중" : "품절"}</td>
+                <td>+{option.option_price.toLocaleString()}원</td>
+                <td>{option.option_is_available ? "판매중" : "품절"}</td>
+
                 <td>
-                  <button onClick={() => handleEditClick("option", option) }>수정</button>
-                  <button onClick={() => handleDeleteOption(option.option_id)}>삭제</button>
+                  <button onClick={() => handleEditClick("option", option)}>
+                    수정
+                  </button>
+
+                  <button onClick={() => handleDeleteOption(option.option_id)}>
+                    삭제
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <button onClick={() => navigate("/adminmenu")}> 뒤로가기 </button>
       </div>
+    </div>
 
 
 
-      <div>
-            <img src={ editMode === "menu" ? selectedItem?.image_url : selectedItem?.option_image}
-                  alt={ editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}
-                  width={250}
-                  height={250}
-                  style={{
-                        objectFit: "cover",
-                        borderRadius: "10px",
-                        border: "1px solid #ddd",
-                        marginBottom: "20px",}}/>
 
-          <h3> {editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}</h3>
-      </div>
+      {/* =========================
+    오른쪽 수정 패널
+========================= */}
+<div className="edit-right">
 
-        <div>
-          <label>
-            {editMode === "menu" ? "메뉴명" : "옵션명"}
-          </label>
+  <div className="preview-box">
+    <img
+      src={
+        editMode === "menu"
+          ? selectedItem?.image_url
+          : selectedItem?.option_image
+      }
+      alt={
+        editMode === "menu"
+          ? selectedItem?.menu_name
+          : selectedItem?.option_name
+      }
+    />
 
-          <input name={editMode === "menu" ? "menu_name" : "option_name"}
-                  value={editMode === "menu" ? selectedItem?.menu_name || "" : selectedItem?.option_name || ""}
-                  onChange={handleInputChange}/>
-          {editMode === "menu" && ( <> <label>카테고리</label>
-          <input name="category" value={selectedItem?.category || ""} onChange={handleInputChange} />
-          </>
-          )}
+    <h3 className="preview-name">
+      {editMode === "menu"
+        ? selectedItem?.menu_name
+        : selectedItem?.option_name}
+    </h3>
+  </div>
 
-          <label>{editMode === "menu"? "가격" : "추가 가격"}</label>
-          <input type="number" name={editMode === "menu"? "price": "option_price"}
-                              value={editMode === "menu" ? selectedItem?.price || 0 : selectedItem?.option_price || 0}
-                              onChange={handleInputChange}/>
+  <div className="form-group">
+    <label>{editMode === "menu" ? "메뉴명" : "옵션명"}</label>
 
-          <label>사진</label>
-          <input type="text" name={editMode === "menu" ? "image_url" : "option_image"} placeholder="이미지 경로 입력"
-                  value={ editMode === "menu" ? selectedItem?.image_url || "" : selectedItem?.option_image || ""}
-                  onChange={handleInputChange}/>
+    <input
+      name={editMode === "menu" ? "menu_name" : "option_name"}
+      value={
+        editMode === "menu"
+          ? selectedItem?.menu_name || ""
+          : selectedItem?.option_name || ""
+      }
+      onChange={handleInputChange}
+    />
+  </div>
 
-          <label>상태</label>
-          <select name={editMode === "menu" ? "is_available" : "option_is_available"}
-                  value={editMode === "menu" ? selectedItem?.is_available : selectedItem?.option_is_available}
-                  onChange={handleInputChange}>
-                <option value={true}>판매중</option>
-                <option value={false}>품절</option>
-          </select>
-          
-          <button onClick={() => { if (editMode === "menu") { if (isAddMode) {
-                  handleAddMenu();
-                    } else {
-                      handleSave();}
-                    } else {
-                      if (isAddMode) {
-                      handleAddOption();
-                      } else {
-                      handleSaveOption();
-                      }}}}>
-  {editMode === "menu" ? isAddMode ? "메뉴 등록" : "메뉴 정보 수정" : isAddMode
-                                    ? "옵션 등록" : "옵션 정보 수정"}
-          </button>
-        </div>
-      </div>
+  {editMode === "menu" && (
+    <div className="form-group">
+      <label>카테고리</label>
+
+      <input
+        name="category"
+        value={selectedItem?.category || ""}
+        onChange={handleInputChange}
+      />
+    </div>
+  )}
+
+  <div className="form-group">
+    <label>{editMode === "menu" ? "가격" : "추가 가격"}</label>
+
+    <input
+      type="number"
+      name={editMode === "menu" ? "price" : "option_price"}
+      value={
+        editMode === "menu"
+          ? selectedItem?.price || 0
+          : selectedItem?.option_price || 0
+      }
+      onChange={handleInputChange}
+    />
+  </div>
+
+  <div className="form-group">
+    <label>사진</label>
+
+    <input
+      className="image-link"
+      type="text"
+      name={editMode === "menu" ? "image_url" : "option_image"}
+      placeholder="이미지 경로 입력"
+      value={
+        editMode === "menu"
+          ? selectedItem?.image_url || ""
+          : selectedItem?.option_image || ""
+      }
+      onChange={handleInputChange}
+    />
+  </div>
+
+  <div className="form-group">
+    <label>상태</label>
+
+    <select
+      name={editMode === "menu" ? "is_available" : "option_is_available"}
+      value={
+        editMode === "menu"
+          ? selectedItem?.is_available
+          : selectedItem?.option_is_available
+      }
+      onChange={handleInputChange}
+    >
+      <option value={true}>판매중</option>
+      <option value={false}>품절</option>
+    </select>
+  </div>
+
+  <div className="edit-bottom">
+
+    <button
+      className="back-btn"
+      onClick={() => navigate("/adminmenu")}
+    >
+      뒤로가기
+    </button>
+
+    <button
+      className="save-btn"
+      onClick={() => {
+        if (editMode === "menu") {
+          if (isAddMode) {
+            handleAddMenu();
+          } else {
+            handleSave();
+          }
+        } else {
+          if (isAddMode) {
+            handleAddOption();
+          } else {
+            handleSaveOption();
+          }
+        }
+      }}
+    >
+      {editMode === "menu"
+        ? isAddMode
+          ? "메뉴 등록"
+          : "메뉴 정보 수정"
+        : isAddMode
+        ? "옵션 등록"
+        : "옵션 정보 수정"}
+    </button>
+
+  </div>
+
+</div>
+
+</div>
   );}
 //등록 수정 삭제 기능은 백엔드후에

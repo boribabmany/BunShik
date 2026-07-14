@@ -1,0 +1,176 @@
+/* =========================
+   관리자 주문 페이지
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.admin-order-page{
+    width:100%;
+    min-height:100vh;
+    background:#f5f5f5;
+    padding:25px 35px;
+}
+
+/* =========================
+   제목
+========================= */
+
+.order-header{
+    margin-bottom:20px;
+}
+
+.order-header h1{
+    font-size:30px;
+    font-weight:700;
+}
+
+/* =========================
+   검색 영역
+========================= */
+
+.search-area{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 170px;
+    gap:12px;
+
+    background:#fff;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:8px;
+
+    margin-bottom:15px;
+}
+
+.search-area input,
+.search-area select{
+    height:40px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    padding:0 12px;
+    font-size:14px;
+}
+
+.search-btn{
+    border:none;
+    border-radius:6px;
+    background:#666;
+    color:#fff;
+    cursor:pointer;
+}
+
+.search-btn:hover{
+    background:#444;
+}
+
+/* =========================
+   주문 테이블
+========================= */
+
+.order-table-box{
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.order-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.order-table th{
+    background:#f3f4f6;
+    padding:12px;
+    font-size:14px;
+    border-bottom:1px solid #ddd;
+}
+
+.order-table td{
+    padding:14px 12px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+}
+
+.order-table tbody tr:hover{
+    background:#fafafa;
+}
+
+/* =========================
+   상태 버튼
+========================= */
+
+.order-action{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+}
+
+.order-action button{
+    padding:5px 10px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.order-action button:first-child{
+    background:#5d8dee;
+    color:#fff;
+}
+
+.order-action button:last-child{
+    background:#f05c5c;
+    color:#fff;
+}
+
+/* =========================
+   더보기
+========================= */
+
+.load-more{
+    width:100%;
+    height:45px;
+    margin-top:10px;
+
+    border:1px solid #ddd;
+    border-radius:6px;
+
+    background:#fff;
+    cursor:pointer;
+}
+
+.load-more:hover{
+    background:#f2f2f2;
+}
+
+/* =========================
+   하단 버튼
+========================= */
+
+.bottom-area{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:25px;
+}
+
+.back-btn{
+    width:120px;
+    height:42px;
+
+    border:none;
+    border-radius:20px;
+
+    background:#666;
+    color:#fff;
+
+    cursor:pointer;
+}
+
+.back-btn:hover{
+    background:#444;
+}

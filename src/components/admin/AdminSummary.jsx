@@ -11,12 +11,12 @@ export default function AdminSummary({ onMoveOrder }) {
       <h2>메뉴 관리</h2>
       <div>
         <p>총 메뉴 수</p>
-        <strong>24</strong>
+        <strong>9</strong>
       </div>
 
       <div>
         <p>품절 메뉴</p>
-        <strong>2</strong>
+        <strong>1</strong>
       </div>
 
       <div>
@@ -26,7 +26,7 @@ export default function AdminSummary({ onMoveOrder }) {
 
       <div>
         <p>신규 메뉴</p>
-        <strong>치즈라면</strong>
+        <strong>라면</strong>
       </div>
 
       <button onClick={onMoveOrder}>

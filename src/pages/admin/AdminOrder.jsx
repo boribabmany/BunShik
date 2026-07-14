@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {getOrders,updateOrderStatus,cancelOrder,} from "../../api/orderApi";
 
 export default function AdminOrder() {
 
@@ -10,48 +11,18 @@ export default function AdminOrder() {
   const [status, setStatus] = useState("전체");
 
   // 임시 주문 데이터 (DB 상태값 기준)
-  const [orders, setOrders] = useState([
-  {
-    order_id: 1,
-    order_number: "A-001",
-    created_at: "2025-05-20 11:30",
-    order_type: "포장",
-    order_status: "완료",
-    total_price: 9500,
-  },
-  {
-    order_id: 2,
-    order_number: "A-002",
-    created_at: "2025-05-20 12:20",
-    order_type: "매장",
-    order_status: "완료",
-    total_price: 10000,
-  },
-  {
-    order_id: 3,
-    order_number: "A-003",
-    created_at: "2025-05-20 13:05",
-    order_type: "포장",
-    order_status: "접수",
-    total_price: 8000,
-  },
-  {
-    order_id: 4,
-    order_number: "A-004",
-    created_at: "2025-05-20 14:05",
-    order_type: "포장",
-    order_status: "조리중",
-    total_price: 10000,
-  },
-  {
-    order_id: 5,
-    order_number: "A-005",
-    created_at: "2025-05-20 14:50",
-    order_type: "매장",
-    order_status: "취소",
-    total_price: 12000,
-  },
-]);
+  const [orders, setOrders] = useState([]);
+
+useEffect(() => {
+  const fetchOrders = async () => {
+    const data = await getOrders();
+    setOrders(data);
+  };
+
+  fetchOrders();
+}, []);
+
+
   // 검색 기능
  const filteredOrders = orders.filter((order) => {
   const matchDate = order.created_at.startsWith(date);
@@ -66,34 +37,19 @@ export default function AdminOrder() {
 });
 
   // 상태 변경 버튼
-  const handleStatusChange = (orderNumber) => {
-  setOrders((prev) =>
-    prev.map((order) => {
-      if (order.order_number !== orderNumber) return order;
+  const handleStatusChange = async(orderNumber) => {
+ await updateOrderStatus(orderNumber, "조리중");
 
-      if (order.order_status === "접수") {
-        return { ...order, order_status: "조리중" };
-      }
-
-      if (order.order_status === "조리중") {
-        return { ...order, order_status: "완료" };
-      }
-
-      return order;
-    })
-  );
+const data = await getOrders();
+setOrders(data);
 };
 //취소
-const handleCancel = (orderNumber) => {
+  const handleCancel = async (orderNumber) => {
   if (!window.confirm("주문을 취소하시겠습니까?")) return;
+ await cancelOrder(orderNumber);
 
-  setOrders((prev) =>
-    prev.map((order) =>
-      order.order_number === orderNumber
-        ? { ...order, order_status: "취소" }
-        : order
-    )
-  );
+const data = await getOrders();
+setOrders(data);
 };
   return (
     <div>

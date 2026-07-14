@@ -73,6 +73,20 @@ export default function AdminMenuEdit() {
         : value,
   }));
 };
+//이미지 등록
+const handleImageChange = (e) => {
+  const file = e.target.files[0];
+
+  if (!file) return;
+
+  const preview = URL.createObjectURL(file);
+
+  setSelectedItem((prev) => ({
+    ...prev,
+    [editMode === "menu" ? "image_url" : "option_image"]: preview,
+  }));
+};
+
 //옵션삭제
 const handleDeleteOption = async(optionId) => {
   if (!window.confirm("삭제하시겠습니까?")) return;
@@ -113,7 +127,7 @@ const handleAddOption = async () => {
     <div className="edit-left">
 
       <h2 className="edit-title">
-        관리자 메뉴수정 및 등록
+        관리자 메뉴수정 및 등록 (미완성)
       </h2>
 
       <div style={{ marginBottom: "10px" }}>
@@ -324,21 +338,15 @@ const handleAddOption = async () => {
   </div>
 
   <div className="form-group">
-    <label>사진</label>
+  <label>사진</label>
 
-    <input
-      className="image-link"
-      type="text"
-      name={editMode === "menu" ? "image_url" : "option_image"}
-      placeholder="이미지 경로 입력"
-      value={
-        editMode === "menu"
-          ? selectedItem?.image_url || ""
-          : selectedItem?.option_image || ""
-      }
-      onChange={handleInputChange}
-    />
-  </div>
+  <input
+    className="image-upload"
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+  />
+</div>
 
   <div className="form-group">
     <label>상태</label>

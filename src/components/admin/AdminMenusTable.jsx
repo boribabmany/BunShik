@@ -7,7 +7,6 @@ export default function AdminMenusTable() {
   const navigate = useNavigate();
 
   // DB 연결 전 목업 데이터
-
   return (
     <div className="menu-table-box">
       <h2 className="table-title">메뉴 리스트</h2>

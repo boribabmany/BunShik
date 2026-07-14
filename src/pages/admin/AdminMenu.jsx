@@ -17,7 +17,7 @@ export default function AdminMenu() {
     <div className="admin-menu-page">
 
       <header className="admin-header">
-        <h1>관리자 메뉴 관리</h1>
+        <h1>관리자 메뉴 관리(디자인및 이것저것 미완성)</h1>
 
         <button
           className="logout-btn"

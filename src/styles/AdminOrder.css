@@ -157,17 +157,14 @@
     justify-content:flex-end;
     margin-top:25px;
 }
-
 .back-btn{
     width:120px;
     height:42px;
 
     border:none;
     border-radius:20px;
-
     background:#666;
     color:#fff;
-
     cursor:pointer;
 }
 

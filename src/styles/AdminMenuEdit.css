@@ -156,6 +156,13 @@
     border-radius:8px !important;
     padding:8px !important;
 }
+.image-upload{
+    flex:1;
+    padding:8px;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:8px;
+}
 
 /* =========================
    하단 버튼

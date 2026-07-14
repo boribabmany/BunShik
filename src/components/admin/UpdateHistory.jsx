@@ -64,4 +64,7 @@ export default function UpdateHistory() {
       ))}
     </div>
   );
-}*/
+}
+핵심내용이 아닌 추가내용이므로 기본공사끝난후에 작성, DB도  
+
+*/

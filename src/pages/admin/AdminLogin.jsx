@@ -24,7 +24,7 @@ export default function AdminLogin() {
       <div>
         <div><img src={logo} alt="분식 로고" width="150"/></div>
         <h1>
-          관리자 로그인
+          관리자 로그인  /아이디 admin / 비밀번호 1234
         </h1>
 
         <div>

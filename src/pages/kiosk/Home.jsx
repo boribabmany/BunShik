@@ -45,7 +45,11 @@ function Home() {
           alt=""
           className="home-order-icon home-dine-in-icon"
         />
-        <span>매장에서 먹기</span>
+        <span className="home-order-text home-dine-in-text">
+          매장
+          <br />
+          식사
+        </span>
       </button>
 
       <button
@@ -58,7 +62,11 @@ function Home() {
           alt=""
           className="home-order-icon home-takeout-icon"
         />
-        <span>포장하기</span>
+        <span className="home-order-text home-takeout-text">
+          포장
+          <br />
+          하기
+        </span>
       </button>
     </div>
   );

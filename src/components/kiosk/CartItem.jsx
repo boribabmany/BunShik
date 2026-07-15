@@ -1,44 +1,54 @@
+import trashIcon from "../../images/trash.png";
+
 function CartItem({ item, onIncrease, onDecrease, onRemove }) {
-  const hasOptions = item.options.length > 0; // 옵션 있는 메뉴인지 확인
+  const hasOptions = item.options.length > 0;
 
   const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
   const itemTotal = (item.base_price + optionTotal) * item.quantity;
 
   return (
-    <div>
-      <img src={item.image_url} alt={item.menu_name} />
+    <div className="cart-item">
+      <div className="cart-item-toprow">
+        <img
+          src={item.image_url}
+          alt={item.menu_name}
+          className="cart-item-image"
+        />
 
-      <div>
-        <p>{item.menu_name}</p>
+        <p className="cart-item-name">{item.menu_name}</p>
 
-        {/* 옵션이 있을 때만 렌더링 */}
-        {hasOptions && (
-          <div>
-            {item.options.map((option) => (
-              <div key={option.option_id}>
-                <span>+{option.option_name}</span>
-                <span>+{option.option_price.toLocaleString()}원</span>
-              </div>
-            ))}
+        <div className="cart-item-qty-box">
+          <button
+            type="button"
+            onClick={onDecrease}
+            className="cart-item-qty-btn"
+          >
+            -
+          </button>
+          <span className="cart-item-qty-value">{item.quantity}</span>
+          <button
+            type="button"
+            onClick={onIncrease}
+            className="cart-item-qty-btn"
+          >
+            +
+          </button>
+        </div>
+
+        <p className="cart-item-total">{itemTotal.toLocaleString()}원</p>
+
+        <button type="button" onClick={onRemove} className="cart-item-delete">
+          <img src={trashIcon} alt="삭제" className="cart-item-delete-icon" />
+        </button>
+      </div>
+
+      {hasOptions &&
+        item.options.map((option) => (
+          <div key={option.option_id} className="cart-item-option-row">
+            <span>+{option.option_name}</span>
+            <span>+{option.option_price.toLocaleString()}원</span>
           </div>
-        )}
-      </div>
-
-      <div>
-        <button type="button" onClick={onDecrease}>
-          -
-        </button>
-        <span>{item.quantity}</span>
-        <button type="button" onClick={onIncrease}>
-          +
-        </button>
-      </div>
-
-      <p>{itemTotal.toLocaleString()}원</p>
-
-      <button type="button" onClick={onRemove}>
-        삭제
-      </button>
+        ))}
     </div>
   );
 }

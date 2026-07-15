@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useOrderStore from "../../store/useOrderStore";
 import checkIcon from "../../images/check.png";
@@ -9,13 +10,30 @@ function OrderComplete() {
   const totalPrice = useOrderStore((state) => state.totalPrice);
   const resetOrder = useOrderStore((state) => state.resetOrder);
 
+  // 'receipt' | 'orderNumber' | null : 지금 무엇을 인쇄 중인지 표시
+  const [printMode, setPrintMode] = useState(null);
+
+  // 인쇄창이 닫히면(인쇄 완료 또는 취소) 처음 화면으로 리셋 후 이동
+  useEffect(() => {
+    const handleAfterPrint = () => {
+      setPrintMode(null);
+      resetOrder();
+      navigate("/");
+    };
+
+    window.addEventListener("afterprint", handleAfterPrint);
+    return () => window.removeEventListener("afterprint", handleAfterPrint);
+  }, [navigate, resetOrder]);
+
   const handleReceiptPrint = () => {
-    window.print();
+    setPrintMode("receipt");
+    // printMode가 DOM에 반영된 다음 프레임에 인쇄 실행
+    requestAnimationFrame(() => window.print());
   };
 
-  const handleGoHome = () => {
-    resetOrder();
-    navigate("/");
+  const handleOrderNumberPrint = () => {
+    setPrintMode("orderNumber");
+    requestAnimationFrame(() => window.print());
   };
 
   return (
@@ -50,11 +68,32 @@ function OrderComplete() {
 
       <button
         type="button"
-        onClick={handleGoHome}
+        onClick={handleOrderNumberPrint}
         className="complete-home-button"
       >
-        처음으로
+        주문번호만 출력
       </button>
+
+      {/* ---------- 인쇄 전용 영역 (화면에는 안 보이고, 인쇄 시에만 표시) ---------- */}
+      <div className="complete-print-area">
+        {printMode === "receipt" && (
+          <div className="print-receipt">
+            <p className="print-receipt-heading">주문 영수증</p>
+            <p className="print-receipt-label">주문번호</p>
+            <p className="print-receipt-number">{orderNumber}</p>
+            <p className="print-receipt-total">
+              총 결제 금액 {totalPrice?.toLocaleString()}원
+            </p>
+          </div>
+        )}
+
+        {printMode === "orderNumber" && (
+          <div className="print-ordernumber">
+            <p className="print-ordernumber-label">주문번호</p>
+            <p className="print-ordernumber-value">{orderNumber}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

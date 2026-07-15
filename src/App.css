@@ -1505,11 +1505,12 @@ body {
 }
 
 /* ---------- 영수증 출력 버튼 ---------- */
+/* 왼쪽에서 88px 고정 */
 .complete-receipt-button {
   position: absolute;
   width: 366px;
   height: 140px;
-  left: 142px;
+  left: 88px;
   top: 1724px;
   background: var(--color-primary-light);
   border: none;
@@ -1520,13 +1521,15 @@ body {
   cursor: pointer;
 }
 
-/* ---------- 처음으로 버튼 ---------- */
+/* ---------- 주문번호만 출력 버튼 ---------- */
+/* width 없이 right: 68px로 고정하여
+   텍스트가 길어져도 오른쪽 여백이 항상 68px로 유지되도록 처리 */
 .complete-home-button {
   position: absolute;
-  width: 305px;
   height: 140px;
-  left: 627px;
+  right: 68px;
   top: 1724px;
+  padding: 0 40px;
   background: #5e5e5e;
   border: none;
   border-radius: 20px;
@@ -1534,4 +1537,74 @@ body {
   font-weight: 500;
   color: #ffffff;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   인쇄 전용 영역 (OrderComplete)
+   - 화면(모니터)에서는 항상 숨김
+   - window.print() 실행 시에만 종이에 출력됨
+========================================================== */
+.complete-print-area {
+  display: none;
+}
+
+@media print {
+  /* 인쇄될 때는 화면용 UI를 전부 숨기고 */
+  .complete-screen > *:not(.complete-print-area) {
+    display: none !important;
+  }
+
+  /* 인쇄 전용 영역만 보이게 전환 */
+  .complete-print-area {
+    display: block;
+    position: static;
+    width: 100%;
+  }
+}
+
+/* ---------- 영수증 전체 출력용 레이아웃 ---------- */
+.print-receipt {
+  padding: 40px;
+  text-align: center;
+}
+
+.print-receipt-heading {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 24px;
+}
+
+.print-receipt-label {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.print-receipt-number {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 0 32px;
+}
+
+.print-receipt-total {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ---------- 주문번호만 출력용 레이아웃 ---------- */
+.print-ordernumber {
+  padding: 60px;
+  text-align: center;
+}
+
+.print-ordernumber-label {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+
+.print-ordernumber-value {
+  font-size: 60px;
+  font-weight: 700;
+  margin: 0;
 }

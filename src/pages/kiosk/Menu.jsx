@@ -6,14 +6,14 @@ import CategoryTabs from "../../components/kiosk/CategoryTabs";
 import MenuCard from "../../components/kiosk/MenuCard";
 import OptionModal from "../../components/kiosk/OptionModal";
 import CartBar from "../../components/kiosk/CartBar";
+import logo from "../../images/bunshiklogo.png";
+import "../../App.css";
 
 function Menu() {
   const navigate = useNavigate();
   const [menus, setMenus] = useState([]);
   const [category, setCategory] = useState("전체");
   const [selectedMenu, setSelectedMenu] = useState(null);
-
-  // 추가된 상태: 로딩 중 여부, 에러 발생 여부
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -25,16 +25,12 @@ function Menu() {
     setIsError(false);
 
     getMenus()
-      .then((data) => {
-        setMenus(data);
-      })
+      .then(setMenus)
       .catch((error) => {
         console.error("메뉴 조회 실패:", error);
         setIsError(true);
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
@@ -68,14 +64,20 @@ function Menu() {
   }, 0);
 
   return (
-    <div>
-      <button type="button" onClick={() => navigate(-1)}>
-        뒤로가기
+    <div className="menu-screen">
+      <button
+        type="button"
+        className="menu-back-button"
+        onClick={() => navigate(-1)}
+      >
+        <span className="menu-back-icon" />
+        <span className="menu-back-text">뒤로가기</span>
       </button>
+
+      <img src={logo} alt="분식집 로고" className="menu-logo" />
 
       <CategoryTabs selected={category} onSelect={setCategory} />
 
-      {/* 상태별 분기 렌더링 */}
       {isLoading ? (
         <p>메뉴를 불러오는 중입니다...</p>
       ) : isError ? (
@@ -88,7 +90,7 @@ function Menu() {
       ) : filteredMenus.length === 0 ? (
         <p>표시할 메뉴가 없습니다.</p>
       ) : (
-        <div>
+        <div className="menu-card-grid">
           {filteredMenus.map((menu) => (
             <MenuCard
               key={menu.menu_id}

@@ -1,9 +1,21 @@
+import cartIcon from "../../images/carticon.png";
+
 function CartBar({ count, total, onCheckClick, disabled }) {
   return (
-    <div>
-      <span>장바구니 {count}개</span>
-      <span>{total.toLocaleString()}원</span>
-      <button type="button" onClick={onCheckClick} disabled={disabled}>
+    <div className="menu-cartbar-footer">
+      <div className="menu-cartbar-box">
+        <img src={cartIcon} alt="" className="menu-cartbar-icon" />
+        <p className="menu-cartbar-label">장바구니</p>
+        <p className="menu-cartbar-count">{count}개</p>
+        <p className="menu-cartbar-total">{total.toLocaleString()}원</p>
+      </div>
+
+      <button
+        type="button"
+        onClick={onCheckClick}
+        disabled={disabled}
+        className="menu-cartbar-confirm"
+      >
         주문 확인
       </button>
     </div>

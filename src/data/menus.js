@@ -53,7 +53,7 @@ export const menus = [
     category: "오뎅",
     image_url: odang,
     description: "",
-    is_available: false,
+    is_available: true,
     option_ids: [],
   },
   {

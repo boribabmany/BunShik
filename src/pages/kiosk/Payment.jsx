@@ -5,7 +5,11 @@ import useOrderStore from "../../store/useOrderStore";
 import { submitPayment } from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
 import EmptyCartModal from "../../components/kiosk/EmptyCartModal";
-import OrderItem from "../../components/kiosk/OrderItem";
+import PaymentItem from "../../components/kiosk/PaymentItem";
+import logo from "../../images/bunshiklogo.png";
+import cardIcon from "../../images/card.png";
+import backIcon from "../../images/backicon.png";
+import "../../App.css";
 
 function Payment() {
   const navigate = useNavigate();
@@ -61,24 +65,45 @@ function Payment() {
   }
 
   return (
-    <div>
-      <h1>주문내역</h1>
+    <div className="payment-screen">
+      <img src={logo} alt="분식집 로고" className="menu-logo" />
 
-      {items.map((item, index) => (
-        <OrderItem key={index} item={item} />
-      ))}
+      <h1 className="payment-title">주문내역</h1>
 
-      <div>
-        <p>총 결제 금액</p>
-        <p>{totalPrice.toLocaleString()}원</p>
+      <div className="payment-divider-top" />
+
+      <div className="payment-list-wrapper">
+        <div className="payment-list">
+          {items.map((item, index) => (
+            <PaymentItem key={index} item={item} />
+          ))}
+        </div>
       </div>
 
-      <button type="button" onClick={handlePay} disabled={isPaying}>
-        {isPaying ? "결제 중..." : "카드 결제"}
+      <div className="payment-divider-bottom" />
+
+      <p className="payment-total-label">총 결제 금액</p>
+      <p className="payment-total-price">{totalPrice.toLocaleString()}원</p>
+
+      <button
+        type="button"
+        className="payment-pay-button"
+        onClick={handlePay}
+        disabled={isPaying}
+      >
+        <img src={cardIcon} alt="" className="payment-pay-icon" />
+        <span className="payment-pay-text">
+          {isPaying ? "결제 중..." : "카드 결제"}
+        </span>
       </button>
 
-      <button type="button" onClick={() => navigate(-1)}>
-        뒤로가기
+      <button
+        type="button"
+        className="payment-back-button"
+        onClick={() => navigate(-1)}
+      >
+        <img src={backIcon} alt="" className="payment-back-icon" />
+        <span className="payment-back-text">뒤로가기</span>
       </button>
 
       {failType && (

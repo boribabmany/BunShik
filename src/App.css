@@ -945,3 +945,431 @@ body {
   background: #b4b2a9;
   cursor: not-allowed;
 }
+
+/* ==========================================================
+   Payment 화면 (SCR_004)
+   캔버스 기준: 1080 x 1920
+========================================================== */
+.payment-screen {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  margin: 0 auto;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ---------- 타이틀 "주문내역" ---------- */
+.payment-title {
+  position: absolute;
+  top: 88px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 96px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+/* 위쪽 구분선: 위에서 348px, 두께2, 길이984 */
+.payment-divider-top {
+  position: absolute;
+  top: 348px;
+  left: 48px;
+  width: 984px;
+  height: 2px;
+  background: #000000;
+}
+
+/* ---------- 주문내역 목록 (스크롤, 위 348 ~ 아래 1188 사이) ---------- */
+.payment-list-wrapper {
+  position: absolute;
+  top: 350px;
+  left: 48px;
+  width: 984px;
+  height: 838px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.payment-list-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.payment-list {
+  width: 100%;
+}
+
+.payment-item {
+  width: 984px;
+  padding: 18px 32px 18px 22px;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.payment-item-toprow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 73px;
+  width: 930px;
+  height: 200px;
+}
+
+.payment-item-image {
+  width: 160px;
+  height: 200px;
+  border-radius: 20px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.payment-item-name {
+  font-size: 48px;
+  color: #000000;
+  margin: 0;
+  flex: 1;
+}
+
+.payment-item-qty-box {
+  width: 116px;
+  height: 80px;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #000000;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.payment-item-price {
+  font-size: 48px;
+  color: #000000;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* 옵션추가칸: 장바구니 목록과 동일 */
+.payment-item-option-row {
+  display: flex;
+  justify-content: space-between;
+  width: 930px;
+  margin: 0 auto;
+  padding: 4px 140px 4px 220px;
+  box-sizing: border-box;
+  font-size: 28px;
+  font-weight: 300;
+  color: #000000;
+}
+
+/* 아래쪽 구분선: 위에서 1188px, 두께2, 길이984 */
+.payment-divider-bottom {
+  position: absolute;
+  top: 1188px;
+  left: 48px;
+  width: 984px;
+  height: 2px;
+  background: #000000;
+}
+
+/* ---------- 총 결제 금액 ---------- */
+.payment-total-label {
+  position: absolute;
+  top: 1248px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 54px;
+  color: #000000;
+  margin: 0;
+}
+
+.payment-total-price {
+  position: absolute;
+  top: 1349px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 100px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+/* ---------- 카드 결제 버튼 ---------- */
+.payment-pay-button {
+  position: absolute;
+  top: 1520px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 760px;
+  height: 200px;
+  border-radius: 40px;
+  border: none;
+  background: #5e5e5e;
+  cursor: pointer;
+}
+
+.payment-pay-button:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+
+.payment-pay-icon {
+  position: absolute;
+  left: 104px;
+  top: 54%;
+  transform: translateY(-50%);
+  width: 84px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.payment-pay-text {
+  position: absolute;
+  left: 276px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 84px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* ---------- 뒤로가기 버튼 (하단, 왼쪽56px, 글씨48) ---------- */
+.payment-back-button {
+  position: absolute;
+  left: 56px;
+  bottom: 56px;
+  width: 360px;
+  height: 120px;
+  border-radius: 20px;
+  border: 1px solid #c4c7c7;
+  background: #ffffff;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* 뒤로가기 버튼 안 화살표 이미지: 버튼 왼쪽에서 42px, 세로 중앙 정렬 */
+.payment-back-icon {
+  position: absolute;
+  left: 42px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.payment-back-text {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: #000000;
+  white-space: nowrap;
+  margin-left: 20px; /* 화살표가 왼쪽에 있으니 텍스트를 살짝 오른쪽으로 밀어 균형 맞춤 */
+}
+
+/* ==========================================================
+   결제 실패/거절 팝업
+========================================================== */
+.fail-card-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.fail-card {
+  width: 500px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 24px;
+  padding: 48px 32px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.fail-card-title {
+  font-size: 40px;
+  color: #000000;
+  margin: 0 0 32px;
+}
+
+.fail-card-message {
+  font-size: 24px;
+  color: #000000;
+  line-height: 1.6;
+  margin: 0 0 40px;
+}
+
+.fail-card-icon-declined {
+  width: 160px;
+  height: 120px;
+  margin: 0 auto 32px;
+  border: 6px solid #e02020;
+  border-radius: 8px;
+  position: relative;
+}
+
+.fail-card-icon-declined::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 226px;
+  height: 6px;
+  background: #e02020;
+  transform: rotate(38deg);
+  transform-origin: top left;
+}
+
+.fail-card-icon-error {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 32px;
+  border-radius: 50%;
+  background: #e02020;
+  color: #ffffff;
+  font-size: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fail-card-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.fail-card-btn-outline {
+  width: 180px;
+  height: 90px;
+  border-radius: 20px;
+  border: 1px solid #000000;
+  background: #ffffff;
+  font-size: 28px;
+  color: #000000;
+  cursor: pointer;
+}
+
+.fail-card-btn-filled {
+  width: 180px;
+  height: 90px;
+  border-radius: 20px;
+  border: none;
+  background: #5e5e5e;
+  font-size: 28px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* ==========================================================
+   주문목록 비어있을 때 팝업 (EmptyCartModal)
+========================================================== */
+.empty-cart-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.empty-cart-card {
+  width: 500px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 24px;
+  padding: 56px 40px 48px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* 초록 원형 아이콘 배경 */
+/* 초록 원형 아이콘 배경 */
+.empty-cart-icon-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+}
+
+.empty-cart-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.empty-cart-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 12px;
+}
+
+.empty-cart-subtitle {
+  font-size: 24px;
+  color: var(--color-text-sub);
+  margin: 0 0 32px;
+}
+
+/* 진행 바 트랙 (연한 초록) */
+.empty-cart-progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--color-primary-light);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+/* 진행 바 (진한 초록, width로 남은시간 표현) */
+.empty-cart-progress-bar {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 999px;
+  transition: width 1s linear;
+}
+
+.empty-cart-timer-text {
+  text-align: right;
+  font-size: 16px;
+  color: var(--color-text-sub);
+  margin: 0 0 24px;
+}
+
+.empty-cart-confirm-button {
+  width: 100%;
+  height: 90px;
+  border-radius: 20px;
+  border: none;
+  background: var(--color-primary-light);
+  font-size: 32px;
+  font-weight: 700;
+  color: #000000;
+  cursor: pointer;
+}

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useOrderStore from "../../store/useOrderStore";
+import checkIcon from "../../images/check.png";
+import "../../App.css";
 
 function OrderComplete() {
   const navigate = useNavigate();
@@ -8,7 +10,7 @@ function OrderComplete() {
   const resetOrder = useOrderStore((state) => state.resetOrder);
 
   const handleReceiptPrint = () => {
-    window.print(); // 임시: 브라우저 인쇄 기능으로 영수증 흉내
+    window.print();
   };
 
   const handleGoHome = () => {
@@ -17,25 +19,40 @@ function OrderComplete() {
   };
 
   return (
-    <div>
-      <h1>주문이 완료되었습니다!</h1>
-      <p>맛있게 준비해 드릴게요. 잠시만 기다려주세요</p>
-
-      <div>
-        <p>주문번호</p>
-        <p>{orderNumber}</p>
+    <div className="complete-screen">
+      <div className="complete-check-circle">
+        <img src={checkIcon} alt="완료" className="complete-check-icon" />
       </div>
 
-      <div>
-        <span>총 결제 금액</span>
-        <span>{totalPrice?.toLocaleString()}원</span>
+      <h1 className="complete-title">주문이 완료되었습니다!</h1>
+
+      <p className="complete-subtitle">
+        맛있게 준비해 드릴게요.
+        <br />
+        잠시만 기다려주세요
+      </p>
+
+      <div className="complete-order-card">
+        <p className="complete-order-label">주문번호</p>
+        <p className="complete-order-number">{orderNumber}</p>
       </div>
 
-      <button type="button" onClick={handleReceiptPrint}>
+      <p className="complete-total-label">총 결제 금액</p>
+      <p className="complete-total-price">{totalPrice?.toLocaleString()}원</p>
+
+      <button
+        type="button"
+        onClick={handleReceiptPrint}
+        className="complete-receipt-button"
+      >
         영수증 출력
       </button>
 
-      <button type="button" onClick={handleGoHome}>
+      <button
+        type="button"
+        onClick={handleGoHome}
+        className="complete-home-button"
+      >
         처음으로
       </button>
     </div>

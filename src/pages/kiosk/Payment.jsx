@@ -4,6 +4,7 @@ import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
 import { submitPayment } from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
+import OrderItem from "../../components/kiosk/OrderItem";
 
 function Payment() {
   const navigate = useNavigate();
@@ -34,12 +35,10 @@ function Payment() {
         clearCart();
         navigate("/complete");
       } else {
-        setFailType(result.status); // 'card-error' | 'declined'
+        setFailType(result.status);
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
-
-      // 에러 종류에 따라 다른 팝업 문구를 보여줌
       if (error.message === "TIMEOUT") {
         setFailType("timeout");
       } else {
@@ -54,22 +53,9 @@ function Payment() {
     <div>
       <h1>주문내역</h1>
 
-      {items.map((item, index) => {
-        const optionTotal = item.options.reduce(
-          (s, o) => s + o.option_price,
-          0,
-        );
-        const itemTotal = (item.base_price + optionTotal) * item.quantity;
-
-        return (
-          <div key={index}>
-            <img src={item.image_url} alt={item.menu_name} />
-            <span>{item.menu_name}</span>
-            <span>{item.quantity}개</span>
-            <span>{itemTotal.toLocaleString()}원</span>
-          </div>
-        );
-      })}
+      {items.map((item, index) => (
+        <OrderItem key={index} item={item} />
+      ))}
 
       <div>
         <p>총 결제 금액</p>

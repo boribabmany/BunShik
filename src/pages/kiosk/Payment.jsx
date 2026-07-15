@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
@@ -15,6 +15,13 @@ function Payment() {
 
   const [isPaying, setIsPaying] = useState(false);
   const [failType, setFailType] = useState(null);
+
+  // 결제 화면에 진입했을 때 장바구니가 비어있으면 메뉴 화면으로 돌려보냄
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate("/menu", { replace: true });
+    }
+  }, [items, navigate]);
 
   const totalPrice = items.reduce((sum, item) => {
     const optionTotal = item.options.reduce((s, o) => s + o.option_price, 0);

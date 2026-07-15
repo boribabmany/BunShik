@@ -1,4 +1,4 @@
-// 임시 주문 데이터 (백엔드 연동 전)
+// orderAPI.js // 임시 주문 데이터 (백엔드 연동 전)
 
 let orders = [
   {
@@ -73,20 +73,3 @@ export const cancelOrder = async (orderNumber) => {
       : order
   );
 };
-
-/* 백엔드완성하면
-import axiosInstance from "./axiosInstance";
-
-export const getOrders = async () => {
-  const res = await axiosInstance.get("/orders");
-  return res.data;
-};
-
-export const updateOrderStatus = async (orderNumber) => {
-  return axiosInstance.patch(`/orders/${orderNumber}/status`);
-};
-
-export const cancelOrder = async (orderNumber) => {
-  return axiosInstance.patch(`/orders/${orderNumber}/cancel`);
-};
-*/ 

@@ -1,36 +1,23 @@
 // 변경내역 임시
+import useHistoryStore from "../../store/historyStore";
+
 export default function UpdateHistory() {
-  const histories = [
-    {
-      id: 1,
-      title: "메뉴 등록",
-      description: "참치김밥이 등록되었습니다.",
-    },
-    {
-      id: 2,
-      title: "가격 변경",
-      description: "떡볶이 가격이 변경되었습니다.",
-    },
-    {
-      id: 3,
-      title: "품절 처리",
-      description: "콜라가 품절 처리되었습니다.",
-    },
-  ];
+  // 💡 하드코딩된 배열 대신 스토어에서 가져옵니다!
+  const { histories } = useHistoryStore();
 
   return (
     <div className="history-box">
-  <h3 className="history-title">최근 변경 내역</h3>
+      <h3 className="history-title">최근 변경 내역</h3>
 
-  <div className="history-list">
-    {histories.map((history) => (
-      <div key={history.id} className="history-item">
-        <strong>{history.title}</strong>
-        <p>{history.description}</p>
+      <div className="history-list">
+        {histories.map((history) => (
+          <div key={history.id} className="history-item">
+            <strong>{history.title}</strong>
+            <p>{history.description}</p>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
+    </div>
   );
 }
 

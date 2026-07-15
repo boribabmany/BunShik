@@ -44,7 +44,6 @@ export default function AdminSummary({ onMoveOrder }) {
       >
         + 메뉴 등록
       </button>
-
       <UpdateHistory />
     </div>
   );

@@ -26,12 +26,16 @@ export default function AdminMenuEdit() {
 };
   //메뉴수정
   const handleSave = async () => {
-    if (!selectedItem.menu_name.trim()) {
+    if (!selectedItem) {
+    alert("수정할 메뉴를 선택하세요.");
+    return;
+  }
+    if (!selectedItem.menu_name?.trim()) {
     alert("메뉴명을 입력하세요.");
     return;
   }
   // 카테고리 검사
-  if (!selectedItem.category.trim()) {
+  if (!selectedItem.category?.trim()) {
     alert("카테고리를 입력하세요.");
     return;
   }
@@ -54,12 +58,16 @@ export default function AdminMenuEdit() {
 };
   //메뉴등록
   const handleAddMenu = async () => {
-  if (!selectedItem.menu_name.trim()) {
+    if (!selectedItem) {
+    alert("등록할 메뉴 정보를 입력하세요.");
+    return;
+  }
+    if (!selectedItem.menu_name?.trim()) {
     alert("메뉴명을 입력하세요.");
     return;
   }
   // 카테고리 검사
-  if (!selectedItem.category.trim()) {
+  if (!selectedItem.category?.trim()) {
     alert("카테고리를 입력하세요.");
     return;
   }
@@ -89,15 +97,15 @@ const handleEditClick = (type, item) => {
   setIsAddMode(false);
 };
 // 메뉴와 옵션 이름 수정
-  const handleInputChange = (e) => {
+ const handleInputChange = (e) => {
   const { name, value } = e.target;
   setSelectedItem((prev) => ({
     ...prev,
     [name]:
-      name === "is_available" ||
-      name === "option_is_available"
-        ? value === "true"
-        : value,
+      name === "price" || name === "option_price"
+        ? value === "" ? "" : Number(value) : name === "is_available" ||
+          name === "option_is_available"
+        ? value === "true" : value,
   }));
 };
 //이미지 등록하는 거
@@ -112,8 +120,13 @@ const handleImageChange = (e) => {
 //옴션------------------------------------------------------------
 // 옵션 등록
 const handleAddOption = async () => {
+  
+  if (!selectedItem) {
+    alert("등록할 옵션 정보를 입력하세요.");
+    return;
+  }
   //필수값
-  if (!selectedItem.option_name.trim()) {
+  if (!selectedItem.option_name?.trim()) {
     alert("옵션메뉴명을 입력하세요.");
     return;
   }
@@ -143,6 +156,10 @@ const handleDeleteOption = async (optionId) => {
 
 //옵션 수정
 const handleSaveOption = async () => {
+  if (!selectedItem) {
+    alert("수정할 옵션을 선택하세요.");
+    return;
+  }
   if (!selectedItem.option_name.trim()) {
     alert("옵션메뉴명을 입력하세요.");
     return;
@@ -157,14 +174,13 @@ const handleSaveOption = async () => {
   alert("옵션 사진을 등록하세요.");
   return;
 }
-   try {
+  try {
     await editOption(selectedItem);
     alert("옵션수정되었습니다.");
   } catch {
     alert("옵션수정 실패");
   }
 };
-
 // -----------------------------------------------------------------------
   return (
   <div className="admin-edit-page">
@@ -229,8 +245,7 @@ const handleSaveOption = async () => {
           </tbody>
         </table>
       </div>
-
-{/* 옵션 등록 버튼 */}
+  {/* 옵션 등록 버튼 */}
       <div style={{ marginBottom: "10px" }}>
         <button
           className="register-btn"
@@ -274,14 +289,20 @@ const handleSaveOption = async () => {
       </div>
     </div>
 {/*오른쪽 수정 패널*/}
-
 <div className="edit-right">
   <div className="preview-box">
     <img src={ editMode === "menu" ? selectedItem?.image_url : selectedItem?.option_image }
           alt={ editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}/>
-      <h3 className="preview-name">
-          {editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}
-      </h3>
+    
+    <div className="preview-title">
+        <span className="preview-label">
+        {editMode === "menu" ? "메뉴 리스트" : "옵션 리스트"}
+        </span>
+
+        <h3 className="preview-name">
+        {editMode === "menu" ? selectedItem?.menu_name: selectedItem?.option_name}
+        </h3>
+    </div>
   </div>
 
   <div className="form-group">
@@ -302,7 +323,6 @@ const handleSaveOption = async () => {
       name={editMode === "menu" ? "price" : "option_price"}
       value={editMode === "menu" ? (selectedItem?.price ?? "") : (selectedItem?.option_price ?? "")}
       onChange={handleInputChange}/>
-
   </div>
 
   <div className="form-group">
@@ -324,7 +344,6 @@ const handleSaveOption = async () => {
     <button className="back-btn" onClick={() => navigate("/adminmenu")}>
       뒤로가기
     </button>
-
     <button className="save-btn"
       onClick={() => {
         if (editMode === "menu") {

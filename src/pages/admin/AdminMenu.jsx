@@ -6,33 +6,24 @@ import "../../styles/AdminMenu.css";
 
 export default function AdminMenu() {
   const navigate = useNavigate();
-
+  //로그아웃
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    navigate("/adminlogin");
-  };
+  sessionStorage.removeItem("isAdminLoggedIn");
+  navigate("/adminlogin");
+};
 
   return (
     <div className="admin-menu-page">
-
       <header className="admin-header">
         <h1>관리자 메뉴 관리(디자인및 이것저것 미완성)</h1>
-
-        <button
-          className="logout-btn"
-          onClick={handleLogout}
-        >
+        <button className="logout-btn" onClick={handleLogout}>
           로그아웃
         </button>
       </header>
 
       <main className="admin-layout">
-
         <section className="left-panel">
-          <AdminSummary
-            onMoveOrder={() => navigate("/adminorder")}
-          />
+          <AdminSummary onMoveOrder={() => navigate("/adminorder")}/>
         </section>
 
         <section className="right-panel">
@@ -41,7 +32,6 @@ export default function AdminMenu() {
         </section>
 
       </main>
-
     </div>
   );
 }

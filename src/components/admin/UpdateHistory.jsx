@@ -2,7 +2,6 @@
 import useHistoryStore from "../../store/historyStore";
 
 export default function UpdateHistory() {
-  // 💡 하드코딩된 배열 대신 스토어에서 가져옵니다!
   const { histories } = useHistoryStore();
 
   return (

@@ -11,7 +11,7 @@ export default function AdminMenusTable() {
     <div className="menu-table-box">
       <h2 className="table-title">메뉴 리스트</h2>
 
-       <div className="table-scroll">
+      <div className="table-scroll">
       <table className="menu-table">
         <thead>
           <tr>
@@ -46,10 +46,7 @@ export default function AdminMenusTable() {
 
       {/* 하단 버튼 */}
       <div className="table-button-area">
-        <button
-          className="menu-edit-btn"
-          onClick={() => navigate("/adminmenuedit")}
-        >
+        <button className="menu-edit-btn" onClick={() => navigate("/adminmenuedit")}>
           메뉴 수정
         </button>
       </div>

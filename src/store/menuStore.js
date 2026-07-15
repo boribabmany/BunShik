@@ -9,11 +9,6 @@ const useMenuStore = create((set) => ({
     const menus = await getMenus();
     set({ menuList: menus });
 },
-    addMenu: async (menu) => {
-    await createMenu(menu);
-    const menus = await getMenus();
-    set({ menuList: menus });
-},
     editMenu: async (menu) => {
     await updateMenu(menu);
     const menus = await getMenus();
@@ -29,7 +24,6 @@ addMenu: async (menu) => {
 await createMenu(menu);
 const menus = await getMenus();
 set({ menuList: menus });
-
 //한줄추가해줌
 useHistoryStore.getState().addHistory("메뉴 등록", `${menu.name}이(가) 신규 등록되었습니다.`);
 },

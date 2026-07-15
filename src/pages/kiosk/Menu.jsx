@@ -13,11 +13,32 @@ function Menu() {
   const [category, setCategory] = useState("전체");
   const [selectedMenu, setSelectedMenu] = useState(null);
 
+  // 추가된 상태: 로딩 중 여부, 에러 발생 여부
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
   const items = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
 
+  const fetchMenus = () => {
+    setIsLoading(true);
+    setIsError(false);
+
+    getMenus()
+      .then((data) => {
+        setMenus(data);
+      })
+      .catch((error) => {
+        console.error("메뉴 조회 실패:", error);
+        setIsError(true);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   useEffect(() => {
-    getMenus().then(setMenus);
+    fetchMenus();
   }, []);
 
   const filteredMenus =
@@ -54,15 +75,29 @@ function Menu() {
 
       <CategoryTabs selected={category} onSelect={setCategory} />
 
-      <div>
-        {filteredMenus.map((menu) => (
-          <MenuCard
-            key={menu.menu_id}
-            menu={menu}
-            onClick={() => handleMenuClick(menu)}
-          />
-        ))}
-      </div>
+      {/* 상태별 분기 렌더링 */}
+      {isLoading ? (
+        <p>메뉴를 불러오는 중입니다...</p>
+      ) : isError ? (
+        <div>
+          <p>메뉴를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>
+          <button type="button" onClick={fetchMenus}>
+            다시 시도
+          </button>
+        </div>
+      ) : filteredMenus.length === 0 ? (
+        <p>표시할 메뉴가 없습니다.</p>
+      ) : (
+        <div>
+          {filteredMenus.map((menu) => (
+            <MenuCard
+              key={menu.menu_id}
+              menu={menu}
+              onClick={() => handleMenuClick(menu)}
+            />
+          ))}
+        </div>
+      )}
 
       <CartBar
         count={cartCount}

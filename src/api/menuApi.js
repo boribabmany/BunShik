@@ -19,6 +19,25 @@ export const getMenus = async () => {
   });
 };
 
+/*
+    백엔드 완성시 위에꺼 삭제 하고 주석 풀어서 사용
+   */
+// export const getMenus = async () => {
+//   const res = await fetch("/api/menus");
+//   const data = await res.json();
+//   return data.map(mapServerMenuToFrontend);
+// };
+
+// const mapServerMenuToFrontend = (serverMenu) => ({
+//   menu_id: serverMenu.id,
+//   menu_name: serverMenu.name,
+//   price: serverMenu.price,
+//   category: serverMenu.category_name,
+//   image_url: serverMenu.image_url,
+//   is_available: serverMenu.is_active && !serverMenu.is_sold_out,
+//   option_ids: serverMenu.options?.map((o) => o.id) ?? [],
+// });
+
 // 등록
 export const createMenu = async (menu) => {
   return new Promise((resolve) => {

@@ -255,6 +255,57 @@ body {
   color: #ffffff;
 }
 
+/* 카테고리 탭 wrapper: 고정 화살표 버튼의 위치 기준점 */
+.menu-category-tabs-wrap {
+  position: absolute;
+  top: 140px;
+  left: 48px;
+  width: 984px;
+  height: 140px;
+}
+
+/* 스크롤 영역: 오른쪽에 버튼 자리(56px + 여백)만큼 padding을 줘서 탭이 버튼 밑에 안 깔리게 함 */
+.menu-category-tabs {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-right: 72px; /* 버튼 너비(56px) + 버튼과 탭 사이 여백(16px) */
+  box-sizing: border-box;
+}
+
+/* 고정 화살표 버튼: 56x56로 축소, 박스 오른쪽에서 12px */
+.menu-category-next-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 2;
+}
+
+.menu-category-next-btn:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.menu-category-next-icon {
+  width: 20px;
+  height: 32px;
+  object-fit: contain;
+  transform: rotate(180deg);
+  filter: brightness(0) invert(1);
+}
+
 /* ---------- 메뉴 카드 그리드 ---------- */
 .menu-card-grid {
   position: absolute;

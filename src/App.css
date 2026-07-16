@@ -206,26 +206,38 @@ body {
 }
 
 /* ---------- 카테고리 탭 ---------- */
-/* 984x140 박스, 좌우 슬라이드 가능한 가로 스크롤 컨테이너 */
-.menu-category-tabs {
+/* wrapper: 큰 사각 박스 하나 (radius 없음), 화살표+스크롤 영역을 감싸는 컨테이너 */
+.menu-category-tabs-wrap {
   position: absolute;
   top: 140px;
-  left: 48px; /* (1080 - 984) / 2 = 48px, 뒤로가기 버튼과 좌측 정렬 */
+  left: 48px;
   width: 984px;
   height: 140px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  overflow-x: auto; /* 가로 슬라이드 핵심 */
-  -webkit-overflow-scrolling: touch; /* 아이패드/모바일 관성 스크롤 */
-  scroll-behavior: smooth;
-  box-sizing: border-box;
-  padding: 0 20px;
   background: var(--color-primary-light);
-  border-radius: 20px;
 }
 
-/* 스크롤바 숨김 (크롬/사파리 + 파이어폭스) */
+/* 스크롤 영역: 독립된 테두리/배경 없이, wrap 안에서 카드만 슬라이드되는 순수 스크롤 컨테이너 */
+.menu-category-tabs {
+  flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  cursor: grab;
+  user-select: none;
+}
+
+.menu-category-tabs:active {
+  cursor: grabbing;
+}
+
 .menu-category-tabs::-webkit-scrollbar {
   display: none;
 }
@@ -235,18 +247,18 @@ body {
 }
 
 .menu-category-btn {
-  flex: 0 0 auto; /* 개수가 늘어도 각자 내용 길이만큼 차지, 줄어들지 않음 */
+  flex: 0 0 auto;
   height: 100px;
-  padding: 0 32px; /* 좌우 여백으로 글자 길이에 맞춰 너비 자동 결정 */
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 20px;
   border: 2px solid var(--color-primary);
-  background: #ffffff; /* ★ 변경: 연두색 → 흰색 */
+  background: #ffffff;
   font-size: 48px;
   color: #000000;
-  white-space: nowrap; /* 버튼 안 글자 줄바꿈 방지 */
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -255,34 +267,12 @@ body {
   color: #ffffff;
 }
 
-/* 카테고리 탭 wrapper: 고정 화살표 버튼의 위치 기준점 */
-.menu-category-tabs-wrap {
-  position: absolute;
-  top: 140px;
-  left: 48px;
-  width: 984px;
-  height: 140px;
-}
-
-/* 스크롤 영역: 오른쪽에 버튼 자리(56px + 여백)만큼 padding을 줘서 탭이 버튼 밑에 안 깔리게 함 */
-.menu-category-tabs {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding-right: 72px; /* 버튼 너비(56px) + 버튼과 탭 사이 여백(16px) */
-  box-sizing: border-box;
-}
-
-/* 고정 화살표 버튼: 56x56로 축소, 박스 오른쪽에서 12px */
-.menu-category-next-btn {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
+/* 좌우 화살표: 큰 박스 안, 스크롤 영역 옆에 고정된 형제 요소 */
+.menu-category-nav-btn {
+  flex: 0 0 56px;
   width: 56px;
   height: 56px;
+  margin: 0 12px;
   border-radius: 50%;
   border: none;
   background: var(--color-primary);
@@ -291,11 +281,18 @@ body {
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  z-index: 2;
 }
 
-.menu-category-next-btn:active {
-  transform: translateY(-50%) scale(0.92);
+.menu-category-nav-btn:active {
+  transform: scale(0.92);
+}
+
+.menu-category-prev-icon {
+  width: 20px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  margin-right: 2px;
 }
 
 .menu-category-next-icon {
@@ -304,6 +301,7 @@ body {
   object-fit: contain;
   transform: rotate(180deg);
   filter: brightness(0) invert(1);
+  margin-left: 2px;
 }
 
 /* ---------- 메뉴 카드 그리드 ---------- */

@@ -36,13 +36,25 @@ function CategoryTabs({ selected, onSelect }) {
     }
   };
 
-  // 화살표 버튼 클릭 시 오른쪽으로 한 칸씩 슬라이드
+  const handlePrevClick = () => {
+    scrollRef.current.scrollBy({ left: -200, behavior: "smooth" });
+  };
+
   const handleNextClick = () => {
     scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
   };
 
   return (
     <div className="menu-category-tabs-wrap">
+      <button
+        type="button"
+        className="menu-category-nav-btn"
+        onClick={handlePrevClick}
+        aria-label="이전 카테고리 보기"
+      >
+        <img src={backIcon} alt="" className="menu-category-prev-icon" />
+      </button>
+
       <div
         ref={scrollRef}
         className="menu-category-tabs"
@@ -67,7 +79,7 @@ function CategoryTabs({ selected, onSelect }) {
 
       <button
         type="button"
-        className="menu-category-next-btn"
+        className="menu-category-nav-btn"
         onClick={handleNextClick}
         aria-label="다음 카테고리 보기"
       >

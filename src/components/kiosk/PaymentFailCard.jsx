@@ -1,18 +1,26 @@
-function PaymentFailCard({ type, onRetry, onBack }) {
-  const isCardError = type === "card-error"; // 결제 실패 (IC카드 인식불가)
-  const isDeclined = type === "declined"; // 결제 거절 (카드사 승인거절)
+function PaymentFailCard({ type, failReason, onRetry, onBack }) {
+  const isCardError = type === "card-error";
+  const isDeclined = type === "declined";
+  const isTimeout = type === "timeout";
+  // system-error 및 그 외 알 수 없는 타입은 fallback으로 처리
 
   const title = isCardError
     ? "결제 실패"
     : isDeclined
       ? "결제 거절"
-      : "일시적인 오류";
+      : isTimeout
+        ? "결제 응답 지연"
+        : "일시적인 오류";
 
   const message = isCardError
     ? "IC 카드를 인식할 수 없습니다. 카드를 다시 삽입해 주세요. 계속 인식되지 않으면 카드를 긁어(MS) 결제하거나 다른 결제수단을 이용해 주세요."
     : isDeclined
-      ? "카드사 승인이 거절되었습니다"
-      : "결제 서버와 통신 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.";
+      ? failReason
+        ? `카드사에서 결제를 승인하지 않았습니다 (${failReason}). 다른 카드로 시도하시거나 카드사에 문의해 주세요.`
+        : "카드사에서 결제를 승인하지 않았습니다. 다른 카드로 시도하시거나 카드사에 문의해 주세요."
+      : isTimeout
+        ? "결제 응답이 지연되고 있습니다. 네트워크 상태를 확인하신 후 다시 시도해 주세요."
+        : "결제 처리 중 문제가 발생했습니다. 잠시 후 다시 시도해 주시고, 계속되면 직원을 호출해 주세요.";
 
   return (
     <div className="fail-card-backdrop">
@@ -24,6 +32,9 @@ function PaymentFailCard({ type, onRetry, onBack }) {
         )}
         {isCardError && (
           <div className="fail-card-icon fail-card-icon-error">✕</div>
+        )}
+        {(isTimeout || (!isCardError && !isDeclined)) && (
+          <div className="fail-card-icon fail-card-icon-error">!</div>
         )}
 
         <p className="fail-card-message">{message}</p>

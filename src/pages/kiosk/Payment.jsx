@@ -15,11 +15,13 @@ function Payment() {
   const navigate = useNavigate();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
+  const getTotalPrice = useCartStore((state) => state.getTotalPrice);
   const setOrderNumber = useOrderStore((state) => state.setOrderNumber);
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
 
   const [isPaying, setIsPaying] = useState(false);
   const [failType, setFailType] = useState(null);
+  const [failReason, setFailReason] = useState(null);
 
   const isCartEmpty = items.length === 0;
 
@@ -27,14 +29,12 @@ function Payment() {
     navigate("/menu", { replace: true });
   };
 
-  const totalPrice = items.reduce((sum, item) => {
-    const optionTotal = item.options.reduce((s, o) => s + o.option_price, 0);
-    return sum + (item.base_price + optionTotal) * item.quantity;
-  }, 0);
+  const totalPrice = getTotalPrice();
 
   const handlePay = async () => {
     setIsPaying(true);
     setFailType(null);
+    setFailReason(null);
 
     try {
       const result = await submitPayment();
@@ -47,9 +47,11 @@ function Payment() {
         navigate("/complete");
       } else {
         setFailType(result.status);
+        setFailReason(result.fail_reason ?? null);
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
+      setFailReason(null);
       if (error.message === "TIMEOUT") {
         setFailType("timeout");
       } else {
@@ -109,6 +111,7 @@ function Payment() {
       {failType && (
         <PaymentFailCard
           type={failType}
+          failReason={failReason}
           onRetry={handlePay}
           onBack={() => setFailType(null)}
         />

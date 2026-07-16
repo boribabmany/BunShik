@@ -80,7 +80,7 @@ function Cart() {
         onClick={() => navigate("/payment")}
         disabled={isEmpty}
       >
-        주문 확인
+        결제 하기
       </button>
     </div>
   );

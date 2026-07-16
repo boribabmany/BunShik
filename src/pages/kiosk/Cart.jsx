@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
 import CartItem from "../../components/kiosk/CartItem";
 import logo from "../../images/bunshiklogo.png";
-import "../../App.css";
+import "../../styles/common.css";
+import "../../styles/Cart.css";
 
 function Cart() {
   const navigate = useNavigate();

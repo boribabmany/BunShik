@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import emptyCartIcon from "../../images/emptycart.png";
+import "../../styles/EmptyCartModal.css";
 
 const AUTO_CLOSE_SECONDS = 5;
 

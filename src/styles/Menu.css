@@ -1,0 +1,322 @@
+/* ==========================================================
+   Menu 화면 (SCR_002)
+========================================================== */
+.menu-screen {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  margin: 0 auto;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+
+/* ---------- 카테고리 탭 ---------- */
+/* wrapper: 큰 사각 박스 하나 (radius 없음), 화살표+스크롤 영역을 감싸는 컨테이너 */
+.menu-category-tabs-wrap {
+  position: absolute;
+  top: 140px;
+  left: 48px;
+  width: 984px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  background: var(--color-primary-light);
+}
+
+/* 스크롤 영역: 독립된 테두리/배경 없이, wrap 안에서 카드만 슬라이드되는 순수 스크롤 컨테이너 */
+.menu-category-tabs {
+  flex: 1;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  cursor: grab;
+  user-select: none;
+}
+
+.menu-category-tabs:active {
+  cursor: grabbing;
+}
+
+.menu-category-tabs::-webkit-scrollbar {
+  display: none;
+}
+.menu-category-tabs {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.menu-category-btn {
+  flex: 0 0 auto;
+  height: 100px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  border: 2px solid var(--color-primary);
+  background: #ffffff;
+  font-size: 48px;
+  color: #000000;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-category-btn.active {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+
+/* 좌우 화살표: 큰 박스 안, 스크롤 영역 옆에 고정된 형제 요소 */
+.menu-category-nav-btn {
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  margin: 0 12px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.menu-category-nav-btn:active {
+  transform: scale(0.92);
+}
+
+.menu-category-prev-icon {
+  width: 20px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  margin-right: 2px;
+}
+
+.menu-category-next-icon {
+  width: 20px;
+  height: 32px;
+  object-fit: contain;
+  transform: rotate(180deg);
+  filter: brightness(0) invert(1);
+  margin-left: 2px;
+}
+
+/* ---------- 메뉴 카드 그리드 ---------- */
+.menu-card-grid {
+  position: absolute;
+  top: 335px;
+  left: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 316px);
+  grid-auto-rows: 520px;
+  gap: 42px 18px;
+}
+
+.menu-card {
+  position: relative;
+  width: 316px;
+  height: 520px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.menu-card-image-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 320px;
+}
+
+.menu-card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+  display: block;
+}
+
+.menu-card-name {
+  position: absolute;
+  top: 333px;
+  left: 16px;
+  font-size: 40px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.menu-card-price {
+  position: absolute;
+  top: 425px;
+  left: 16px;
+  font-size: 32px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.menu-card-add-btn {
+  position: absolute;
+  top: 421px;
+  left: 228px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: none;
+  background: #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* + 벡터 아이콘: 36 x 36, 십자 모양, 선 두께 4px */
+.menu-card-add-icon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.menu-card-add-icon::before,
+.menu-card-add-icon::after {
+  content: "";
+  position: absolute;
+  background: #ffffff;
+}
+
+.menu-card-add-icon::before {
+  left: 0;
+  top: 16px;
+  width: 36px;
+  height: 4px;
+}
+
+.menu-card-add-icon::after {
+  left: 16px;
+  top: 0;
+  width: 4px;
+  height: 36px;
+}
+
+.menu-card-add-btn:active,
+.menu-card-add-btn.is-pressed {
+  background: var(--color-primary);
+  transform: scale(0.88);
+}
+
+.menu-card-add-btn:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+
+.menu-card-soldout-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 320px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-card-soldout-overlay span {
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+/* ---------- 장바구니 바 (하단 고정) ---------- */
+.menu-cartbar-footer {
+  position: absolute;
+  top: 1683px;
+  left: 0;
+  width: 100%;
+  height: 240px;
+  background: var(--color-primary-light);
+}
+
+/* flex로 배치 - 세로 중앙정렬(align-items:center)이 아이콘 top32, 텍스트 top46과 정확히 일치 */
+.menu-cartbar-box {
+  position: absolute;
+  top: 52px;
+  left: 48px;
+  width: 650px;
+  height: 140px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding-left: 20px; /* 아이콘 왼쪽 20px */
+}
+
+/* 장바구니 아이콘 이미지: 78 x 75 */
+.menu-cartbar-icon {
+  width: 78px;
+  height: 75px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* 장바구니 텍스트: 아이콘 끝에서 40px 간격 */
+.menu-cartbar-label {
+  margin: 0 0 0 40px;
+  font-size: 40px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+/* "N개" 텍스트: "장바구니" 텍스트 끝에서 66px 간격 */
+.menu-cartbar-count {
+  margin: 0 0 0 66px;
+  font-size: 40px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+/* "N원" 텍스트: "N개" 텍스트 끝에서 68px 간격 */
+.menu-cartbar-total {
+  margin: 0 0 0 68px;
+  font-size: 40px;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.menu-cartbar-confirm {
+  position: absolute;
+  top: 50px;
+  left: 733px;
+  width: 298px;
+  height: 140px;
+  border-radius: 20px;
+  border: none;
+  background: #5e5e5e;
+  color: #ffffff;
+  font-size: 52px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.menu-cartbar-confirm:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+

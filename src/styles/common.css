@@ -1,0 +1,68 @@
+/* ==========================================================
+   전역 변수 - 메인 컬러 및 공통 값
+========================================================== */
+:root {
+  --color-primary: #6da12f;
+  --color-primary-light: #eaf4de;
+  --color-text: #1a1a1a;
+  --color-text-sub: #4a4a4a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    "Pretendard",
+    -apple-system,
+    sans-serif;
+}
+
+/* ========================================================== 
+   공통 컴포넌트 (여러 화면에서 재사용: 뒤로가기 버튼, 로고)
+========================================================== */
+/* ---------- 뒤로가기 버튼 ---------- */
+.menu-back-button {
+  position: absolute;
+  left: 48px;
+  top: 32px;
+  width: 184px;
+  height: 56px;
+  border-radius: 24px;
+  border: 1px solid #c4c7c7;
+  background: #ffffff;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  padding: 0;
+}
+
+/* 화살표 아이콘: 16x20, 왼쪽20px 위16px */
+.menu-back-icon {
+  position: absolute;
+  left: 20px;
+  top: 16px;
+  width: 16px;
+  height: 20px;
+  background: #000000;
+  clip-path: polygon(100% 0%, 100% 20%, 30% 50%, 100% 80%, 100% 100%, 0% 50%);
+}
+
+/* 뒤로가기 텍스트: 아이콘(20+16=36)에서 24px 간격 → 60px, 위에서12px, font-size 24 */
+.menu-back-text {
+  position: absolute;
+  left: 60px;
+  top: 8px;
+  font-size: 24px;
+  color: #000000;
+}
+
+/* ---------- 로고 ---------- */
+.menu-logo {
+  position: absolute;
+  left: 940px;
+  top: 16px;
+  width: 92px;
+  height: 92px;
+}

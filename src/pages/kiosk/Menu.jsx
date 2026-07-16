@@ -7,8 +7,8 @@ import MenuCard from "../../components/kiosk/MenuCard";
 import OptionModal from "../../components/kiosk/OptionModal";
 import CartBar from "../../components/kiosk/CartBar";
 import logo from "../../images/bunshiklogo.png";
-import "../../App.css";
-
+import "../../styles/common.css";
+import "../../styles/Menu.css";
 function Menu() {
   const navigate = useNavigate();
   const [menus, setMenus] = useState([]);

@@ -1,0 +1,236 @@
+/* ==========================================================
+   OrderComplete 화면 (SCR_005)
+   캔버스 기준: 1080 x 1920
+========================================================== */
+.complete-screen {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  margin: 0 auto;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ---------- 체크 표시 원형 아이콘 ---------- */
+.complete-check-circle {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 440px;
+  top: 144px;
+  border-radius: 50%;
+  background: #6da12f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.complete-check-icon {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+/* ---------- "주문이 완료되었습니다!" ---------- */
+.complete-title {
+  position: absolute;
+  width: 781px;
+  left: 149px;
+  top: 557px;
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 97px;
+  color: #000000;
+  margin: 0;
+}
+
+/* ---------- 안내 문구 ---------- */
+.complete-subtitle {
+  position: absolute;
+  width: 482px;
+  left: 300px;
+  top: 707px;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 58px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+/* ---------- 주문번호 카드 ---------- */
+.complete-order-card {
+  box-sizing: border-box;
+  position: absolute;
+  width: 774px;
+  height: 341px;
+  left: 153px;
+  top: 926px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 20px;
+}
+
+/* 카드가 position:absolute이므로 자식은 카드 기준 상대좌표.
+   width:100% + text-align:center로 카드 안에서 항상 가운데 정렬 */
+.complete-order-label {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 51px; /* 카드 top(926px)으로부터 51px 아래 */
+  font-size: 54px;
+  font-weight: 500;
+  line-height: 65px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+.complete-order-number {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 151px; /* 카드 top(926px)으로부터 151px 아래 */
+  font-size: 100px;
+  font-weight: 500;
+  line-height: 121px;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+}
+
+/* ---------- 총 결제 금액 ---------- */
+/* 라벨: 프레임(1080px) 왼쪽에서 120px 고정 */
+.complete-total-label {
+  position: absolute;
+  left: 120px;
+  top: 1531px;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 77px;
+  color: #000000;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* 가격: 프레임(1080px) 오른쪽에서 120px 고정.
+   width를 주지 않고 right로만 고정하면
+   자릿수가 늘어나도 오른쪽 기준점은 그대로 유지되고
+   글자는 왼쪽으로 자연스럽게 늘어남 */
+.complete-total-price {
+  position: absolute;
+  right: 120px;
+  top: 1531px;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 77px;
+  color: #000000;
+  margin: 0;
+  white-space: nowrap; /* 숫자가 길어져도 줄바꿈 안 되게 */
+}
+
+/* ---------- 영수증 출력 버튼 ---------- */
+/* 왼쪽에서 88px 고정 */
+.complete-receipt-button {
+  position: absolute;
+  width: 366px;
+  height: 140px;
+  left: 88px;
+  top: 1724px;
+  background: var(--color-primary-light);
+  border: none;
+  border-radius: 20px;
+  font-size: 52px;
+  font-weight: 500;
+  color: #000000;
+  cursor: pointer;
+}
+
+/* ---------- 주문번호만 출력 버튼 ---------- */
+/* width 없이 right: 68px로 고정하여
+   텍스트가 길어져도 오른쪽 여백이 항상 68px로 유지되도록 처리 */
+.complete-home-button {
+  position: absolute;
+  height: 140px;
+  right: 68px;
+  top: 1724px;
+  padding: 0 40px;
+  background: #5e5e5e;
+  border: none;
+  border-radius: 20px;
+  font-size: 52px;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   인쇄 전용 영역 (OrderComplete)
+   - 화면(모니터)에서는 항상 숨김
+   - window.print() 실행 시에만 종이에 출력됨
+========================================================== */
+.complete-print-area {
+  display: none;
+}
+
+@media print {
+  /* 인쇄될 때는 화면용 UI를 전부 숨기고 */
+  .complete-screen > *:not(.complete-print-area) {
+    display: none !important;
+  }
+
+  /* 인쇄 전용 영역만 보이게 전환 */
+  .complete-print-area {
+    display: block;
+    position: static;
+    width: 100%;
+  }
+}
+
+/* ---------- 영수증 전체 출력용 레이아웃 ---------- */
+.print-receipt {
+  padding: 40px;
+  text-align: center;
+}
+
+.print-receipt-heading {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 24px;
+}
+
+.print-receipt-label {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.print-receipt-number {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 0 32px;
+}
+
+.print-receipt-total {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* ---------- 주문번호만 출력용 레이아웃 ---------- */
+.print-ordernumber {
+  padding: 60px;
+  text-align: center;
+}
+
+.print-ordernumber-label {
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+
+.print-ordernumber-value {
+  font-size: 60px;
+  font-weight: 700;
+  margin: 0;
+}
+

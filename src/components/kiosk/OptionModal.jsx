@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../App.css";
+import "../../styles/OptionModal.css";
 
 const MAX_OPTIONS = 2; // 시안에 "최대 2개 선택"으로 명시되어 있어 제한 로직 추가
 

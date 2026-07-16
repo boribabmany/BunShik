@@ -5,7 +5,7 @@ import korea from "../../images/korea.png";
 import usa from "../../images/usa.png";
 import eatinIcon from "../../images/eatinicon.png";
 import takeoutIcon from "../../images/takeout.png";
-import "../../App.css";
+import "../../styles/Home.css";
 
 function Home() {
   const navigate = useNavigate();

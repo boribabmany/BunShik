@@ -9,7 +9,8 @@ import PaymentItem from "../../components/kiosk/PaymentItem";
 import logo from "../../images/bunshiklogo.png";
 import cardIcon from "../../images/card.png";
 import backIcon from "../../images/backicon.png";
-import "../../App.css";
+import "../../styles/common.css";
+import "../../styles/Payment.css";
 
 function Payment() {
   const navigate = useNavigate();

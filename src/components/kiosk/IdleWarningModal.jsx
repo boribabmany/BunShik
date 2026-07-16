@@ -1,3 +1,5 @@
+import "../../styles/IdleWarningModal.css";
+
 function IdleWarningModal({ secondsLeft, onContinue }) {
   const progressPercent = (secondsLeft / 10) * 100;
 

@@ -1,3 +1,4 @@
+import "../../styles/PaymentFailCard.css";
 function PaymentFailCard({ type, failReason, onRetry, onBack }) {
   const isCardError = type === "card-error";
   const isDeclined = type === "declined";

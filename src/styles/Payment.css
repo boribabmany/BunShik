@@ -1,0 +1,232 @@
+/* ==========================================================
+   Payment 화면 (SCR_004)
+   캔버스 기준: 1080 x 1920
+========================================================== */
+.payment-screen {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  margin: 0 auto;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* ---------- 타이틀 "주문내역" ---------- */
+.payment-title {
+  position: absolute;
+  top: 88px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 96px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+/* 위쪽 구분선: 위에서 348px, 두께2, 길이984 */
+.payment-divider-top {
+  position: absolute;
+  top: 348px;
+  left: 48px;
+  width: 984px;
+  height: 2px;
+  background: #000000;
+}
+
+/* ---------- 주문내역 목록 (스크롤, 위 348 ~ 아래 1188 사이) ---------- */
+.payment-list-wrapper {
+  position: absolute;
+  top: 350px;
+  left: 48px;
+  width: 984px;
+  height: 838px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.payment-list-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.payment-list {
+  width: 100%;
+}
+
+.payment-item {
+  width: 984px;
+  padding: 18px 32px 18px 22px;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+.payment-item-toprow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 73px;
+  width: 930px;
+  height: 200px;
+}
+
+.payment-item-image {
+  width: 160px;
+  height: 200px;
+  border-radius: 20px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.payment-item-name {
+  font-size: 48px;
+  color: #000000;
+  margin: 0;
+  flex: 1;
+}
+
+.payment-item-qty-box {
+  width: 116px;
+  height: 80px;
+  border: 1px solid #000000;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #000000;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.payment-item-price {
+  font-size: 48px;
+  color: #000000;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* 옵션추가칸: 장바구니 목록과 동일 */
+.payment-item-option-row {
+  display: flex;
+  justify-content: space-between;
+  width: 930px;
+  margin: 0 auto;
+  padding: 4px 240px 4px 228px;
+  box-sizing: border-box;
+  font-size: 28px;
+  font-weight: 300;
+  color: #000000;
+}
+
+/* 아래쪽 구분선: 위에서 1188px, 두께2, 길이984 */
+.payment-divider-bottom {
+  position: absolute;
+  top: 1188px;
+  left: 48px;
+  width: 984px;
+  height: 2px;
+  background: #000000;
+}
+
+/* ---------- 총 결제 금액 ---------- */
+.payment-total-label {
+  position: absolute;
+  top: 1248px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 54px;
+  color: #000000;
+  margin: 0;
+}
+
+.payment-total-price {
+  position: absolute;
+  top: 1349px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 100px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+/* ---------- 카드 결제 버튼 ---------- */
+.payment-pay-button {
+  position: absolute;
+  top: 1520px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 760px;
+  height: 200px;
+  border-radius: 40px;
+  border: none;
+  background: #5e5e5e;
+  cursor: pointer;
+}
+
+.payment-pay-button:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+
+.payment-pay-icon {
+  position: absolute;
+  left: 104px;
+  top: 54%;
+  transform: translateY(-50%);
+  width: 84px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.payment-pay-text {
+  position: absolute;
+  left: 276px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 84px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+/* ---------- 뒤로가기 버튼 (하단, 왼쪽56px, 글씨48) ---------- */
+.payment-back-button {
+  position: absolute;
+  left: 56px;
+  bottom: 56px;
+  width: 360px;
+  height: 120px;
+  border-radius: 20px;
+  border: 1px solid #c4c7c7;
+  background: #ffffff;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* 뒤로가기 버튼 안 화살표 이미지: 버튼 왼쪽에서 42px, 세로 중앙 정렬 */
+.payment-back-icon {
+  position: absolute;
+  left: 42px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.payment-back-text {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font-size: 48px;
+  color: #000000;
+  white-space: nowrap;
+  margin-left: 20px;
+}
+

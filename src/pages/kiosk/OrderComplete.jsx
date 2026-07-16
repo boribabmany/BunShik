@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useOrderStore from "../../store/useOrderStore";
 import checkIcon from "../../images/check.png";
-import "../../App.css";
+import "../../styles/OrderComplete.css";
 
 function OrderComplete() {
   const navigate = useNavigate();

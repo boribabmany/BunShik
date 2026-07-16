@@ -11,13 +11,11 @@ function Cart() {
   const increaseQuantity = useCartStore((state) => state.increaseQuantity);
   const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
   const removeItem = useCartStore((state) => state.removeItem);
+  const getTotalPrice = useCartStore((state) => state.getTotalPrice);
 
   const isEmpty = items.length === 0;
 
-  const totalPrice = items.reduce((sum, item) => {
-    const optionTotal = item.options.reduce((s, o) => s + o.option_price, 0);
-    return sum + (item.base_price + optionTotal) * item.quantity;
-  }, 0);
+  const totalPrice = getTotalPrice();
 
   return (
     <div className="cart-screen">

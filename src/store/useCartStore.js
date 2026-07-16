@@ -10,7 +10,13 @@ const isSameItem = (a, b) => {
   return aIds.every((id, i) => id === bIds[i]);
 };
 
-const useCartStore = create((set) => ({
+// 항목 하나의 옵션 포함 합계 (기본가 + 옵션가 합) * 수량
+const getItemTotal = (item) => {
+  const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
+  return (item.base_price + optionTotal) * item.quantity;
+};
+
+const useCartStore = create((set, get) => ({
   items: [], // [{ menu_id, menu_name, image_url, base_price, quantity, options: [{option_id, option_name, option_price}] }]
 
   addItem: (newItem) =>
@@ -55,6 +61,12 @@ const useCartStore = create((set) => ({
     })),
 
   clearCart: () => set({ items: [] }),
+
+  // ★ 추가: 장바구니 전체 총액 계산 (Menu/Cart/Payment 공통으로 재사용)
+  getTotalPrice: () => {
+    const { items } = get();
+    return items.reduce((sum, item) => sum + getItemTotal(item), 0);
+  },
 }));
 
 export default useCartStore;

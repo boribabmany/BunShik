@@ -19,6 +19,7 @@ function Menu() {
 
   const items = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
+  const getTotalPrice = useCartStore((state) => state.getTotalPrice);
 
   const fetchMenus = () => {
     setIsLoading(true);
@@ -58,10 +59,7 @@ function Menu() {
   };
 
   const cartCount = items.length;
-  const cartTotal = items.reduce((sum, item) => {
-    const optionTotal = item.options.reduce((s, o) => s + o.option_price, 0);
-    return sum + (item.base_price + optionTotal) * item.quantity;
-  }, 0);
+  const cartTotal = getTotalPrice();
 
   return (
     <div className="menu-screen">

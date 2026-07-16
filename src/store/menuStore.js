@@ -8,25 +8,32 @@ const useMenuStore = create((set) => ({
     loadMenus: async () => {
     const menus = await getMenus();
     set({ menuList: menus });
-},
+    },
+    addMenu: async (menu) => {
+    await createMenu(menu);
+    const menus = await getMenus();
+    set({ menuList: menus });
+    useHistoryStore.getState().addHistory("메뉴 등록", `${menu.menu_name}이(가) 신규 등록되었습니다.`);
+    },
     editMenu: async (menu) => {
     await updateMenu(menu);
     const menus = await getMenus();
     set({ menuList: menus });
-},
+    useHistoryStore.getState().addHistory(
+    "메뉴 수정",
+    `${menu.menu_name}이(가) 수정되었습니다.`);
+    },
     removeMenu: async (menuId) => {
     await deleteMenu(menuId);
     const menus = await getMenus();
     set({ menuList: menus });
+    useHistoryStore.getState().addHistory(
+    "메뉴 삭제",
+    `메뉴(ID: ${menuId})이(가) 삭제되었습니다.`
+);
 },
-//히스토리용
-addMenu: async (menu) => {
-await createMenu(menu);
-const menus = await getMenus();
-set({ menuList: menus });
-//한줄추가해줌
-useHistoryStore.getState().addHistory("메뉴 등록", `${menu.name}이(가) 신규 등록되었습니다.`);
-},
+
+
 }));
 
 export default useMenuStore;

@@ -1,11 +1,11 @@
 // adminmenu 옵션테이블
 
 import { useNavigate } from "react-router-dom";
-import { options } from "../../data/options";
+import useOptionStore from "../../store/optionStore";
 
 export default function AdminOptionsTable() {
   const navigate = useNavigate();
-
+  const {optionList} = useOptionStore();
   // DB 연결 전 목업 데이터
 
   return (
@@ -26,7 +26,7 @@ export default function AdminOptionsTable() {
         </thead>
 
         <tbody>
-          {options.map((option) => (
+          {optionList.map((option) => (
             <tr key={option.option_id}>
               <td className="number-col">{option.option_id}</td>
               <td> <img src={option.option_image} alt={option.option_name}/> </td>

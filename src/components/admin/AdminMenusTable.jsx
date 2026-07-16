@@ -1,10 +1,11 @@
 // adminmenu 메뉴테이블
 
 import { useNavigate } from "react-router-dom";
-import { menus } from "../../data/menus";
+import useMenuStore from "../../store/menuStore";
 
 export default function AdminMenusTable() {
   const navigate = useNavigate();
+  const { menuList } = useMenuStore();
 
   // DB 연결 전 목업 데이터
   return (
@@ -26,7 +27,7 @@ export default function AdminMenusTable() {
         </thead>
 
         <tbody>
-          {menus.map((menu) => (
+          {menuList.map((menu) => (
             <tr key={menu.menu_id}>
 
               <td className="number-col">{menu.menu_id}</td>

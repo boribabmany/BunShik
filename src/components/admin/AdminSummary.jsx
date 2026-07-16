@@ -5,14 +5,14 @@ import useMenuStore from "../../store/menuStore";
 import useOrderStore from "../../store/orderStore"; 
 import useOptionStore from "../../store/optionStore"; 
 import UpdateHistory from "./UpdateHistory";
-
 export default function AdminSummary({ onMoveOrder }) {
   const navigate = useNavigate();
 
   const { menuList, loadMenus } = useMenuStore();
-  const { orders, loadOrders } = useOrderStore();
   const { optionList, loadOptions } = useOptionStore(); 
-
+    // 4. 오늘의매출 (안전하게 예외 처리 적용)
+  const { orders, loadOrders, todaySales } = useOrderStore();
+  
   useEffect(() => {
     if (loadMenus) loadMenus();
     if (loadOrders) loadOrders();
@@ -32,8 +32,7 @@ export default function AdminSummary({ onMoveOrder }) {
   const todayOrdersCount = orders 
     ? orders.filter(o => o.created_at?.startsWith(todayDate)).length 
     : 0;
-  // 4. 신규 메뉴 이름 (안전하게 예외 처리 적용)
-  const newMenuName = menuList?.[menuList.length - 1]?.name || "없음";
+
 
   return (
     <div className="admin-summary">
@@ -55,8 +54,8 @@ export default function AdminSummary({ onMoveOrder }) {
       </div>
 
       <div className="summary-card">
-        <p>신규 메뉴</p>
-        <strong>{newMenuName}</strong>
+        <p>오늘의 매출</p>
+        <strong>{todaySales.toLocaleString()}원</strong>
       </div>
 
       <button

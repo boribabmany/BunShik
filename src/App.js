@@ -4,10 +4,12 @@ import Menu from "./pages/kiosk/Menu";
 import Cart from "./pages/kiosk/Cart";
 import Payment from "./pages/kiosk/Payment";
 import OrderComplete from "./pages/kiosk/OrderComplete";
+import IdleResetHandler from "./components/kiosk/IdleResetHandler";
 
 function App() {
   return (
     <BrowserRouter>
+      <IdleResetHandler />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/menu" element={<Menu />} />

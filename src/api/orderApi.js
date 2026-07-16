@@ -24,16 +24,16 @@ const requestPayment = async () => {
 
       // 5% 확률로 네트워크 오류 흉내
       if (rand < 0.05) {
-        reject(new Error("NETWORK_ERROR"));
+        reject(new Error("NETWORK_ERROR")); //시스템 오류(네트워크 오류)
         return;
       }
 
       if (rand < 0.4) {
-        resolve({ status: "success" });
+        resolve({ status: "success" }); //성공
       } else if (rand < 0.7) {
-        resolve({ status: "card-error" });
+        resolve({ status: "card-error" }); // 카드인식 오류
       } else {
-        resolve({ status: "declined", fail_reason: "잔액부족" });
+        resolve({ status: "declined", fail_reason: "잔액부족" }); // 결제 거절
       }
     }, 800);
   });

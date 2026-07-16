@@ -206,53 +206,53 @@ body {
 }
 
 /* ---------- 카테고리 탭 ---------- */
+/* 984x140 박스, 좌우 슬라이드 가능한 가로 스크롤 컨테이너 */
 .menu-category-tabs {
   position: absolute;
   top: 140px;
-  left: 0;
-  width: 100%;
-  height: 100px;
+  left: 48px; /* (1080 - 984) / 2 = 48px, 뒤로가기 버튼과 좌측 정렬 */
+  width: 984px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto; /* 가로 슬라이드 핵심 */
+  -webkit-overflow-scrolling: touch; /* 아이패드/모바일 관성 스크롤 */
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  padding: 0 20px;
+  background: var(--color-primary-light);
+  border-radius: 20px;
+}
+
+/* 스크롤바 숨김 (크롬/사파리 + 파이어폭스) */
+.menu-category-tabs::-webkit-scrollbar {
+  display: none;
+}
+.menu-category-tabs {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .menu-category-btn {
-  position: absolute;
-  top: 0;
+  flex: 0 0 auto; /* 개수가 늘어도 각자 내용 길이만큼 차지, 줄어들지 않음 */
   height: 100px;
+  padding: 0 32px; /* 좌우 여백으로 글자 길이에 맞춰 너비 자동 결정 */
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 20px;
   border: 2px solid var(--color-primary);
-  background: var(--color-primary-light);
+  background: #ffffff; /* ★ 변경: 연두색 → 흰색 */
   font-size: 48px;
   color: #000000;
+  white-space: nowrap; /* 버튼 안 글자 줄바꿈 방지 */
   cursor: pointer;
 }
 
 .menu-category-btn.active {
   background: var(--color-primary);
   color: #ffffff;
-}
-
-.menu-category-btn[data-category="전체"] {
-  left: 53px;
-  width: 180px;
-}
-.menu-category-btn[data-category="떡볶이"] {
-  left: 243px;
-  width: 224px;
-}
-.menu-category-btn[data-category="라면"] {
-  left: 477px;
-  width: 180px;
-}
-.menu-category-btn[data-category="김밥"] {
-  left: 667px;
-  width: 180px;
-}
-.menu-category-btn[data-category="음료"] {
-  left: 852px;
-  width: 180px;
 }
 
 /* ---------- 메뉴 카드 그리드 ---------- */

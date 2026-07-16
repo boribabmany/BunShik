@@ -40,7 +40,7 @@ export const menus = [
     menu_id: 4,
     menu_name: "순대",
     price: 3000,
-    category: "순대",
+    category: "사이드", // 기존 "순대" → "사이드"로 변경
     image_url: sundae,
     description: "",
     is_available: true,
@@ -50,7 +50,7 @@ export const menus = [
     menu_id: 5,
     menu_name: "오뎅",
     price: 2000,
-    category: "오뎅",
+    category: "사이드", // 기존 "오뎅" → "사이드"로 변경
     image_url: odang,
     description: "",
     is_available: true,

@@ -10,7 +10,6 @@
   overflow: hidden;
 }
 
-
 /* ---------- 카테고리 탭 ---------- */
 /* wrapper: 큰 사각 박스 하나 (radius 없음), 화살표+스크롤 영역을 감싸는 컨테이너 */
 .menu-category-tabs-wrap {
@@ -262,7 +261,8 @@
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  padding-left: 20px; /* 아이콘 왼쪽 20px */
+  padding: 0 24px; /* 좌우 여백을 동일하게(기존엔 padding-left만 있었음) */
+  cursor: pointer;
 }
 
 /* 장바구니 아이콘 이미지: 78 x 75 */
@@ -273,28 +273,31 @@
   flex-shrink: 0;
 }
 
-/* 장바구니 텍스트: 아이콘 끝에서 40px 간격 */
+/* 장바구니 텍스트: 아이콘 끝에서 간격 */
 .menu-cartbar-label {
-  margin: 0 0 0 40px;
+  margin-left: auto;
   font-size: 40px;
   color: #000000;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-/* "N개" 텍스트: "장바구니" 텍스트 끝에서 66px 간격 */
+/* "N개" 텍스트 */
 .menu-cartbar-count {
-  margin: 0 0 0 66px;
+  margin-left: auto;
   font-size: 40px;
   color: #000000;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
-/* "N원" 텍스트: "N개" 텍스트 끝에서 68px 간격 */
+/* "N원" 텍스트: 앞의 다른 요소들이 아무리 길어져도 항상 박스 오른쪽 끝(padding 24px)에 고정 */
 .menu-cartbar-total {
-  margin: 0 0 0 68px;
+  margin-left: auto;
   font-size: 40px;
   color: #000000;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .menu-cartbar-confirm {
@@ -319,4 +322,3 @@
   background: #b4b2a9;
   cursor: not-allowed;
 }
-

@@ -38,7 +38,7 @@
 
 .home-logo {
   position: absolute;
-  top: 140px;
+  top: 240px;
   left: 50%;
   transform: translateX(-50%);
   width: 330px;
@@ -47,7 +47,7 @@
 
 .home-guide {
   position: absolute;
-  top: 640px;
+  top: 800px;
   left: 0;
   width: 100%;
   text-align: center;
@@ -101,7 +101,7 @@
 .home-takeout-icon {
   width: 131px;
   height: 138px;
-  left: 52px;
+  left: 60px;
   top: 93px;
 }
 
@@ -126,4 +126,3 @@
 .home-takeout-text {
   left: 223px;
 }
-

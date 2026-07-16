@@ -58,7 +58,7 @@ function Menu() {
     }
   };
 
-  const cartCount = items.length;
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const cartTotal = getTotalPrice();
 
   return (

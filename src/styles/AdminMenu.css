@@ -294,5 +294,12 @@
     font-size:14px;
     color:#666;
 }
-
-/*css 컴퍼넌트 분리예정*/
+/* 등록버튼 2개*/
+.add-btn-group{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
+}
+.add-btn-group .add-btn{
+    flex:1;
+}

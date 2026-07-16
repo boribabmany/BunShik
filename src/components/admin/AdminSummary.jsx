@@ -30,10 +30,8 @@ export default function AdminSummary({ onMoveOrder }) {
   // 3. 오늘의 주문 수 계산 (임시 오늘 날짜 기준 "2025-05-20")
   const todayDate = "2025-05-20"; 
   const todayOrdersCount = orders 
-    ? orders.filter(o => o.created_at?.startsWith(todayDate)).length 
-    : 0;
-
-
+    ? orders.filter(o => o.created_at?.startsWith(todayDate)).length : 0;
+    
   return (
     <div className="admin-summary">
       <h2 className="summary-title">메뉴 관리</h2>
@@ -58,16 +56,20 @@ export default function AdminSummary({ onMoveOrder }) {
         <strong>{todaySales.toLocaleString()}원</strong>
       </div>
 
-      <button
-        className="summary-btn"
-        onClick={onMoveOrder}
-      >
+      <button className="summary-btn" onClick={onMoveOrder} >
         주문관리로 가기
       </button>
 
-      <button className="summary-btn add-btn" onClick={() => navigate("/adminmenuedit")}>
-        + 메뉴 등록
+      <div className="add-btn-group">
+      <button className="summary-btn add-btn" onClick={() => navigate("/adminmenuedit", { state: {
+                        type: "menu", isAddMode: true, },})}>
+              + 메뉴 등록
       </button>
+      <button className="summary-btn add-btn" onClick={() => navigate("/adminmenuedit", { state: {
+                        type: "option", isAddMode: true,},})}>
+              + 옵션 등록
+      </button>
+      </div>
       <UpdateHistory />
     </div>
   );

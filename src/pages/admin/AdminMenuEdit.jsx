@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
 import "../../styles/AdminMenuEdit.css";
@@ -11,6 +11,15 @@ export default function AdminMenuEdit() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [editMode, setEditMode] = useState("menu");
   const [isAddMode, setIsAddMode] = useState(false);
+  
+  const location = useLocation();
+
+  const [menuPage, setMenuPage] = useState(1);
+  const [optionPage, setOptionPage] = useState(1);
+  
+
+  const MENU_PER_PAGE = 5;
+  const OPTION_PER_PAGE = 3;
 
   //페이지가 처음 열릴 때 메뉴와 옵션 데이터를 불러오는 역할
   useEffect(() => {
@@ -18,11 +27,50 @@ export default function AdminMenuEdit() {
     await loadMenus();
     await loadOptions();};
   fetchData();}, [loadMenus, loadOptions]);
+  //페이지 매칭
+  useEffect(() => {
+  if (location.state?.item) {
+    setEditMode(location.state.type);
+    setSelectedItem(location.state.item);
+    setIsAddMode(false);
+  }
+  }, [location.state]);
+//-------------
+  useEffect(() => {
+  if (!location.state) return;
+  // 등록 모드
+  if (location.state.isAddMode) {
+    setEditMode(location.state.type);
+    setIsAddMode(true);
+
+    if (location.state.type === "menu") { setSelectedItem({
+        menu_name: "",
+        category: "",
+        price: 0,
+        is_available: true,
+        image_url: "",
+      });
+    } else { setSelectedItem({
+        option_name: "",
+        option_price: 0,
+        option_is_available: true,
+        option_image: "",
+      });}return;
+  }
+  // 수정 모드
+  if (location.state.item) {
+    setEditMode(location.state.type);
+    setSelectedItem(location.state.item);
+    setIsAddMode(false);}}, [location.state]);
   //--메뉴리스트-------------------------------------------------
   //메뉴삭제
   const handleDeleteMenu = async (menuId) => {
   if (!window.confirm("삭제하시겠습니까?")) return;
   await removeMenu(menuId);
+  if (selectedItem?.menu_id === menuId) {
+  setSelectedItem(null);
+  setIsAddMode(false);
+}
 };
   //메뉴수정
   const handleSave = async () => {
@@ -50,11 +98,14 @@ export default function AdminMenuEdit() {
   return;
 }
   try {
-    await editMenu(selectedItem);
-    alert("수정되었습니다.");
-  } catch {
-    alert("수정 실패");
-  }
+  await editMenu(selectedItem);
+  alert("수정되었습니다.");
+
+  setSelectedItem(null);
+  setIsAddMode(false);
+} catch {
+  alert("수정 실패");
+}
 };
   //메뉴등록
   const handleAddMenu = async () => {
@@ -82,11 +133,14 @@ export default function AdminMenuEdit() {
   return;
 }
   try {
-    await addMenu(selectedItem);
-    alert("등록되었습니다.");
-  } catch {
-    alert("등록 실패");
-  }
+  await addMenu(selectedItem);
+  alert("등록되었습니다.");
+
+  setSelectedItem(null);
+  setIsAddMode(false);
+} catch {
+  alert("등록 실패");
+}
 };
 //----------------------------------------------------------------------------
 //오른쪽 구역
@@ -141,19 +195,22 @@ const handleAddOption = async () => {
   return;
 }
   try {
-    await addOption(selectedItem);
-    alert("옵션추가되었습니다.");
-  } catch {
-    alert("옵션추가 실패");
-  }
-};
+  await addOption(selectedItem);
+  alert("옵션추가되었습니다.");
 
+  setSelectedItem(null);
+  setIsAddMode(false);
+} catch {
+  alert("옵션추가 실패");
+}};
 //옵션삭제
 const handleDeleteOption = async (optionId) => {
   if (!window.confirm("삭제하시겠습니까?")) return;
   await removeOption(optionId);
-};
-
+  if (selectedItem?.option_id === optionId) {
+  setSelectedItem(null);
+  setIsAddMode(false);
+}};
 //옵션 수정
 const handleSaveOption = async () => {
   if (!selectedItem) {
@@ -175,12 +232,24 @@ const handleSaveOption = async () => {
   return;
 }
   try {
-    await editOption(selectedItem);
-    alert("옵션수정되었습니다.");
-  } catch {
-    alert("옵션수정 실패");
-  }
+  await editOption(selectedItem);
+  alert("옵션수정되었습니다.");
+
+  setSelectedItem(null);
+  setIsAddMode(false);
+} catch {
+  alert("옵션수정 실패");
+}
 };
+//---------------------------------------------------------------------
+  //메뉴페이지
+  const menuStart = (menuPage - 1) * MENU_PER_PAGE;
+  const currentMenus = menuList.slice(menuStart, menuStart + MENU_PER_PAGE);
+  const menuTotalPage = Math.ceil(menuList.length / MENU_PER_PAGE);
+  //옵션페이지
+  const optionStart = (optionPage - 1) * OPTION_PER_PAGE;
+  const currentOptions = optionList.slice(optionStart,  optionStart + OPTION_PER_PAGE);
+  const optionTotalPage = Math.ceil(optionList.length / OPTION_PER_PAGE);
 // -----------------------------------------------------------------------
   return (
   <div className="admin-edit-page">
@@ -219,7 +288,7 @@ const handleSaveOption = async () => {
             </tr>
           </thead>
           <tbody>
-            {menuList.map((menu) => (
+            {currentMenus.map((menu) => (
               <tr key={menu.menu_id}>
                 <td>
                   <img
@@ -244,7 +313,14 @@ const handleSaveOption = async () => {
               </tr>))}
           </tbody>
         </table>
+        <div className="pagination">
+              {Array.from({ length: menuTotalPage }, (_, i) => (
+              <button key={i} className={menuPage === i + 1 ? "active" : ""} onClick={() => setMenuPage(i + 1)} >
+                        {i + 1}
+              </button>))}
+        </div>
       </div>
+
   {/* 옵션 등록 버튼 */}
       <div style={{ marginBottom: "10px" }}>
         <button
@@ -267,7 +343,7 @@ const handleSaveOption = async () => {
             </tr>
           </thead>
           <tbody>
-            {optionList.map((option) => ( <tr key={option.option_id}>
+            {currentOptions.map((option) => ( <tr key={option.option_id}>
                 <td><img src={option.option_image} alt={option.option_name}
                           width={60} height={60}
                           style={{ objectFit: "cover", borderRadius: "8px" }}/>
@@ -286,6 +362,12 @@ const handleSaveOption = async () => {
               </tr>))}
           </tbody>
         </table>
+      </div>
+      <div className="pagination">
+          {Array.from({ length: optionTotalPage }, (_, i) => (
+          <button key={i} className={optionPage === i + 1 ? "active" : ""} onClick={() => setOptionPage(i + 1)} >
+                {i + 1}
+          </button>))}
       </div>
     </div>
 {/*오른쪽 수정 패널*/}

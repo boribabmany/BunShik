@@ -10,12 +10,13 @@ export default function AdminOrder() {
   const [date, setDate] = useState("2025-05-20");
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
+  const [visibleCount, setVisibleCount] = useState(5);
 
 // 페이지 진입 시 주문 목록 로드
   useEffect(() => {
     loadOrders();
   }, [loadOrders]);
-
+  
   // 검색 기능
   const filteredOrders = orders.filter((order) => {
   const matchDate = order.created_at.startsWith(date);
@@ -77,7 +78,7 @@ export default function AdminOrder() {
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.map((order) => (
+            {filteredOrders.slice(0, visibleCount).map((order) => (
               <tr key={order.order_id}>
                 <td>{order.order_number}</td>
                 <td>{order.created_at}</td>
@@ -89,25 +90,13 @@ export default function AdminOrder() {
                     {/*  버그 수정을 위해 order_status를 인자로 함께 넘겨줍니다 */}
                     <button
                       onClick={() => handleStatusChange(order.order_number, order.order_status)}
-                      disabled={
-                        order.order_status === "완료" ||
-                        order.order_status === "취소"
-                      }
-                    >
-                      {order.order_status === "접수"
-                        ? "조리 시작"
-                        : order.order_status === "조리중"
-                        ? "조리 완료"
-                        : "완료"}
+                      disabled={order.order_status === "완료" || order.order_status === "취소"} >
+                      {order.order_status === "접수"? "조리 시작" : order.order_status === "조리중"
+                                                  ? "조리 완료" : "완료"}
                     </button>
-
-                    <button 
-                      onClick={() => handleCancel(order.order_number)} 
-                      disabled={
-                        order.order_status === "완료" ||
-                        order.order_status === "취소"
-                      }
-                    >
+                    <button  onClick={() => handleCancel(order.order_number)} 
+                      disabled= {order.order_status === "완료" || order.order_status === "취소"}
+                            >
                       취소
                     </button>
                   </div>
@@ -116,9 +105,10 @@ export default function AdminOrder() {
             ))}
           </tbody>    
         </table>
-        
-        <button className="load-more"> 더 보기 (Load More)</button>
-        
+        {visibleCount < filteredOrders.length && (
+        <button className="load-more" onClick={() => setVisibleCount((prev) => prev + 5)}>
+        더 보기
+        </button>)}
         <div className="bottom-area">
           <button className="back-btn" onClick={() => navigate("/adminmenu")}> 뒤로가기 </button>
         </div>

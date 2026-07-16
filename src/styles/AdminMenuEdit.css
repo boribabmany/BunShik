@@ -52,11 +52,14 @@
     border:1px solid #ddd;
     margin-bottom:14px;
     overflow:hidden;
+    display:flex;
+    flex-direction:column;
 }
 
 .edit-table{
     width:100%;
     border-collapse:collapse;
+    table-layout:fixed;
 }
 
 .edit-table th{
@@ -196,4 +199,37 @@
 .back-btn:hover,
 .save-btn:hover{
     background:#444;
+}
+/* =========================
+   페이지 번호
+========================= */
+
+.pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:8px;
+    padding:12px 0;
+    background:#fff;
+    border-top:1px solid #eee;
+}
+
+.pagination button{
+    width:34px;
+    height:34px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    background:#fff;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.pagination button:hover{
+    background:#f3f3f3;
+}
+
+.pagination button.active{
+    background:#666;
+    color:#fff;
+    border-color:#666;
 }

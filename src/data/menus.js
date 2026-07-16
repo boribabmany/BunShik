@@ -1,10 +1,8 @@
 import sundae from "../images/sundae.jpg";
-import chesse from "../images/chesse.png";
 import cola from "../images/cola.jpg";
 import kimbab from "../images/kimbab.webp";
 import odang from "../images/odang.jpg";
 import ramen from "../images/ramen.jpg";
-import ramensari from "../images/ramensari.jpg";
 import tteokbokki from "../images/tteokbokki.webp";
 
 export const menus = [
@@ -16,7 +14,7 @@ export const menus = [
     image_url: kimbab,
     description: "",
     is_available: true,
-    options: [],
+    option_ids: [],
   },
   {
     menu_id: 2,
@@ -26,20 +24,7 @@ export const menus = [
     image_url: ramen,
     description: "매콤한 라면",
     is_available: true,
-    options: [
-      {
-        option_id: 1,
-        option_name: "치즈 추가",
-        option_price: 1000,
-        option_image: chesse,
-      },
-      {
-        option_id: 2,
-        option_name: "계란 추가",
-        option_price: 1000,
-        option_image: "",
-      },
-    ],
+    option_ids: [1, 2],
   },
   {
     menu_id: 3,
@@ -49,20 +34,7 @@ export const menus = [
     image_url: tteokbokki,
     description: "학교앞 달달하고 매콤한 추억의 떡볶이",
     is_available: true,
-    options: [
-      {
-        option_id: 1,
-        option_name: "치즈 추가",
-        option_price: 1000,
-        option_image: chesse,
-      },
-      {
-        option_id: 3,
-        option_name: "라면사리 추가",
-        option_price: 1000,
-        option_image: ramensari,
-      },
-    ],
+    option_ids: [1, 3],
   },
   {
     menu_id: 4,
@@ -72,7 +44,7 @@ export const menus = [
     image_url: sundae,
     description: "",
     is_available: true,
-    options: [],
+    option_ids: [],
   },
   {
     menu_id: 5,
@@ -82,7 +54,7 @@ export const menus = [
     image_url: odang,
     description: "",
     is_available: true,
-    options: [],
+    option_ids: [],
   },
   {
     menu_id: 6,
@@ -92,6 +64,6 @@ export const menus = [
     image_url: cola,
     description: "",
     is_available: true,
-    options: [],
+    option_ids: [],
   },
 ];

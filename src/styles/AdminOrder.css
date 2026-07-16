@@ -111,15 +111,17 @@
 }
 
 .order-action button{
-    padding:5px 10px;
+    width:80px;      /* 고정 너비 */
+    height:32px;     /* 고정 높이 */
     border:none;
     border-radius:5px;
     cursor:pointer;
     font-size:12px;
+    font-weight:500;
 }
 
 .order-action button:first-child{
-    background:#5d8dee;
+    background:#16A34A;
     color:#fff;
 }
 

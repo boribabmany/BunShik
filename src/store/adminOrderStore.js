@@ -1,8 +1,9 @@
 import { create } from "zustand";
-import { getOrders, updateOrderStatus, cancelOrder } from "../api/orderApi";
+import { getOrders, updateOrderStatus, cancelOrder } from "../api/adminOrderApi";
 import useHistoryStore from "./historyStore";
+
 // 주문 목록 불러오기 AdminSummary와 AdminOrder가 함께 공유
-const useOrderStore = create((set, get) => ({
+const useAdminOrderStore = create((set, get) => ({
   orders: [],
   todaySales: 0,
   loadOrders: async () => {
@@ -58,4 +59,4 @@ const useOrderStore = create((set, get) => ({
   }
 }));
 
-export default useOrderStore;
+export default useAdminOrderStore;

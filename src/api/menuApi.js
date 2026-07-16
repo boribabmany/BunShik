@@ -1,12 +1,22 @@
 //목업
 import { menus } from "../data/menus";
+import { getOptions } from "./optionApi";
 
 let menuData = [...menus];
 
-// 조회
+// 조회 (옵션까지 조립해서 반환)
 export const getMenus = async () => {
+  const optionList = await getOptions();
+
+  const menusWithOptions = menuData.map((menu) => ({
+    ...menu,
+    options: menu.option_ids
+      .map((id) => optionList.find((o) => o.option_id === id))
+      .filter(Boolean),
+  }));
+
   return new Promise((resolve) => {
-    setTimeout(() => resolve(menuData), 200);
+    setTimeout(() => resolve(menusWithOptions), 200);
   });
 };
 

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 import useMenuStore from "../../store/menuStore"; 
-import useOrderStore from "../../store/orderStore"; 
+import useAdminOrderStore from "../../store/adminOrderStore"; 
 import useOptionStore from "../../store/optionStore"; 
 import UpdateHistory from "./UpdateHistory";
 export default function AdminSummary({ onMoveOrder }) {
@@ -11,7 +11,7 @@ export default function AdminSummary({ onMoveOrder }) {
   const { menuList, loadMenus } = useMenuStore();
   const { optionList, loadOptions } = useOptionStore(); 
     // 4. 오늘의매출 (안전하게 예외 처리 적용)
-  const { orders, loadOrders, todaySales } = useOrderStore();
+  const { orders, loadOrders, todaySales } = useAdminOrderStore();
   
   useEffect(() => {
     if (loadMenus) loadMenus();

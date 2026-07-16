@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useOrderStore from "../../store/orderStore";
+import useAdminOrderStore from "../../store/adminOrderStore";
 import "../../styles/AdminOrder.css";
 
 export default function AdminOrder() {
   const navigate = useNavigate();
   // 스토어에서 상태와 액션 가져오기
-  const { orders, loadOrders, changeOrderStatus, cancelOrder: storeCancelOrder } = useOrderStore();
+  const { orders, loadOrders, changeOrderStatus, cancelOrder: storeCancelOrder } = useAdminOrderStore();
   const [date, setDate] = useState("2025-05-20");
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");

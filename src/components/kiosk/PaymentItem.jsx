@@ -1,4 +1,4 @@
-function OrderItem({ item }) {
+function PaymentItem({ item }) {
   const hasOptions = item.options.length > 0;
   const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
   const itemTotal = (item.base_price + optionTotal) * item.quantity;
@@ -27,4 +27,4 @@ function OrderItem({ item }) {
   );
 }
 
-export default OrderItem;
+export default PaymentItem;

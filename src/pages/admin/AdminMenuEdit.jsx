@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { validateMenu, validateOption } from "../../utils/validation";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
 import "../../styles/AdminMenuEdit.css";
@@ -62,6 +63,7 @@ export default function AdminMenuEdit() {
     setEditMode(location.state.type);
     setSelectedItem(location.state.item);
     setIsAddMode(false);}}, [location.state]);
+    
   //--메뉴리스트-------------------------------------------------
   //메뉴삭제
   const handleDeleteMenu = async (menuId) => {
@@ -74,28 +76,10 @@ export default function AdminMenuEdit() {
 };
   //메뉴수정
   const handleSave = async () => {
-    if (!selectedItem) {
-    alert("수정할 메뉴를 선택하세요.");
+    const error = validateMenu(selectedItem);
+    if (error) {
+    alert(error);
     return;
-  }
-    if (!selectedItem.menu_name?.trim()) {
-    alert("메뉴명을 입력하세요.");
-    return;
-  }
-  // 카테고리 검사
-  if (!selectedItem.category?.trim()) {
-    alert("카테고리를 입력하세요.");
-    return;
-  }
-  // 가격 검사
-  if (selectedItem.price < 1000) {
-    alert("가격은 1000원 이상이어야 합니다.");
-    return;
-  }
-  //사진 검사
-  if (!selectedItem.image_url) {
-  alert("메뉴 사진을 등록하세요.");
-  return;
 }
   try {
   await editMenu(selectedItem);
@@ -109,28 +93,10 @@ export default function AdminMenuEdit() {
 };
   //메뉴등록
   const handleAddMenu = async () => {
-    if (!selectedItem) {
-    alert("등록할 메뉴 정보를 입력하세요.");
+    const error = validateMenu(selectedItem);
+    if (error) {
+    alert(error);
     return;
-  }
-    if (!selectedItem.menu_name?.trim()) {
-    alert("메뉴명을 입력하세요.");
-    return;
-  }
-  // 카테고리 검사
-  if (!selectedItem.category?.trim()) {
-    alert("카테고리를 입력하세요.");
-    return;
-  }
-  // 가격 검사
-  if (selectedItem.price < 1000) {
-    alert("가격은 1000원 이상이어야 합니다.");
-    return;
-  }
-  //사진 검사
-  if (!selectedItem.image_url) {
-  alert("메뉴 사진을 등록하세요.");
-  return;
 }
   try {
   await addMenu(selectedItem);
@@ -174,24 +140,9 @@ const handleImageChange = (e) => {
 //옴션------------------------------------------------------------
 // 옵션 등록
 const handleAddOption = async () => {
-  
-  if (!selectedItem) {
-    alert("등록할 옵션 정보를 입력하세요.");
-    return;
-  }
-  //필수값
-  if (!selectedItem.option_name?.trim()) {
-    alert("옵션메뉴명을 입력하세요.");
-    return;
-  }
-  // 가격 검사
-  if (selectedItem.option_price < 1000) {
-    alert("옵션가격은 1000원 이상이어야 합니다.");
-    return;
-  }
-  // 사진등록검사
-  if (!selectedItem.option_image) {
-  alert("옵션 사진을 등록하세요.");
+  const error = validateOption(selectedItem);
+if (error) {
+  alert(error);
   return;
 }
   try {
@@ -203,6 +154,7 @@ const handleAddOption = async () => {
 } catch {
   alert("옵션추가 실패");
 }};
+
 //옵션삭제
 const handleDeleteOption = async (optionId) => {
   if (!window.confirm("삭제하시겠습니까?")) return;
@@ -211,24 +163,12 @@ const handleDeleteOption = async (optionId) => {
   setSelectedItem(null);
   setIsAddMode(false);
 }};
+
 //옵션 수정
-const handleSaveOption = async () => {
-  if (!selectedItem) {
-    alert("수정할 옵션을 선택하세요.");
-    return;
-  }
-  if (!selectedItem.option_name.trim()) {
-    alert("옵션메뉴명을 입력하세요.");
-    return;
-  }
-  // 가격 검사
-  if (selectedItem.option_price < 1000) {
-    alert("옵션가격은 1000원 이상이어야 합니다.");
-    return;
-  }
-  // 사진등록검사
-  if (!selectedItem.option_image) {
-  alert("옵션 사진을 등록하세요.");
+const handleSaveOption =  async () => {
+  const error = validateOption(selectedItem);
+  if (error) {
+  alert(error);
   return;
 }
   try {

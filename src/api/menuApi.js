@@ -10,9 +10,12 @@ export const getMenus = async () => {
 
   const menusWithOptions = menuData.map((menu) => ({
     ...menu,
-    options: menu.option_ids
-      .map((id) => optionList.find((o) => o.option_id === id))
-      .filter(Boolean),
+    options: (menu.option_ids || [])
+    .map((id) => optionList.find((o) => o.option_id === id))
+    .filter(Boolean),
+    // 수정 options: menu.option_ids
+    //   .map((id) => optionList.find((o) => o.option_id === id))
+    //   .filter(Boolean),
   }));
 
   return new Promise((resolve) => {

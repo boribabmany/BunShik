@@ -1,0 +1,206 @@
+/* =========================
+   관리자 매출 대시보드
+========================= */
+
+/* 페이지 */
+.admin-sales-page{
+    width:100%;
+    min-height:100vh;
+    background:#f5f5f5;
+    padding:25px 35px;
+}
+
+/* 헤더 */
+.sales-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.sales-header h1{
+    font-size:32px;
+    color:#333;
+}
+
+/* 뒤로가기 버튼 */
+.back-btn{
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    background:#333;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.back-btn:hover{
+    background:#555;
+}
+
+/* 컴포넌트 배치 */
+.sales-layout{
+    display:flex;
+    flex-direction:column;
+    gap:25px;
+}
+
+/* =========================
+   SalesSummary
+========================= */
+
+.sales-summary{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+/* 오늘의 매출 */
+.today-sales-card{
+    background:#ffffff;
+    border-radius:12px;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.today-sales-card h2{
+    font-size:24px;
+    margin-bottom:15px;
+    color:#555;
+}
+
+.today-sales-amount{
+    font-size:42px;
+    font-weight:700;
+    color:#ff6b35;
+    margin-bottom:12px;
+}
+
+.today-sales-card p{
+    font-size:18px;
+    color:#666;
+}
+
+/* 요약 카드 */
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+}
+
+.sale-summary-card{
+    background:#ffffff;
+    border-radius:12px;
+    padding:25px;
+    min-height:140px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.summary-card h3{
+    font-size:18px;
+    color:#666;
+    margin-bottom:15px;
+}
+
+.summary-card strong{
+    font-size:32px;
+    color:#333;
+}
+
+/* =========================
+   PopularMenu
+========================= */
+
+.popular-menu{
+    background:#ffffff;
+    border-radius:12px;
+    padding:25px 30px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.popular-menu h2{
+    font-size:24px;
+    margin-bottom:20px;
+    color:#333;
+}
+
+.popular-menu-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.popular-menu-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 0;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.popular-menu-item:last-child{
+    border-bottom:none;
+}
+
+.popular-menu-item span{
+    font-size:18px;
+    color:#333;
+}
+
+.popular-menu-item strong{
+    font-size:18px;
+    color:#ff6b35;
+}
+
+/* =========================
+   SalesHistoryTable
+========================= */
+
+.sales-history{
+    background:#ffffff;
+    border-radius:12px;
+    padding:25px 30px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.sales-history h2{
+    font-size:24px;
+    margin-bottom:20px;
+    color:#333;
+}
+
+.sales-history-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.sales-history-table thead{
+    background:#f5f5f5;
+}
+
+.sales-history-table th{
+    padding:14px;
+    text-align:center;
+    font-size:16px;
+    color:#555;
+    border-bottom:2px solid #ddd;
+}
+
+.sales-history-table td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+    font-size:15px;
+}
+
+.sales-history-table tbody tr:hover{
+    background:#fafafa;
+}

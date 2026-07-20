@@ -4,6 +4,7 @@ import { validateMenu, validateOption } from "../../utils/validation";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
 import "../../styles/AdminMenuEdit.css";
+import bunshikLogo from "../../images/bunshiklogo.png";
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
@@ -312,9 +313,20 @@ const handleSaveOption =  async () => {
     </div>
 {/*오른쪽 수정 패널*/}
 <div className="edit-right">
+  <div className="edit-content">
   <div className="preview-box">
-    <img src={ editMode === "menu" ? selectedItem?.image_url : selectedItem?.option_image }
-          alt={ editMode === "menu" ? selectedItem?.menu_name : selectedItem?.option_name}/>
+    <img
+  src={
+    editMode === "menu"
+      ? (selectedItem?.image_url || bunshikLogo)
+      : (selectedItem?.option_image || bunshikLogo)
+  }
+  alt={
+    editMode === "menu"
+      ? (selectedItem?.menu_name || "기본 이미지")
+      : (selectedItem?.option_name || "기본 이미지")
+  }
+/>
     
     <div className="preview-title">
         <span className="preview-label">
@@ -349,8 +361,18 @@ const handleSaveOption =  async () => {
 
   <div className="form-group">
   <label>사진</label>
-  <input className="image-upload" type="file" accept="image/*" onChange={handleImageChange} />
-  </div>
+
+  <label className="image-upload">
+    <span>사진 선택 (버튼클릭)</span>
+
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleImageChange}
+      hidden
+    />
+  </label>
+</div>
 
   <div className="form-group">
     <label>상태</label>
@@ -361,7 +383,7 @@ const handleSaveOption =  async () => {
       <option value={false}>품절</option>
     </select>
   </div>
-
+</div>
   <div className="edit-bottom">
     <button className="back-btn" onClick={() => navigate("/adminmenu")}>
       뒤로가기

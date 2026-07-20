@@ -27,10 +27,16 @@ export const getMenus = async () => {
 export const createMenu = async (menu) => {
   return new Promise((resolve) => {
     setTimeout(() => {
+      const newId =
+        menuData.length > 0
+          ? Math.max(...menuData.map((m) => m.menu_id)) + 1
+          : 1;
+
       menuData.push({
         ...menu,
-        menu_id: Date.now(),
+        menu_id: newId,
       });
+
       resolve();
     }, 200);
   });

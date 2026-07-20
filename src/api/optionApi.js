@@ -14,10 +14,16 @@ export const getOptions = async () => {
 export const createOption = async (option) => {
   return new Promise((resolve) => {
     setTimeout(() => {
+      const newId =
+        optionData.length > 0
+          ? Math.max(...optionData.map((o) => o.option_id)) + 1
+          : 1;
+
       optionData.push({
         ...option,
-        option_id: Date.now(),
+        option_id: newId,
       });
+
       resolve();
     }, 200);
   });

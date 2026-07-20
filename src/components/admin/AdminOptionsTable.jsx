@@ -11,7 +11,7 @@ export default function AdminOptionsTable() {
     <div className="option-table-box">
       <h2 className="table-title">옵션 리스트</h2>
 
-      <div className="table-scroll">
+      <div className="option-table-scroll">
         <table className="menu-table">
           <thead>
             <tr>

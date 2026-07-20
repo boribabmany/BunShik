@@ -10,7 +10,7 @@ export default function AdminMenusTable() {
   return (
     <div className="menu-table-box">
       <h2 className="table-title">메뉴 리스트</h2>
-      <div className="table-scroll">
+      <div className="menu-table-scroll">
       <table className="menu-table">
         <thead>
           <tr>

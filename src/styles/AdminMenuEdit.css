@@ -105,18 +105,27 @@
     background:#eef7de;
     border-left:3px solid #444;
     padding:18px;
+
     display:flex;
     flex-direction:column;
 }
+.edit-content{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
 
 .preview-box{
     text-align:center;
     margin-bottom:18px;
+    margin-top:-100px;
 }
 
 .preview-box img{
-    width:80px;
-    height:80px;
+    width:200px;
+    height:200px;
     object-fit:cover;
     border-radius:10px;
     margin-bottom:8px;
@@ -168,10 +177,29 @@
 }
 .image-upload{
     flex:1;
-    padding:8px;
+    height:36px;              /* 다른 input과 동일한 높이 */
+    padding:6px 12px;
     background:#fff;
     border:1px solid #ccc;
-    border-radius:8px;
+    border-radius:18px;       /* 다른 input과 동일하게 */
+    font-size:13px;
+    display:flex;
+    align-items:center;
+}
+.image-upload::file-selector-button{
+    height:24px;
+    padding:0 10px;
+    margin-right:10px;
+    border:none;
+    border-radius:6px;
+    background:#666;
+    color:#fff;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.image-upload::file-selector-button:hover{
+    background:#444;
 }
 
 /* =========================
@@ -179,7 +207,6 @@
 ========================= */
 
 .edit-bottom{
-    margin-top:auto;
     display:flex;
     justify-content:space-between;
 }

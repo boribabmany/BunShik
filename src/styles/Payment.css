@@ -155,16 +155,19 @@
   margin: 0;
 }
 
-/* ---------- 카드 결제 버튼 ---------- */
+/* ---------- 결제수단 선택 버튼 ---------- */
 .payment-pay-button {
   position: absolute;
   top: 1520px;
   left: 50%;
   transform: translateX(-50%);
-  width: 760px;
-  height: 200px;
-  border-radius: 40px;
+  width: 740px;
+  height: 160px;
+  border-radius: 20px;
   border: none;
+  display: flex;
+  align-items: center; /* 추가: 세로 중앙 */
+  justify-content: center; /* 추가: 가로 중앙 */
   background: #5e5e5e;
   cursor: pointer;
 }
@@ -174,22 +177,8 @@
   cursor: not-allowed;
 }
 
-.payment-pay-icon {
-  position: absolute;
-  left: 104px;
-  top: 54%;
-  transform: translateY(-50%);
-  width: 84px;
-  height: 64px;
-  object-fit: contain;
-}
-
 .payment-pay-text {
-  position: absolute;
-  left: 276px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 84px;
+  font-size: 76px;
   color: #ffffff;
   white-space: nowrap;
 }

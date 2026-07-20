@@ -1,0 +1,127 @@
+/* ==========================================================
+   결제 수단 선택 팝업 (Payment.jsx에서 "결제 수단 선택" 버튼 클릭 시 표시)
+========================================================== */
+.payment-method-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.payment-method-modal {
+  width: 800px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 56px 60px;
+  box-sizing: border-box;
+}
+
+.payment-method-title {
+  font-size: 44px;
+  font-weight: 500;
+  color: #000000;
+  text-align: center;
+  margin: 0 0 48px;
+}
+
+/* ---------- 결제 수단 버튼 공통 ---------- */
+.payment-method-btn {
+  width: 100%;
+  height: 140px;
+  border: none;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  box-sizing: border-box;
+  cursor: pointer;
+  margin-bottom: 28px;
+}
+
+.payment-method-label {
+  font-size: 40px;
+  font-weight: 500;
+  margin-left: 24px;
+}
+
+.payment-method-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* 네이버페이: 버튼 전체를 이미지로 채움 (배경/텍스트가 이미 이미지 안에 포함됨) */
+.payment-method-naver {
+  background: #00de5a;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 카카오페이: 버튼 전체를 이미지로 채움 (배경/텍스트가 이미 이미지 안에 포함됨) */
+.payment-method-kakao {
+  background: #ffeb00;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 네이버페이/카카오페이 공통: 버튼 꽉 채우는 풀사이즈 이미지 */
+.payment-method-full-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 20px;
+  display: block;
+}
+
+/* 네이버페이 이미지만 살짝 축소 */
+.payment-method-naver-img {
+  width: 60%;
+  height: 60%;
+  margin: 10% auto;
+}
+
+/* 카카오페이 이미지만 살짝 축소 */
+.payment-method-kakao-img {
+  width: 50%;
+  height: 50%;
+  margin: 10% auto; /* 줄어든 만큼 버튼 안에서 중앙 정렬 */
+}
+
+/* 카드결제: 기존 결제 버튼과 동일한 회색 톤 */
+.payment-method-card {
+  background: #5e5e5e;
+  justify-content: center;
+}
+.payment-method-icon-card {
+  width: 70px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 0;
+  background: none;
+}
+.payment-method-card .payment-method-label {
+  color: #ffffff;
+}
+
+/* ---------- 취소 버튼 ---------- */
+.payment-method-cancel {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: none;
+  font-size: 36px;
+  color: #5f5e5a;
+  cursor: pointer;
+}

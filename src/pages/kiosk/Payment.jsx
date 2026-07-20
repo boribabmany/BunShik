@@ -5,12 +5,13 @@ import useOrderStore from "../../store/useOrderStore";
 import { submitPayment } from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
 import EmptyCartModal from "../../components/kiosk/EmptyCartModal";
+import PaymentMethodModal from "../../components/kiosk/PaymentMethodModal";
 import PaymentItem from "../../components/kiosk/PaymentItem";
 import logo from "../../images/bunshiklogo.png";
-import cardIcon from "../../images/card.png";
 import backIcon from "../../images/backicon.png";
 import "../../styles/common.css";
 import "../../styles/Payment.css";
+import "../../styles/PaymentMethodModal.css";
 
 function Payment() {
   const navigate = useNavigate();
@@ -22,22 +23,23 @@ function Payment() {
 
   const [isPaying, setIsPaying] = useState(false);
   const [failType, setFailType] = useState(null);
-  const [failReason, setFailReason] = useState(null);
+  const [isMethodModalOpen, setIsMethodModalOpen] = useState(false);
 
   const isCartEmpty = items.length === 0;
+  const totalPrice = getTotalPrice();
 
   const handleGoToMenu = () => {
     navigate("/menu", { replace: true });
   };
 
-  const totalPrice = getTotalPrice();
-
-  const handlePay = async () => {
+  const handlePay = async (method) => {
+    setIsMethodModalOpen(false);
     setIsPaying(true);
     setFailType(null);
-    setFailReason(null);
 
     try {
+      // TODO: method(naverpay/kakaopay/card)에 따라 결제 API 분기 예정.
+      // 지금은 카드결제 시뮬레이션(submitPayment)만 있어서 셋 다 동일 로직으로 처리
       const result = await submitPayment();
 
       if (result.status === "success") {
@@ -48,11 +50,9 @@ function Payment() {
         navigate("/complete");
       } else {
         setFailType(result.status);
-        setFailReason(result.fail_reason ?? null);
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
-      setFailReason(null);
       if (error.message === "TIMEOUT") {
         setFailType("timeout");
       } else {
@@ -91,12 +91,11 @@ function Payment() {
       <button
         type="button"
         className="payment-pay-button"
-        onClick={handlePay}
+        onClick={() => setIsMethodModalOpen(true)}
         disabled={isPaying}
       >
-        <img src={cardIcon} alt="" className="payment-pay-icon" />
         <span className="payment-pay-text">
-          {isPaying ? "결제 중..." : "카드 결제"}
+          {isPaying ? "결제 중..." : "결제 수단 선택"}
         </span>
       </button>
 
@@ -109,11 +108,17 @@ function Payment() {
         <span className="payment-back-text">뒤로가기</span>
       </button>
 
+      {isMethodModalOpen && (
+        <PaymentMethodModal
+          onSelect={handlePay}
+          onClose={() => setIsMethodModalOpen(false)}
+        />
+      )}
+
       {failType && (
         <PaymentFailCard
           type={failType}
-          failReason={failReason}
-          onRetry={handlePay}
+          onRetry={() => handlePay("card")}
           onBack={() => setFailType(null)}
         />
       )}

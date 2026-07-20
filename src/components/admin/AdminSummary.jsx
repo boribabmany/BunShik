@@ -52,13 +52,19 @@ export default function AdminSummary({ onMoveOrder }) {
       </div>
 
       <div className="summary-card sales-card">
-        <p>오늘의 매출</p>
-      <strong>{todaySales.toLocaleString()}원</strong>
+  <p>오늘의 매출</p>
 
-      <button className="sales-dashboard-btn" onClick={() => navigate("/adminsales")}>
-        매출 대시보드 자세히 보기
-      </button>
-      </div>
+  <div className="sales-row">
+    <strong>{todaySales.toLocaleString()}원</strong>
+
+    <button
+      className="sales-dashboard-btn"
+      onClick={() => navigate("/adminsales")}
+    >
+      매출 대시보드 자세히 보기
+    </button>
+  </div>
+</div>
 
       <button className="summary-btn" onClick={onMoveOrder} >
         주문관리로 가기

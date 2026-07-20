@@ -3,8 +3,8 @@
 
 // 매출 요약
 let salesSummary = {
-  today_sales: 1250000,
-  today_order_count: 42,
+  today_sales: 37500,
+  today_order_count: 6,
 
   yesterday_sales: 980000,
 
@@ -46,8 +46,8 @@ let popularMenus = [
 let salesHistory = [
   {
     created_at: "2026-07-20",
-    order_count: 42,
-    total_price: 1250000,
+    order_count: 6,
+    total_price: 37500,
   },
   {
     created_at: "2026-07-19",

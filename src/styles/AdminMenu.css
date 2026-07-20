@@ -53,7 +53,7 @@
 /*오른쪽(메뉴/옵션 리스트)*/
 .right-panel{
     width:70%;
-    overflow-y:auto;
+    margin-top:44px;
 }
 
 /* ----------------------------옵션 테이블------------------------------------ */
@@ -139,7 +139,7 @@
 }
 
 .option-table-box{
-    max-height:220px;   /* 또는 원하는 높이 */
+    max-height:296px;   /* 또는 원하는 높이 */
     overflow-y:auto;
 }
 
@@ -148,15 +148,7 @@
     width:60px;
     min-width:60px;
 }
-.menu-table-scroll{
-    max-height:500px;   /* 메뉴 크게 */
-    overflow-y:auto;
-}
 
-.option-table-scroll{
-    max-height:220px;   /* 옵션 작게 */
-    overflow-y:auto;
-}
 /*------------------Admin Summary Styles 좌측상단-----------------------------------------*/
 
 .admin-summary{
@@ -180,8 +172,7 @@
 
 .summary-card p{
     font-size:14px;
-    color:#666;
-    margin-bottom:8px;
+    color:#666;    
 }
 
 .summary-card strong{
@@ -279,7 +270,36 @@
 }
 
 .sales-dashboard-btn{
+     margin-left:260px;
     margin-top:5px;
+    padding:6px 12px;
+
+    border:none;
+    border-radius:6px;
+
+    background:#5b7f56;
+    color:#fff;
+
+    font-size:12px;
+    cursor:pointer;
+}
+
+.sales-dashboard-btn:hover{
+    background:#666;
+}
+.sales-card{
+    height:100px;   /* 버튼 들어갈 공간 확보 */
+}
+
+.sales-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:8px;
+}
+
+.sales-dashboard-btn{
+    margin:0;               /* margin-left 제거 */
     padding:6px 12px;
 
     border:none;

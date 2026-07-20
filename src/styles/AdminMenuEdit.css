@@ -65,31 +65,33 @@
 .edit-table th{
     background:#f4f4f4;
     padding:8px;
-    font-size:13px;
+    font-size:24px;
 }
 
 .edit-table td{
     padding:8px;
     text-align:center;
     border-top:1px solid #eee;
-    font-size:13px;
+    font-size:16px;
 }
 
 .edit-table img{
-    width:46px;
-    height:46px;
+    width:48px;
+    height:48px;
     object-fit:cover;
     border-radius:6px;
 }
 
 .edit-table button{
-    width:48px;
-    height:22px;
-    margin:0 2px;
+    width:65px;
+    height:32px;
+    margin:0 4px;
     border:1px solid #ccc;
     background:#fff;
     cursor:pointer;
-    font-size:11px;
+    font-size:14px;
+    font-weight:600;
+    border-radius:6px;
 }
 
 .edit-table button:last-child{
@@ -131,16 +133,21 @@
     margin-bottom:8px;
 }
 
-.preview-label {
-  font-size: 16px;
-  color: #888;
-  font-weight: 500;
+.preview-title{
+    margin-top:15px;
 }
 
-.preview-name {
-  font-size: 24px;
-  font-weight: 700;
-  margin-top: 6px;
+.preview-label{
+    display:block;
+    font-size:40px;
+    color:#666;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.preview-name{
+    font-size:40px;
+    font-weight:700;
 }
 
 /* =========================
@@ -155,7 +162,7 @@
 
 .form-group label{
     width:70px;
-    font-size:14px;
+    font-size:16px;
     font-weight:600;
 }
 
@@ -213,14 +220,19 @@
 
 .back-btn,
 .save-btn{
-    width:95px;
-    height:36px;
+    width:150px;      /* 기존 95px */
+    height:50px;      /* 기존 36px */
+
     border:none;
-    border-radius:18px;
+    border-radius:25px;
+
     background:#666;
     color:#fff;
+
     cursor:pointer;
-    font-size:13px;
+
+    font-size:17px;   /* 기존 13px */
+    font-weight:600;
 }
 
 .back-btn:hover,
@@ -259,4 +271,23 @@
     background:#666;
     color:#fff;
     border-color:#666;
+}
+.edit-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin-bottom:20px;
+}
+
+.edit-logo{
+    width:55px;
+    height:55px;
+    object-fit:contain;
+}
+
+.edit-title{
+    margin:0;
+    font-size:30px;
+    font-weight:700;
 }

@@ -196,9 +196,17 @@ const handleSaveOption =  async () => {
   <div className="admin-edit-page">
     {/* 왼쪽 영역*/}
     <div className="edit-left">
-      <h2 className="edit-title">
-        관리자 메뉴수정 및 등록 (미완성)
-      </h2>
+      <div className="edit-header">
+  <img
+    src={bunshikLogo}
+    alt="분식 로고"
+    className="edit-logo"
+  />
+
+  <h2 className="edit-title">
+    관리자 메뉴 수정 및 등록
+  </h2>
+</div>
       <div style={{ marginBottom: "10px" }}>
         <button
           className="register-btn"
@@ -315,18 +323,9 @@ const handleSaveOption =  async () => {
 <div className="edit-right">
   <div className="edit-content">
   <div className="preview-box">
-    <img
-  src={
-    editMode === "menu"
-      ? (selectedItem?.image_url || bunshikLogo)
-      : (selectedItem?.option_image || bunshikLogo)
-  }
-  alt={
-    editMode === "menu"
-      ? (selectedItem?.menu_name || "기본 이미지")
-      : (selectedItem?.option_name || "기본 이미지")
-  }
-/>
+    <img src={ editMode === "menu" ? (selectedItem?.image_url || bunshikLogo) : (selectedItem?.option_image || bunshikLogo)
+              }alt={ editMode === "menu" ? (selectedItem?.menu_name || "기본 이미지") : (selectedItem?.option_name || "기본 이미지")}
+              />
     
     <div className="preview-title">
         <span className="preview-label">

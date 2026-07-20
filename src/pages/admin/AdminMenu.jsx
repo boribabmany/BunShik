@@ -3,6 +3,7 @@ import AdminSummary from "../../components/admin/AdminSummary";
 import AdminMenusTable from "../../components/admin/AdminMenusTable";
 import AdminOptionsTable from "../../components/admin/AdminOptionsTable";
 import "../../styles/AdminMenu.css";
+import bunshikLogo from "../../images/bunshiklogo.png";
 
 export default function AdminMenu() {
   const navigate = useNavigate();
@@ -15,11 +16,20 @@ export default function AdminMenu() {
   return (
     <div className="admin-menu-page">
       <header className="admin-header">
-        <h1>관리자 메뉴 관리(디자인및 이것저것 미완성)</h1>
-        <button className="logout-btn" onClick={handleLogout}>
-          로그아웃
-        </button>
-      </header>
+  <div className="admin-title">
+    <img
+      src={bunshikLogo}
+      alt="분식 로고"
+      className="admin-logo"
+    />
+
+    <h1>관리자 메뉴 관리</h1>
+  </div>
+
+  <button className="logout-btn" onClick={handleLogout}>
+    로그아웃
+  </button>
+</header>
 
       <main className="admin-layout">
         <section className="left-panel">

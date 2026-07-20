@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAdminOrderStore from "../../store/adminOrderStore";
 import "../../styles/AdminOrder.css";
+import bunshikLogo from "../../images/bunshiklogo.png";
+
 
 export default function AdminOrder() {
   const navigate = useNavigate();
@@ -40,9 +42,15 @@ export default function AdminOrder() {
   return (
     <div className="admin-order-page">
       <header className="order-header">
-        <h1>관리자 주문 관리</h1>
-        <h3>상태: 완료는 취소불가</h3>
-      </header>
+  <div className="order-title">
+    <img src={bunshikLogo} alt="분식로고" className="order-logo" />
+
+    <div>
+      <h1>관리자 주문 관리</h1>
+      <h3>상태: 완료는 취소불가</h3>
+    </div>
+  </div>
+</header>
       
       {/* 검색 영역 */}
       <section className="search-area">
@@ -110,7 +118,12 @@ export default function AdminOrder() {
         더 보기
         </button>)}
         <div className="bottom-area">
-          <button className="back-btn" onClick={() => navigate("/adminmenu")}> 뒤로가기 </button>
+          <button
+  className="order-back-btn"
+  onClick={() => navigate("/adminmenu")}
+>
+  뒤로가기
+</button>
         </div>
       </div>
     </div>

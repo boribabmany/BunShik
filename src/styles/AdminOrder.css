@@ -159,17 +159,28 @@
     justify-content:flex-end;
     margin-top:25px;
 }
-.back-btn{
+.order-back-btn{
     width:120px;
-    height:42px;
-
+    height:40px;
     border:none;
-    border-radius:20px;
+    border-radius:15px;
     background:#666;
     color:#fff;
     cursor:pointer;
+    margin:20px 30px;
 }
 
-.back-btn:hover{
+.order-back-btn:hover{
     background:#444;
+}
+.order-title{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.order-logo{
+    width:60px;
+    height:60px;
+    object-fit:contain;
 }

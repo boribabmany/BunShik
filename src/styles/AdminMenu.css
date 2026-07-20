@@ -316,3 +316,14 @@
 .add-btn-group .add-btn{
     flex:1;
 }
+.admin-title{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.admin-logo{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+}

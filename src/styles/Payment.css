@@ -14,7 +14,7 @@
 /* ---------- 타이틀 "주문내역" ---------- */
 .payment-title {
   position: absolute;
-  top: 88px;
+  top: 100px;
   left: 0;
   width: 100%;
   text-align: center;
@@ -27,20 +27,20 @@
 /* 위쪽 구분선: 위에서 348px, 두께2, 길이984 */
 .payment-divider-top {
   position: absolute;
-  top: 348px;
+  top: 280px;
   left: 48px;
   width: 984px;
   height: 2px;
   background: #000000;
 }
 
-/* ---------- 주문내역 목록 (스크롤, 위 348 ~ 아래 1188 사이) ---------- */
+/* ---------- 주문내역 목록  ---------- */
 .payment-list-wrapper {
   position: absolute;
-  top: 350px;
+  top: 282px;
   left: 48px;
   width: 984px;
-  height: 838px;
+  height: 906px;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -229,4 +229,3 @@
   white-space: nowrap;
   margin-left: 20px;
 }
-

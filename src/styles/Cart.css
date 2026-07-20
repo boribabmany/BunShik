@@ -15,7 +15,7 @@
 /* ---------- 상단 헤더 라벨 ---------- */
 .cart-header {
   position: absolute;
-  top: 140px;
+  top: 160px;
   left: 105px;
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@
 /* 위쪽 구분선: 348px */
 .cart-divider-top {
   position: absolute;
-  top: 348px;
+  top: 280px;
   left: 48px;
   width: 984px;
   height: 2px;
@@ -56,7 +56,7 @@
 /* ---------- 목록 스크롤 영역: 위 구분선(348)~아래 구분선(1494) 사이 ---------- */
 .cart-list-wrapper {
   position: absolute;
-  top: 350px;
+  top: 282px;
   left: 48px;
   width: 984px;
   height: 1144px;
@@ -87,7 +87,7 @@
 /* 아래쪽 구분선: 1494px */
 .cart-divider-bottom {
   position: absolute;
-  top: 1494px;
+  top: 1426px;
   left: 48px;
   width: 984px;
   height: 2px;
@@ -97,7 +97,7 @@
 /* ---------- 장바구니 항목 카드 ---------- */
 .cart-item {
   width: 984px;
-  min-height: 300px;
+  min-height: 220px;
   padding: 18px 32px 18px 22px;
   box-sizing: border-box;
   background: #ffffff;
@@ -193,7 +193,7 @@
 /* ---------- 하단: 총 금액 + 버튼 (아래 구분선 밑, 화면에 고정) ---------- */
 .cart-total-row {
   position: absolute;
-  top: 1580px;
+  top: 1520px;
   left: 100px;
   display: flex;
   align-items: center;
@@ -218,7 +218,7 @@
 .cart-more-button {
   position: absolute;
   left: 132px;
-  bottom: 56px;
+  bottom: 116px;
   width: 380px;
   height: 140px;
   border-radius: 20px;
@@ -233,7 +233,7 @@
 .cart-confirm-button {
   position: absolute;
   right: 132px;
-  bottom: 56px;
+  bottom: 116px;
   width: 320px;
   height: 140px;
   border-radius: 20px;
@@ -249,4 +249,3 @@
   background: #b4b2a9;
   cursor: not-allowed;
 }
-

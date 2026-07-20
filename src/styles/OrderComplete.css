@@ -104,7 +104,7 @@
 .complete-total-label {
   position: absolute;
   left: 120px;
-  top: 1531px;
+  top: 1400px;
   font-size: 64px;
   font-weight: 400;
   line-height: 77px;
@@ -120,7 +120,7 @@
 .complete-total-price {
   position: absolute;
   right: 120px;
-  top: 1531px;
+  top: 1400px;
   font-size: 64px;
   font-weight: 400;
   line-height: 77px;
@@ -136,7 +136,7 @@
   width: 366px;
   height: 140px;
   left: 88px;
-  top: 1724px;
+  top: 1620px;
   background: var(--color-primary-light);
   border: none;
   border-radius: 20px;
@@ -153,7 +153,7 @@
   position: absolute;
   height: 140px;
   right: 68px;
-  top: 1724px;
+  top: 1620px;
   padding: 0 40px;
   background: #5e5e5e;
   border: none;
@@ -233,4 +233,3 @@
   font-weight: 700;
   margin: 0;
 }
-

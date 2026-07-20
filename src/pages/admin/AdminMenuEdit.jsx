@@ -329,7 +329,7 @@ const handleSaveOption =  async () => {
     
     <div className="preview-title">
         <span className="preview-label">
-        {editMode === "menu" ? "메뉴 리스트" : "옵션 리스트"}
+        {editMode === "menu" ? "메뉴 등록하기" : "옵션 등록하기"}
         </span>
 
         <h3 className="preview-name">

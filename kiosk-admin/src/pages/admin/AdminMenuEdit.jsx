@@ -19,7 +19,6 @@ export default function AdminMenuEdit() {
   const [menuPage, setMenuPage] = useState(1);
   const [optionPage, setOptionPage] = useState(1);
   
-
   const MENU_PER_PAGE = 5;
   const OPTION_PER_PAGE = 3;
 

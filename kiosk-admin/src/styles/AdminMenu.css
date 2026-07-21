@@ -41,22 +41,25 @@
 /*  메인 레이아웃/ 왼쪽 요약 / 오른쪽 테이블 */
 .admin-layout{
     display:flex;
-    gap:25px;
+    gap:35px;
+
     align-items:flex-start;
+
+    width:100%;
+    margin:0 auto;      /* 가운데 */
+
+    height:calc(100vh - 100px);
 }
 
 /*왼쪽(AdminSummary)*/
 .left-panel{
-    width:30%;
+    width:360px;
+    flex-shrink:0;
 }
 /*오른쪽(메뉴/옵션 리스트)*/
 .right-panel{
-    width:70%;
+    flex:1;
     margin-top:44px;
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-    min-height:0;
 }
 
 /* ----------------------------옵션 테이블------------------------------------ */
@@ -121,9 +124,12 @@
 /* 관리자 메뉴 전체 페이지*/
 .admin-menu-page{
     width:100%;
-    min-height:100vh;
+    height:100vh;
     background:#f5f5f5;
-    padding:25px 35px;
+
+    padding:30px;   /* 바깥 여백 증가 */
+
+    overflow:hidden;
 }
 
 .menu-table-box,
@@ -135,12 +141,12 @@
 }
 
 .menu-table-box{
-    height:520px;
+    max-height:470px;
     overflow-y:auto;
 }
 
 .option-table-box{
-    height:296px;
+    max-height:270px;   /* 또는 원하는 높이 */
     overflow-y:auto;
 }
 
@@ -167,8 +173,8 @@
 .summary-card{
     background:#eef6e8;
     border-radius:10px;
-    padding:8px 14px;
-    height:75px;
+    padding:8px 12px;
+    height:68px;
 }
 
 .summary-card p{
@@ -206,13 +212,13 @@
 /*------------------UpdateHistory 좌측하단-----------------------------------------*/
 
 .history-box{
-    margin-top:15px;
+    margin-top:8px;
     padding:20px;
     background:#fff;
     border-radius:10px;
     border:1px solid #ddd;
 
-    height: 350px;
+    height: 300px;
 
     display:flex;
     flex-direction:column;

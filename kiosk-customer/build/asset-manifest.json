@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.21f86528.css",
-    "main.js": "/static/js/main.26d5f6cf.js",
+    "main.css": "/static/css/main.d4b649f9.css",
+    "main.js": "/static/js/main.2e529da6.js",
     "static/media/ramen.jpg": "/static/media/ramen.5bf5d49e4d7ccf0f091a.jpg",
     "static/media/chesse.png": "/static/media/chesse.1521fe994637b9c3dc64.png",
     "static/media/ramensari.jpg": "/static/media/ramensari.b09825573b48600f9a0b.jpg",
@@ -13,11 +13,11 @@
     "static/media/cola.jpg": "/static/media/cola.a0a2c40e710f6e29c8d6.jpg",
     "static/media/bunshiklogo.png": "/static/media/bunshiklogo.eb272adb4fe8f13c915e.png",
     "index.html": "/index.html",
-    "main.21f86528.css.map": "/static/css/main.21f86528.css.map",
-    "main.26d5f6cf.js.map": "/static/js/main.26d5f6cf.js.map"
+    "main.d4b649f9.css.map": "/static/css/main.d4b649f9.css.map",
+    "main.2e529da6.js.map": "/static/js/main.2e529da6.js.map"
   },
   "entrypoints": [
-    "static/css/main.21f86528.css",
-    "static/js/main.26d5f6cf.js"
+    "static/css/main.d4b649f9.css",
+    "static/js/main.2e529da6.js"
   ]
 }

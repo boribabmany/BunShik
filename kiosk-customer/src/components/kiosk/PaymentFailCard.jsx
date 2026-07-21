@@ -1,9 +1,10 @@
+import cardErrorIcon from "../../images/credit_card_off.png";
 import "../../styles/PaymentFailCard.css";
+
 function PaymentFailCard({ type, failReason, onRetry, onBack }) {
   const isCardError = type === "card-error";
   const isDeclined = type === "declined";
   const isTimeout = type === "timeout";
-  // system-error 및 그 외 알 수 없는 타입은 fallback으로 처리
 
   const title = isCardError
     ? "결제 실패"
@@ -29,10 +30,10 @@ function PaymentFailCard({ type, failReason, onRetry, onBack }) {
         <h2 className="fail-card-title">{title}</h2>
 
         {isDeclined && (
-          <div className="fail-card-icon fail-card-icon-declined" />
+          <img src={cardErrorIcon} alt="" className="fail-card-icon-img" />
         )}
         {isCardError && (
-          <div className="fail-card-icon fail-card-icon-error">✕</div>
+          <img src={cardErrorIcon} alt="" className="fail-card-icon-img" />
         )}
         {(isTimeout || (!isCardError && !isDeclined)) && (
           <div className="fail-card-icon fail-card-icon-error">!</div>

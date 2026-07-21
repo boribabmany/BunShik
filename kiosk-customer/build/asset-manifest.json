@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.21f86528.css",
+    "main.js": "/static/js/main.26d5f6cf.js",
+    "static/media/ramen.jpg": "/static/media/ramen.5bf5d49e4d7ccf0f091a.jpg",
+    "static/media/chesse.png": "/static/media/chesse.1521fe994637b9c3dc64.png",
+    "static/media/ramensari.jpg": "/static/media/ramensari.b09825573b48600f9a0b.jpg",
+    "static/media/egg.png": "/static/media/egg.572b1ab6c59e2c08fdfc.png",
+    "static/media/sundae.jpg": "/static/media/sundae.92c589346bd2b9d67924.jpg",
+    "static/media/kimbab.webp": "/static/media/kimbab.9648ac377a3548b58f63.webp",
+    "static/media/odang.jpg": "/static/media/odang.6c5d163928b228b4e8d1.jpg",
+    "static/media/tteokbokki.webp": "/static/media/tteokbokki.2c123e8ab8eeec75a635.webp",
+    "static/media/cola.jpg": "/static/media/cola.a0a2c40e710f6e29c8d6.jpg",
+    "static/media/bunshiklogo.png": "/static/media/bunshiklogo.eb272adb4fe8f13c915e.png",
+    "index.html": "/index.html",
+    "main.21f86528.css.map": "/static/css/main.21f86528.css.map",
+    "main.26d5f6cf.js.map": "/static/js/main.26d5f6cf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.21f86528.css",
+    "static/js/main.26d5f6cf.js"
+  ]
+}

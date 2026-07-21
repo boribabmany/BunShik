@@ -37,38 +37,12 @@
   margin: 0 0 40px;
 }
 
-.fail-card-icon-declined {
-  width: 160px;
-  height: 120px;
-  margin: 0 auto 32px;
-  border: 6px solid #e02020;
-  border-radius: 8px;
-  position: relative;
-}
-
-.fail-card-icon-declined::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  width: 226px;
-  height: 6px;
-  background: #e02020;
-  transform: rotate(38deg);
-  transform-origin: top left;
-}
-
-.fail-card-icon-error {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 32px;
-  border-radius: 50%;
-  background: #e02020;
-  color: #ffffff;
-  font-size: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.fail-card-icon-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 24px auto;
+  display: block;
 }
 
 .fail-card-buttons {
@@ -98,4 +72,3 @@
   color: #ffffff;
   cursor: pointer;
 }
-

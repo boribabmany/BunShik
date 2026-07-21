@@ -1,0 +1,229 @@
+/* ==========================================================
+   옵션추가 팝업 (Menu.jsx에서 라면/떡볶이 클릭 시 표시)
+   피그마 기준 캔버스: 984 x 1460
+========================================================== */
+.option-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.option-modal {
+  position: relative;
+  width: 984px;
+  min-height: 1460px;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.option-modal-detail {
+  position: relative;
+  width: 984px;
+  height: 416px;
+}
+
+.option-modal-image {
+  position: absolute;
+  left: 79px;
+  top: 66px;
+  width: 273px;
+  height: 278px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.option-modal-name {
+  position: absolute;
+  left: 422px;
+  top: 66px;
+  font-size: 42px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.option-modal-description {
+  position: absolute;
+  left: 422px;
+  top: 151px;
+  width: 437px;
+  font-size: 32px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.option-modal-price {
+  position: absolute;
+  left: 422px;
+  top: 301px;
+  font-size: 40px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.option-modal-divider {
+  position: absolute;
+  top: 414px;
+  left: 48px;
+  width: 888px;
+  height: 2px;
+  background: #000000;
+}
+
+.option-modal-body {
+  position: relative;
+  width: 984px;
+  height: 835px;
+  background: #f3f3f3;
+}
+
+.option-modal-topping-header {
+  position: absolute;
+  top: 36px;
+  left: 48px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.option-modal-topping-label {
+  font-size: 44px;
+  color: #000000;
+}
+
+.option-modal-topping-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 40px;
+  background: #d9d9d9;
+  font-size: 20px;
+  color: #000000;
+  border-radius: 4px;
+}
+
+.option-modal-list {
+  position: absolute;
+  top: 133px;
+  left: 52px;
+  display: flex;
+  gap: 20px;
+}
+
+.option-card {
+  position: relative;
+  width: 210px;
+  height: 320px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.option-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 197px;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+}
+
+.option-card-name {
+  position: absolute;
+  top: 210px;
+  left: 10px;
+  font-size: 32px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.option-card-price {
+  position: absolute;
+  top: 262px;
+  left: 10px;
+  font-size: 24px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+/* 옵션 담기 토글 버튼 */
+.option-card-toggle-btn {
+  position: absolute;
+  top: 258px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #000000;
+  color: #ffffff;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.option-card-toggle-btn.is-selected {
+  background: var(--color-primary);
+}
+
+.option-modal-footer {
+  position: relative;
+  width: 984px;
+  height: 218px;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-modal-submit-button {
+  position: relative;
+  width: 888px;
+  height: 124px;
+  background: #ffffff;
+  border: none;
+  border-radius: 70px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-modal-submit-label {
+  font-size: 60px;
+  color: #000000;
+}
+
+.option-modal-submit-price {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 208px;
+  height: 74px;
+  background: #d9d9d9;
+  border-radius: 50px;
+  font-size: 36px;
+  color: #000000;
+}
+

@@ -1,0 +1,128 @@
+/* ==========================================================
+   Home 화면 (SCR_001)
+   캔버스 기준: 1080 x 1920 (태블릿 세로)
+========================================================== */
+.home-screen {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  margin: 0 auto;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.home-lang-buttons {
+  position: absolute;
+  top: 32px;
+  right: 48px;
+  display: flex;
+  gap: 16px;
+}
+
+.home-lang-button {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  overflow: hidden;
+}
+
+.home-lang-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-logo {
+  position: absolute;
+  top: 240px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 330px;
+  height: 330px;
+}
+
+.home-guide {
+  position: absolute;
+  top: 800px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.home-order-button {
+  position: absolute;
+  top: 1240px;
+  width: 424px;
+  height: 323px;
+  border-radius: 20px;
+  border: 2px solid var(--color-primary);
+  background: var(--color-primary-light);
+  cursor: pointer;
+  padding: 0;
+}
+
+.home-order-button:active {
+  background: var(--color-primary);
+}
+
+.home-order-button:active .home-order-text {
+  color: #ffffff;
+}
+
+.home-dine-in {
+  left: 100px;
+}
+
+.home-takeout {
+  left: 556px;
+}
+
+.home-order-icon {
+  position: absolute;
+  object-fit: contain;
+}
+
+.home-dine-in-icon {
+  width: 136px;
+  height: 136px;
+  left: 52px;
+  top: 94px;
+}
+
+.home-takeout-icon {
+  width: 131px;
+  height: 138px;
+  left: 60px;
+  top: 93px;
+}
+
+.home-order-text {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.home-dine-in-text {
+  left: 228px;
+}
+
+.home-takeout-text {
+  left: 223px;
+}

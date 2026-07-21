@@ -183,6 +183,11 @@
   white-space: nowrap;
 }
 
+/* 영어일 때만 폰트 축소 */
+.payment-pay-text.lang-en {
+  font-size: 56px;
+}
+
 /* ---------- 뒤로가기 버튼 (하단, 왼쪽56px, 글씨48) ---------- */
 .payment-back-button {
   position: absolute;

@@ -1,20 +1,32 @@
-function MenuCard({ menu, onClick }) {
+import {
+  translations,
+  getLocalizedName,
+  formatPrice,
+} from "../../i18n/translations";
+
+function MenuCard({ menu, onClick, language }) {
+  const t = translations[language].menu;
   const isSoldOut = !menu.is_available;
+  const displayName = getLocalizedName(
+    language,
+    menu.menu_name,
+    menu.menu_name_en,
+  );
 
   return (
     <div className="menu-card">
       <div className="menu-card-image-wrap">
-        <img src={menu.image_url} alt={menu.menu_name} />
+        <img src={menu.image_url} alt={displayName} />
 
         {isSoldOut && (
           <div className="menu-card-soldout-overlay">
-            <span>품절</span>
+            <span>{t.soldOut}</span>
           </div>
         )}
       </div>
 
-      <p className="menu-card-name">{menu.menu_name}</p>
-      <p className="menu-card-price">{menu.price.toLocaleString()}원</p>
+      <p className="menu-card-name">{displayName}</p>
+      <p className="menu-card-price">{formatPrice(language, menu.price)}</p>
 
       <button
         type="button"

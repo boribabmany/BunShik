@@ -1,16 +1,19 @@
 import cardIcon from "../../images/card.png";
 import naverPayIcon from "../../images/naverpay.png";
 import kakaoPayIcon from "../../images/payment_icon_yellow_medium.png";
+import { translations } from "../../i18n/translations";
 import "../../styles/PaymentMethodModal.css";
 
-function PaymentMethodModal({ onSelect, onClose }) {
+function PaymentMethodModal({ onSelect, onClose, language }) {
+  const t = translations[language].paymentMethod;
+
   return (
     <div className="payment-method-backdrop" onClick={onClose}>
       <div
         className="payment-method-modal"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="payment-method-title">결제 수단을 선택해주세요</p>
+        <p className="payment-method-title">{t.title}</p>
 
         <button
           type="button"
@@ -19,7 +22,7 @@ function PaymentMethodModal({ onSelect, onClose }) {
         >
           <img
             src={naverPayIcon}
-            alt="네이버페이 결제하기"
+            alt={t.naver}
             className="payment-method-full-img payment-method-naver-img"
           />
         </button>
@@ -31,7 +34,7 @@ function PaymentMethodModal({ onSelect, onClose }) {
         >
           <img
             src={kakaoPayIcon}
-            alt="카카오페이 결제하기"
+            alt={t.kakao}
             className="payment-method-full-img payment-method-kakao-img"
           />
         </button>
@@ -46,7 +49,7 @@ function PaymentMethodModal({ onSelect, onClose }) {
             alt=""
             className="payment-method-icon payment-method-icon-card"
           />
-          <span className="payment-method-label">카드 결제</span>
+          <span className="payment-method-label">{t.card}</span>
         </button>
 
         <button
@@ -54,7 +57,7 @@ function PaymentMethodModal({ onSelect, onClose }) {
           className="payment-method-cancel"
           onClick={onClose}
         >
-          취소
+          {t.cancel}
         </button>
       </div>
     </div>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMenus } from "../../api/menuApi";
 import useCartStore from "../../store/useCartStore";
+import useLanguageStore from "../../store/useLanguageStore";
+import { translations } from "../../i18n/translations";
 import CategoryTabs from "../../components/kiosk/CategoryTabs";
 import MenuCard from "../../components/kiosk/MenuCard";
 import OptionModal from "../../components/kiosk/OptionModal";
@@ -9,6 +11,7 @@ import CartBar from "../../components/kiosk/CartBar";
 import logo from "../../images/bunshiklogo.png";
 import "../../styles/common.css";
 import "../../styles/Menu.css";
+
 function Menu() {
   const navigate = useNavigate();
   const [menus, setMenus] = useState([]);
@@ -20,6 +23,9 @@ function Menu() {
   const items = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
+
+  const language = useLanguageStore((state) => state.language);
+  const t = translations[language].menu;
 
   const fetchMenus = () => {
     setIsLoading(true);
@@ -50,6 +56,7 @@ function Menu() {
       addItem({
         menu_id: menu.menu_id,
         menu_name: menu.menu_name,
+        menu_name_en: menu.menu_name_en,
         image_url: menu.image_url,
         base_price: menu.price,
         quantity: 1,
@@ -69,24 +76,30 @@ function Menu() {
         onClick={() => navigate(-1)}
       >
         <span className="menu-back-icon" />
-        <span className="menu-back-text">뒤로가기</span>
+        <span className="menu-back-text">
+          {translations[language].common.back}
+        </span>
       </button>
 
       <img src={logo} alt="분식집 로고" className="menu-logo" />
 
-      <CategoryTabs selected={category} onSelect={setCategory} />
+      <CategoryTabs
+        selected={category}
+        onSelect={setCategory}
+        language={language}
+      />
 
       {isLoading ? (
-        <p>메뉴를 불러오는 중입니다...</p>
+        <p>{t.loading}</p>
       ) : isError ? (
         <div>
-          <p>메뉴를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.</p>
+          <p>{t.errorText}</p>
           <button type="button" onClick={fetchMenus}>
-            다시 시도
+            {t.retry}
           </button>
         </div>
       ) : filteredMenus.length === 0 ? (
-        <p>표시할 메뉴가 없습니다.</p>
+        <p>{t.empty}</p>
       ) : (
         <div className="menu-card-grid">
           {filteredMenus.map((menu) => (
@@ -94,6 +107,7 @@ function Menu() {
               key={menu.menu_id}
               menu={menu}
               onClick={() => handleMenuClick(menu)}
+              language={language}
             />
           ))}
         </div>
@@ -104,6 +118,7 @@ function Menu() {
         total={cartTotal}
         onCheckClick={() => navigate("/cart")}
         disabled={cartCount === 0}
+        language={language}
       />
 
       {selectedMenu && (
@@ -111,6 +126,7 @@ function Menu() {
           menu={selectedMenu}
           onClose={() => setSelectedMenu(null)}
           onAdd={addItem}
+          language={language}
         />
       )}
     </div>

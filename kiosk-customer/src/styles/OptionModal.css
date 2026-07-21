@@ -154,7 +154,7 @@
 .option-card-price {
   position: absolute;
   top: 262px;
-  left: 10px;
+  left: 20px;
   font-size: 24px;
   font-weight: 500;
   color: #000000;
@@ -226,4 +226,3 @@
   font-size: 36px;
   color: #000000;
 }
-

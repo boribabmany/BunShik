@@ -42,6 +42,7 @@
   line-height: 97px;
   color: #000000;
   margin: 0;
+  text-align: center;
 }
 
 /* ---------- 안내 문구 ---------- */
@@ -136,7 +137,7 @@
   width: 366px;
   height: 140px;
   left: 88px;
-  top: 1620px;
+  top: 1660px;
   background: var(--color-primary-light);
   border: none;
   border-radius: 20px;
@@ -153,7 +154,7 @@
   position: absolute;
   height: 140px;
   right: 68px;
-  top: 1620px;
+  top: 1660px;
   padding: 0 40px;
   background: #5e5e5e;
   border: none;

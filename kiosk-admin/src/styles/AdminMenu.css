@@ -56,6 +56,7 @@
     display:flex;
     flex-direction:column;
     gap:20px;
+    min-height:0;
 }
 
 /* ----------------------------옵션 테이블------------------------------------ */
@@ -123,7 +124,6 @@
     min-height:100vh;
     background:#f5f5f5;
     padding:25px 35px;
-    height:100vh;
 }
 
 .menu-table-box,
@@ -135,12 +135,12 @@
 }
 
 .menu-table-box{
-    max-height:520px;
+    height:520px;
     overflow-y:auto;
 }
 
 .option-table-box{
-    max-height:296px;   /* 또는 원하는 높이 */
+    height:296px;
     overflow-y:auto;
 }
 

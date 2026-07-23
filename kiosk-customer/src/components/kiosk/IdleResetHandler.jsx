@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useIdleWarning from "../../hooks/useIdleWarning";
 import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
+import useLanguageStore from "../../store/useLanguageStore";
 import IdleWarningModal from "./IdleWarningModal";
 
 function IdleResetHandler() {
@@ -10,6 +11,7 @@ function IdleResetHandler() {
   const location = useLocation();
   const clearCart = useCartStore((state) => state.clearCart);
   const resetOrder = useOrderStore((state) => state.resetOrder);
+  const language = useLanguageStore((state) => state.language);
 
   const isHome = location.pathname === "/";
 
@@ -27,7 +29,11 @@ function IdleResetHandler() {
   if (!showWarning) return null;
 
   return (
-    <IdleWarningModal secondsLeft={secondsLeft} onContinue={continueSession} />
+    <IdleWarningModal
+      secondsLeft={secondsLeft}
+      onContinue={continueSession}
+      language={language}
+    />
   );
 }
 

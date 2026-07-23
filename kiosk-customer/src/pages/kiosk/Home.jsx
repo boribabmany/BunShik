@@ -1,15 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import useOrderStore from "../../store/useOrderStore";
+import useLanguageStore from "../../store/useLanguageStore";
+import { translations } from "../../i18n/translations";
 import logo from "../../images/bunshiklogo.png";
 import korea from "../../images/korea.png";
 import usa from "../../images/usa.png";
 import eatinIcon from "../../images/eatinicon.png";
 import takeoutIcon from "../../images/takeout.png";
+import "../../styles/common.css";
 import "../../styles/Home.css";
 
 function Home() {
   const navigate = useNavigate();
   const setOrderType = useOrderStore((state) => state.setOrderType);
+  const language = useLanguageStore((state) => state.language);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
+
+  const t = translations[language].home;
 
   const handleSelect = (orderType) => {
     setOrderType(orderType);
@@ -19,10 +26,18 @@ function Home() {
   return (
     <div className="home-screen">
       <div className="home-lang-buttons">
-        <button type="button" className="home-lang-button">
+        <button
+          type="button"
+          className={`home-lang-button ${language === "ko" ? "active" : ""}`}
+          onClick={() => setLanguage("ko")}
+        >
           <img src={korea} alt="한국어" />
         </button>
-        <button type="button" className="home-lang-button">
+        <button
+          type="button"
+          className={`home-lang-button ${language === "en" ? "active" : ""}`}
+          onClick={() => setLanguage("en")}
+        >
           <img src={usa} alt="English" />
         </button>
       </div>
@@ -30,9 +45,9 @@ function Home() {
       <img src={logo} alt="분식집 로고" className="home-logo" />
 
       <p className="home-guide">
-        주문을 시작하려면
+        {t.guide1}
         <br />
-        아래 버튼을 눌러주세요
+        {t.guide2}
       </p>
 
       <button
@@ -46,9 +61,12 @@ function Home() {
           className="home-order-icon home-dine-in-icon"
         />
         <span className="home-order-text home-dine-in-text">
-          매장
-          <br />
-          식사
+          {t.dineIn.split("\n").map((line, i) => (
+            <span key={i}>
+              {line}
+              {i === 0 && <br />}
+            </span>
+          ))}
         </span>
       </button>
 
@@ -63,9 +81,12 @@ function Home() {
           className="home-order-icon home-takeout-icon"
         />
         <span className="home-order-text home-takeout-text">
-          포장
-          <br />
-          하기
+          {t.takeout.split("\n").map((line, i) => (
+            <span key={i}>
+              {line}
+              {i === 0 && <br />}
+            </span>
+          ))}
         </span>
       </button>
     </div>

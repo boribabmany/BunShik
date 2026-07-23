@@ -1,72 +1,24 @@
-import { menus } from "../data/menus";
-import { getOptions } from "./optionApi";
+const API_BASE_URL = "http://localhost:8080";
 
-let menuData = [...menus];
-
-// 조회 (옵션까지 조립해서 반환)
 export const getMenus = async () => {
-  const optionList = await getOptions();
+  const res = await fetch(`${API_BASE_URL}/api/menus`);
+  const data = await res.json();
 
-  const menusWithOptions = menuData.map((menu) => ({
+  return data.data.map((menu) => ({
     ...menu,
-    options: menu.option_ids
-      .map((id) => optionList.find((o) => o.option_id === id))
-      .filter(Boolean),
+    options: menu.options ?? [],
   }));
-
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(menusWithOptions), 200);
-  });
 };
 
-/*
-    백엔드 완성시 위에꺼 삭제 하고 주석 풀어서 사용
-   */
-// export const getMenus = async () => {
-//   const res = await fetch("/api/menus");
-//   const data = await res.json();
-//   return data.map(mapServerMenuToFrontend);
-// };
-
-// const mapServerMenuToFrontend = (serverMenu) => ({
-//   menu_id: serverMenu.id,
-//   menu_name: serverMenu.name,
-//   price: serverMenu.price,
-//   category: serverMenu.category_name,
-//   image_url: serverMenu.image_url,
-//   is_available: serverMenu.is_active && !serverMenu.is_sold_out,
-//   option_ids: serverMenu.options?.map((o) => o.id) ?? [],
-// });
-
-// 등록
+// 관리자 CRUD는 아직 백엔드 연동 전 - 팀원분이 admin API 완성하면 교체 예정
 export const createMenu = async (menu) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      menuData.push({
-        ...menu,
-        menu_id: Date.now(),
-      });
-      resolve();
-    }, 200);
-  });
+  console.warn("createMenu는 아직 구현 전입니다.");
 };
 
-// 수정
 export const updateMenu = async (menu) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      menuData = menuData.map((m) => (m.menu_id === menu.menu_id ? menu : m));
-      resolve();
-    }, 200);
-  });
+  console.warn("updateMenu는 아직 구현 전입니다.");
 };
 
-// 삭제
 export const deleteMenu = async (menuId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      menuData = menuData.filter((m) => m.menu_id !== menuId);
-      resolve();
-    }, 200);
-  });
+  console.warn("deleteMenu는 아직 구현 전입니다.");
 };

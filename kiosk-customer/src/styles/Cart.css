@@ -17,8 +17,10 @@
   position: absolute;
   top: 160px;
   left: 105px;
+  width: 870px; /* 카드 너비(984px) - 좌우 여백 감안 */
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .cart-header-menu,
@@ -31,16 +33,23 @@
   white-space: nowrap;
 }
 
+.cart-header-menu {
+  flex: 1; /* 메뉴명 칸은 남는 공간을 다 차지 */
+}
+
 .cart-header-qty {
-  margin-left: 364px;
+  width: 180px; /* cart-item-qty-box 너비(180px)와 동일하게 맞춤 */
+  text-align: center;
 }
 
 .cart-header-price {
-  margin-left: 124px;
+  width: 200px;
+  text-align: center;
 }
 
 .cart-header-delete {
-  margin-left: 68px;
+  width: 100px;
+  text-align: center;
 }
 
 /* 위쪽 구분선: 348px */
@@ -125,6 +134,10 @@
   color: #000000;
   margin: 0;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cart-item-qty-box {

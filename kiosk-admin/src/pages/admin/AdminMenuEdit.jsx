@@ -132,9 +132,10 @@ const handleEditClick = (type, item) => {
 const handleImageChange = (e) => {
   const file = e.target.files[0];
   if (!file) return;
-  const preview = URL.createObjectURL(file);
+
   setSelectedItem((prev) => ({
-    ...prev, [editMode === "menu" ? "image_url" : "option_image"]: preview,
+    ...prev,
+    [editMode === "menu" ? "image_url" : "option_image"]: file.name,
   }));
 };
 //옴션------------------------------------------------------------

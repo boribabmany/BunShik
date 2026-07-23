@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
+import useLanguageStore from "../../store/useLanguageStore";
+import { translations, formatPrice } from "../../i18n/translations";
 import CartItem from "../../components/kiosk/CartItem";
 import logo from "../../images/bunshiklogo.png";
 import "../../styles/common.css";
@@ -14,8 +16,10 @@ function Cart() {
   const removeItem = useCartStore((state) => state.removeItem);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
 
-  const isEmpty = items.length === 0;
+  const language = useLanguageStore((state) => state.language);
+  const t = translations[language].cart;
 
+  const isEmpty = items.length === 0;
   const totalPrice = getTotalPrice();
 
   return (
@@ -26,24 +30,25 @@ function Cart() {
         onClick={() => navigate(-1)}
       >
         <span className="menu-back-icon" />
-        <span className="menu-back-text">뒤로가기</span>
+        <span className="menu-back-text">
+          {translations[language].common.back}
+        </span>
       </button>
 
       <img src={logo} alt="분식집 로고" className="menu-logo" />
 
       <div className="cart-header">
-        <span className="cart-header-menu">메뉴</span>
-        <span className="cart-header-qty">수량</span>
-        <span className="cart-header-price">금액</span>
-        <span className="cart-header-delete">삭제</span>
+        <span className="cart-header-menu">{t.headerMenu}</span>
+        <span className="cart-header-qty">{t.headerQty}</span>
+        <span className="cart-header-price">{t.headerPrice}</span>
+        <span className="cart-header-delete">{t.headerDelete}</span>
       </div>
 
       <div className="cart-divider-top" />
 
-      {/* 위/아래 구분선 사이에서만 스크롤 */}
       <div className="cart-list-wrapper">
         {isEmpty ? (
-          <p className="cart-empty-text">장바구니가 비어있습니다</p>
+          <p className="cart-empty-text">{t.empty}</p>
         ) : (
           <div className="cart-list">
             {items.map((item, index) => (
@@ -53,6 +58,7 @@ function Cart() {
                 onIncrease={() => increaseQuantity(index)}
                 onDecrease={() => decreaseQuantity(index)}
                 onRemove={() => removeItem(index)}
+                language={language}
               />
             ))}
           </div>
@@ -62,8 +68,8 @@ function Cart() {
       <div className="cart-divider-bottom" />
 
       <div className="cart-total-row">
-        <p className="cart-total-label">총 금액</p>
-        <p className="cart-total-price">{totalPrice.toLocaleString()}원</p>
+        <p className="cart-total-label">{t.totalLabel}</p>
+        <p className="cart-total-price">{formatPrice(language, totalPrice)}</p>
       </div>
 
       <button
@@ -71,7 +77,7 @@ function Cart() {
         className="cart-more-button"
         onClick={() => navigate("/menu")}
       >
-        메뉴 더 담기
+        {t.moreMenu}
       </button>
 
       <button
@@ -80,7 +86,7 @@ function Cart() {
         onClick={() => navigate("/payment")}
         disabled={isEmpty}
       >
-        결제 하기
+        {t.confirm}
       </button>
     </div>
   );

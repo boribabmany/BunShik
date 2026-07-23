@@ -1,11 +1,14 @@
 // adminmenu 메뉴테이블
-
+import { useEffect } from "react";
 import { useNavigate, } from "react-router-dom";
 import useMenuStore from "../../store/menuStore";
 
 export default function AdminMenusTable() {
   const navigate = useNavigate();
-  const { menuList } = useMenuStore();
+  const { menuList, loadMenus } = useMenuStore();
+  useEffect(() => {
+  loadMenus();
+}, [loadMenus]);
 
   return (
     <div className="menu-table-box">

@@ -1,8 +1,8 @@
-//adminmenu 변경사항
+import api from "./axios";
 
-// 백엔드들어오면 작성예정
-import axiosInstance from "./axiosInstance";
+// 관리자 변경 내역 조회
+export const getHistory = async () => {
+  const response = await api.get("/api/admin/history");
 
-export const getHistory = () => {
-return axiosInstance.get("/admin/history");
+  return response.data;
 };

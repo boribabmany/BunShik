@@ -1,67 +1,62 @@
-//목업
-import { menus } from "../data/menus";
-import { getOptions } from "./optionApi";
+import api from "./axios";
 
-let menuData = [...menus];
-
-// 조회 (옵션까지 조립해서 반환)
+// 메뉴 조회
 export const getMenus = async () => {
-  const optionList = await getOptions();
+  const response = await api.get("/api/admin/menus");
 
-  const menusWithOptions = menuData.map((menu) => ({
-    ...menu,
-    options: (menu.option_ids || [])
-    .map((id) => optionList.find((o) => o.option_id === id))
-    .filter(Boolean),
-    // 수정 options: menu.option_ids
-    //   .map((id) => optionList.find((o) => o.option_id === id))
-    //   .filter(Boolean),
+  return response.data.map((menu) => ({
+    menu_id: menu.menuId,
+    menu_name: menu.menuName,
+    category: menu.category,
+    price: menu.price,
+    image_url: menu.imageUrl,
+    is_available: menu.isAvailable,
+    status: menu.isAvailable ? "판매중" : "품절",
+    description: menu.description,
+    option_ids: [],
   }));
-
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(menusWithOptions), 200);
-  });
 };
 
-// 등록
+// 메뉴 등록
 export const createMenu = async (menu) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newId =
-        menuData.length > 0
-          ? Math.max(...menuData.map((m) => m.menu_id)) + 1
-          : 1;
+  const request = {
+    menuName: menu.menu_name,
+    price: menu.price,
+    category: menu.category,
+    imageUrl: menu.image_url,
+    description: menu.description,
+    isAvailable: menu.is_available,
+    soldOutReason: null,
+  };
 
-      menuData.push({
-        ...menu,
-        menu_id: newId,
-      });
+  const response = await api.post("/api/admin/menus", request);
 
-      resolve();
-    }, 200);
-  });
+  return response.data;
 };
 
-// 수정
-export const updateMenu = async (menu) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      menuData = menuData.map((m) =>
-        m.menu_id === menu.menu_id ? menu : m
-      );
-      resolve();
-    }, 200);
-  });
+// 메뉴 수정
+export const updateMenu = async (menuId, menu) => {
+  const request = {
+    menuName: menu.menu_name,
+    price: menu.price,
+    category: menu.category,
+    imageUrl: menu.image_url,
+    description: menu.description,
+    isAvailable: menu.is_available,
+    soldOutReason: null,
+  };
+
+  const response = await api.put(
+    `/api/admin/menus/${menuId}`,
+    request
+  );
+
+  return response.data;
 };
 
-// 삭제
+// 메뉴 삭제
 export const deleteMenu = async (menuId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      menuData = menuData.filter(
-        (m) => m.menu_id !== menuId
-      );
-      resolve();
-    }, 200);
-  });
+  const response = await api.delete(`/api/admin/menus/${menuId}`);
+
+  return response.data;
 };

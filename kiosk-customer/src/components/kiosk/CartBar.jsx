@@ -1,8 +1,11 @@
 import cartIcon from "../../images/carticon.png";
+import { translations, formatPrice } from "../../i18n/translations";
 
-function CartBar({ count, total, onCheckClick, disabled }) {
+function CartBar({ count, total, onCheckClick, disabled, language }) {
+  const t = translations[language].menu;
+
   const handleBoxClick = () => {
-    if (disabled) return; // 장바구니가 비어있으면 박스 클릭도 무시
+    if (disabled) return;
     onCheckClick();
   };
 
@@ -16,9 +19,9 @@ function CartBar({ count, total, onCheckClick, disabled }) {
         aria-disabled={disabled}
       >
         <img src={cartIcon} alt="" className="menu-cartbar-icon" />
-        <p className="menu-cartbar-label">장바구니</p>
-        <p className="menu-cartbar-count">{count}개</p>
-        <p className="menu-cartbar-total">{total.toLocaleString()}원</p>
+        <p className="menu-cartbar-label">{t.cartLabel}</p>
+        <p className="menu-cartbar-count">{t.cartCount(count)}</p>
+        <p className="menu-cartbar-total">{formatPrice(language, total)}</p>
       </div>
 
       <button
@@ -27,7 +30,7 @@ function CartBar({ count, total, onCheckClick, disabled }) {
         disabled={disabled}
         className="menu-cartbar-confirm"
       >
-        주문 확인
+        {t.cartConfirm}
       </button>
     </div>
   );

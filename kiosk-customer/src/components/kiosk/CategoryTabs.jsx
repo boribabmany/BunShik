@@ -1,10 +1,13 @@
 import { useRef } from "react";
 import backIcon from "../../images/backicon.png";
+import { translations } from "../../i18n/translations";
 
 const categories = ["전체", "떡볶이", "라면", "김밥", "사이드", "음료"];
 
-function CategoryTabs({ selected, onSelect }) {
+function CategoryTabs({ selected, onSelect, language }) {
   const scrollRef = useRef(null);
+  const t = translations[language].menu;
+  const categoryLabels = t.categories;
 
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -50,7 +53,7 @@ function CategoryTabs({ selected, onSelect }) {
         type="button"
         className="menu-category-nav-btn"
         onClick={handlePrevClick}
-        aria-label="이전 카테고리 보기"
+        aria-label={t.prevCategory}
       >
         <img src={backIcon} alt="" className="menu-category-prev-icon" />
       </button>
@@ -72,7 +75,7 @@ function CategoryTabs({ selected, onSelect }) {
             className={`menu-category-btn ${selected === category ? "active" : ""}`}
             onClick={() => onSelect(category)}
           >
-            {category}
+            {categoryLabels[category]}
           </button>
         ))}
       </div>
@@ -81,7 +84,7 @@ function CategoryTabs({ selected, onSelect }) {
         type="button"
         className="menu-category-nav-btn"
         onClick={handleNextClick}
-        aria-label="다음 카테고리 보기"
+        aria-label={t.nextCategory}
       >
         <img src={backIcon} alt="" className="menu-category-next-icon" />
       </button>

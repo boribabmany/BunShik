@@ -17,9 +17,12 @@ import "../../styles/PaymentMethodModal.css";
 
 function Payment() {
   const navigate = useNavigate();
+
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
+
+  const orderType = useOrderStore((state) => state.orderType);
   const setOrderNumber = useOrderStore((state) => state.setOrderNumber);
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
 
@@ -44,22 +47,55 @@ function Payment() {
     setFailType(null);
     setFailReason(null);
 
+    let paymentMethod;
+
+    switch (method) {
+      case "card":
+        paymentMethod = "카드";
+        break;
+
+      case "naverpay":
+      case "kakaopay":
+        paymentMethod = "간편결제";
+        break;
+
+      default:
+        paymentMethod = "카드";
+    }
+
+    const request = {
+      items: items.map((item) => ({
+        menu_id: item.menu_id,
+        quantity: item.quantity,
+        option_ids: item.options.map((option) => option.option_id),
+      })),
+
+      order_type: orderType === "dine-in" ? "매장" : "포장",
+
+      payment_method: paymentMethod,
+    };
+
     try {
-      const result = await submitPayment();
+      const result = await submitPayment(request);
 
       if (result.status === "success") {
-        const orderNumber = `A-${Math.floor(Math.random() * 900 + 100)}`;
-        setOrderNumber(orderNumber);
+        setOrderNumber(result.order_number);
+
         setTotalPrice(totalPrice);
+
         clearCart();
+
         navigate("/complete");
       } else {
         setFailType(result.status);
+
         setFailReason(result.fail_reason ?? null);
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
+
       setFailReason(null);
+
       if (error.message === "TIMEOUT") {
         setFailType("timeout");
       } else {
@@ -93,6 +129,7 @@ function Payment() {
       <div className="payment-divider-bottom" />
 
       <p className="payment-total-label">{t.totalLabel}</p>
+
       <p className="payment-total-price">{formatPrice(language, totalPrice)}</p>
 
       <button

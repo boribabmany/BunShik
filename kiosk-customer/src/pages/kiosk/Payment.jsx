@@ -4,7 +4,7 @@ import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
 import { translations, formatPrice } from "../../i18n/translations";
-import { submitPayment } from "../../api/orderApi";
+import { createOrder, submitPayment } from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
 import EmptyCartModal from "../../components/kiosk/EmptyCartModal";
 import PaymentMethodModal from "../../components/kiosk/PaymentMethodModal";
@@ -33,6 +33,7 @@ function Payment() {
   const [failType, setFailType] = useState(null);
   const [failReason, setFailReason] = useState(null);
   const [isMethodModalOpen, setIsMethodModalOpen] = useState(false);
+  const [lastMethod, setLastMethod] = useState("card");
 
   const isCartEmpty = items.length === 0;
   const totalPrice = getTotalPrice();
@@ -46,6 +47,7 @@ function Payment() {
     setIsPaying(true);
     setFailType(null);
     setFailReason(null);
+    setLastMethod(method);
 
     let paymentMethod;
 
@@ -53,47 +55,48 @@ function Payment() {
       case "card":
         paymentMethod = "카드";
         break;
-
       case "naverpay":
-      case "kakaopay":
-        paymentMethod = "간편결제";
+        paymentMethod = "네이버페이";
         break;
-
+      case "kakaopay":
+        paymentMethod = "카카오페이";
+        break;
       default:
         paymentMethod = "카드";
     }
 
-    const request = {
-      items: items.map((item) => ({
-        menu_id: item.menu_id,
-        quantity: item.quantity,
-        option_ids: item.options.map((option) => option.option_id),
-      })),
-
-      order_type: orderType === "dine-in" ? "매장" : "포장",
-
-      payment_method: paymentMethod,
-    };
-
     try {
-      const result = await submitPayment(request);
+      const orderResult = await createOrder({
+        items: items.map((item) => ({
+          menu_id: item.menu_id,
+          quantity: item.quantity,
+          option_ids: item.options.map((option) => option.option_id),
+        })),
+        order_type: orderType === "dine-in" ? "매장" : "포장",
+      });
 
-      if (result.status === "success") {
-        setOrderNumber(result.order_number);
+      if (orderResult.status !== "대기") {
+        setFailType("order-error");
+        setFailReason(orderResult.message ?? null);
+        return;
+      }
 
+      const paymentResult = await submitPayment({
+        order_id: orderResult.order_id,
+        payment_method: paymentMethod,
+      });
+
+      if (paymentResult.status === "성공") {
+        setOrderNumber(orderResult.order_number);
         setTotalPrice(totalPrice);
-
         clearCart();
-
         navigate("/complete");
       } else {
-        setFailType(result.status);
-
-        setFailReason(result.fail_reason ?? null);
+        setFailType(paymentResult.status);
+        setFailReason(paymentResult.fail_reason ?? null);
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
-
       setFailReason(null);
 
       if (error.message === "TIMEOUT") {
@@ -168,7 +171,7 @@ function Payment() {
         <PaymentFailCard
           type={failType}
           failReason={failReason}
-          onRetry={() => handlePay("card")}
+          onRetry={() => handlePay(lastMethod)}
           onBack={() => setFailType(null)}
           language={language}
         />

@@ -114,10 +114,23 @@
   position: absolute;
   top: 335px;
   left: 48px;
+  width: 984px;
+  height: 1345px;
   display: grid;
   grid-template-columns: repeat(3, 316px);
   grid-auto-rows: 520px;
   gap: 42px 18px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.menu-card-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .menu-card {

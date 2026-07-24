@@ -92,7 +92,7 @@ function Payment() {
         clearCart();
         navigate("/complete");
       } else {
-        setFailType(paymentResult.status);
+        setFailType("declined");
         setFailReason(paymentResult.fail_reason ?? null);
       }
     } catch (error) {

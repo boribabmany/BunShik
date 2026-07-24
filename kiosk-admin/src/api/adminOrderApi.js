@@ -30,7 +30,7 @@ export const getOrders = async () => {
 
     console.log("백엔드 응답:", response.data);
 
-    return response.data.map((order) => ({
+    return response.data.data.map((order) => ({
       order_id: order.orderId,
       order_number: order.orderNumber,
       created_at: formatDateTime(order.createdAt),
@@ -58,7 +58,7 @@ export const updateOrderStatus = async (orderId, orderStatus) => {
 
     console.log("주문 상태 변경:", response.data);
 
-    return response.data;
+    return response.data.data;
 
   } catch (error) {
     console.error("주문 상태 변경 실패:", error);
@@ -76,7 +76,7 @@ export const cancelOrder = async (orderId) => {
 
     console.log("주문 취소:", response.data);
 
-    return response.data;
+    return response.data.data;
 
   } catch (error) {
     console.error("주문 취소 실패:", error);

@@ -10,16 +10,18 @@ export default function PopularMenu() {
 
   return (
     <div className="popular-menu">
-      <h2> 한달 간 인기 메뉴 TOP 5</h2>
+      <h2>한달 간 인기 메뉴 TOP 5</h2>
 
       <ul className="popular-menu-list">
-        {popularMenus.map((menu) => (
-          <li key={menu.menu_id} className="popular-menu-item">
+        {popularMenus.map((menu, index) => (
+          <li key={index} className="popular-menu-item">
             <span>
-              {menu.rank}. {menu.menu_name}
+              {index + 1}. {menu.menuName}
             </span>
 
-            <strong>{menu.order_count}개</strong>
+            <strong>
+              {menu.orderCount}개
+            </strong>
           </li>
         ))}
       </ul>

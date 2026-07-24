@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 import useSalesStore from "../../store/salesStore";
 
-
-
 export default function SalesHistoryTable() {
   const { salesHistory, loadSalesHistory } = useSalesStore();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-
-  const currentSales = salesHistory.slice(
-        startIndex,
-        startIndex + itemsPerPage);
-
-  const totalPages = Math.ceil(salesHistory.length / itemsPerPage);
-
   useEffect(() => {
     loadSalesHistory();
   }, [loadSalesHistory]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  const currentSales = salesHistory.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
+
+  const totalPages = Math.ceil(salesHistory.length / itemsPerPage);
 
   return (
     <div className="sales-history">
@@ -36,39 +35,52 @@ export default function SalesHistoryTable() {
 
         <tbody>
           {currentSales.map((item) => (
-            <tr key={item.created_at}>
-              <td>{item.created_at}</td>
-              <td>{item.order_count}건</td>
-              <td>₩{item.total_price.toLocaleString()}</td>
+            <tr key={item.salesDate}>
+              <td>{item.salesDate}</td>
+
+              <td>
+                {item.orderCount ?? 0}건
+              </td>
+
+              <td>
+                ₩{(item.totalSales ?? 0).toLocaleString()}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+
       <div className="pagination">
-  <button
-    onClick={() => setCurrentPage(currentPage - 1)}
-    disabled={currentPage === 1}
-  >
-    이전
-  </button>
 
-  {Array.from({ length: totalPages }, (_, index) => (
-    <button
-      key={index}
-      className={currentPage === index + 1 ? "active" : ""}
-      onClick={() => setCurrentPage(index + 1)}
-    >
-      {index + 1}
-    </button>
-  ))}
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          이전
+        </button>
 
-  <button
-    onClick={() => setCurrentPage(currentPage + 1)}
-    disabled={currentPage === totalPages}
-  >
-    다음
-  </button>
-</div>
+
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            className={currentPage === index + 1 ? "active" : ""}
+            onClick={() => setCurrentPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          다음
+        </button>
+
+      </div>
+
     </div>
   );
 }

@@ -15,8 +15,10 @@ const useOptionStore = create((set) => ({
     set({ optionList: options });
   },
 
-  addOption: async (option) => {
-    await createOption(option);
+  // 옵션 등록
+  addOption: async (option, file) => {
+    await createOption(option, file);
+
     const options = await getOptions();
     set({ optionList: options });
 
@@ -26,8 +28,13 @@ const useOptionStore = create((set) => ({
     );
   },
 
-  editOption: async (option) => {
-    await updateOption(option.option_id, option);
+  // 옵션 수정
+  editOption: async (option, file) => {
+    await updateOption(
+      option.option_id,
+      option,
+      file
+    );
 
     const options = await getOptions();
     set({ optionList: options });
@@ -38,6 +45,7 @@ const useOptionStore = create((set) => ({
     );
   },
 
+  // 옵션 삭제
   removeOption: async (optionId) => {
     await deleteOption(optionId);
 

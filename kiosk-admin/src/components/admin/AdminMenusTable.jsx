@@ -10,6 +10,7 @@ export default function AdminMenusTable() {
   loadMenus();
 }, [loadMenus]);
 
+
   return (
     <div className="menu-table-box">
       <h2 className="table-title">메뉴 리스트</h2>

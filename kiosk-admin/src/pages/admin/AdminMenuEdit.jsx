@@ -13,7 +13,7 @@ export default function AdminMenuEdit() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [editMode, setEditMode] = useState("menu");
   const [isAddMode, setIsAddMode] = useState(false);
-  
+  const [imageFile, setImageFile] = useState(null);
   const location = useLocation();
 
   const [menuPage, setMenuPage] = useState(1);
@@ -75,38 +75,150 @@ export default function AdminMenuEdit() {
 }
 };
   //메뉴수정
-  const handleSave = async () => {
-    const error = validateMenu(selectedItem);
-    if (error) {
+const handleSave = async () => {
+
+  const error = validateMenu(selectedItem);
+
+  if (error) {
     alert(error);
     return;
-}
-  try {
-  await editMenu(selectedItem);
-  alert("수정되었습니다.");
+  }
 
-  setSelectedItem(null);
-  setIsAddMode(false);
-} catch {
-  alert("수정 실패");
-}
+
+  try {
+
+    const formData = new FormData();
+
+
+    formData.append(
+      "menuName",
+      selectedItem.menu_name
+    );
+
+
+    formData.append(
+      "price",
+      selectedItem.price
+    );
+
+
+    formData.append(
+      "category",
+      selectedItem.category
+    );
+
+
+    formData.append(
+      "description",
+      selectedItem.description || ""
+    );
+
+
+    formData.append(
+      "isAvailable",
+      selectedItem.is_available
+    );
+
+
+    if (imageFile) {
+
+      formData.append(
+        "file",
+        imageFile
+      );
+
+    }
+
+
+    await editMenu(
+      selectedItem.menu_id,
+      formData
+    );
+
+
+    alert("수정되었습니다.");
+
+
+    setSelectedItem(null);
+    setImageFile(null);
+    setIsAddMode(false);
+
+
+  } catch(error) {
+
+    console.log(error);
+    alert("수정 실패");
+
+  }
+
 };
   //메뉴등록
   const handleAddMenu = async () => {
-    const error = validateMenu(selectedItem);
-    if (error) {
+
+  const error = validateMenu(selectedItem);
+
+  if (error) {
     alert(error);
     return;
-}
-  try {
-  await addMenu(selectedItem);
-  alert("등록되었습니다.");
+  }
 
-  setSelectedItem(null);
-  setIsAddMode(false);
-} catch {
-  alert("등록 실패");
-}
+  try {
+
+    const formData = new FormData();
+
+    formData.append(
+      "menuName",
+      selectedItem.menu_name
+    );
+
+    formData.append(
+      "price",
+      selectedItem.price
+    );
+
+    formData.append(
+      "category",
+      selectedItem.category
+    );
+
+    formData.append(
+      "description",
+      selectedItem.description || ""
+    );
+
+    formData.append(
+      "isAvailable",
+      selectedItem.is_available
+    );
+
+
+    if(imageFile){
+      formData.append(
+        "file",
+        imageFile
+      );
+    }
+
+
+    await addMenu(
+  formData,
+  selectedItem.menu_name
+);
+
+
+    alert("등록되었습니다.");
+
+    setSelectedItem(null);
+    setImageFile(null);
+    setIsAddMode(false);
+
+
+  } catch(error){
+
+    console.log(error);
+    alert("등록 실패");
+
+  }
 };
 //----------------------------------------------------------------------------
 //오른쪽 구역
@@ -114,6 +226,7 @@ export default function AdminMenuEdit() {
 const handleEditClick = (type, item) => {
   setEditMode(type);
   setSelectedItem(item);
+  setImageFile(null);
   setIsAddMode(false);
 };
 // 메뉴와 옵션 이름 수정
@@ -131,11 +244,19 @@ const handleEditClick = (type, item) => {
 //이미지 등록하는 거
 const handleImageChange = (e) => {
   const file = e.target.files[0];
+
   if (!file) return;
+
+  setImageFile(file);
+
+  const previewUrl = URL.createObjectURL(file);
 
   setSelectedItem((prev) => ({
     ...prev,
-    [editMode === "menu" ? "image_url" : "option_image"]: file.name,
+    [editMode === "menu"
+      ? "image_url"
+      : "option_image"
+    ]: previewUrl,
   }));
 };
 //옴션------------------------------------------------------------
@@ -147,7 +268,7 @@ if (error) {
   return;
 }
   try {
-  await addOption(selectedItem);
+  await addOption(selectedItem, imageFile);
   alert("옵션추가되었습니다.");
 
   setSelectedItem(null);
@@ -173,7 +294,7 @@ const handleSaveOption =  async () => {
   return;
 }
   try {
-  await editOption(selectedItem);
+  await editOption(selectedItem, imageFile);
   alert("옵션수정되었습니다.");
 
   setSelectedItem(null);
@@ -274,7 +395,7 @@ const handleSaveOption =  async () => {
       <div style={{ marginBottom: "10px" }}>
         <button
           className="register-btn"
-          onClick={() => { setEditMode("option"); setIsAddMode(true);
+          onClick={() => { setEditMode("option"); setIsAddMode(true); setImageFile(null);
             setSelectedItem({ option_name: "", option_price: 0, option_is_available: true,option_image: "",
             });}}> + 옵션 등록
         </button>

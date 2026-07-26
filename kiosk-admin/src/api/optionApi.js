@@ -14,7 +14,7 @@ const getImageUrl = (imageUrl) => {
 export const getOptions = async () => {
   const response = await api.get("/api/admin/options");
 
-  return response.data.map((option) => ({
+  return response.data.data.map((option) => ({
     option_id: option.optionId,
     option_name: option.optionName,
     option_price: option.optionPrice,
@@ -50,7 +50,7 @@ export const createOption = async (option, file) => {
     }
   );
 
-  return response.data;
+  return response.data.data;
 };
 
 // 옵션 수정
@@ -83,7 +83,7 @@ export const updateOption = async (
     }
   );
 
-  return response.data;
+  return response.data.data;
 };
 
 // 옵션 삭제
@@ -92,5 +92,5 @@ export const deleteOption = async (optionId) => {
     `/api/admin/options/${optionId}`
   );
 
-  return response.data;
+  return response.data.data;
 };

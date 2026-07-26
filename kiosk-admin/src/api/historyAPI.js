@@ -4,5 +4,7 @@ import api from "./axios";
 export const getHistory = async () => {
   const response = await api.get("/api/admin/history");
 
-  return response.data;
+  console.log("History 응답:", response.data);
+
+  return response.data?.data ?? response.data ?? [];
 };

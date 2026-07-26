@@ -14,9 +14,9 @@ export default function AdminOrder() {
     cancelOrder: storeCancelOrder,
   } = useAdminOrderStore();
 
-const [date, setDate] = useState(
-  new Date().toISOString().slice(0, 10)
-);
+  const [date, setDate] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
   const [visibleCount, setVisibleCount] = useState(5);
@@ -28,8 +28,11 @@ const [date, setDate] = useState(
   const filteredOrders = orders
     .filter((order) => {
       const matchDate =
-  date === "" || order.created_at.startsWith(date);
-      const matchType = type === "전체" || order.order_type === type;
+        date === "" || order.created_at.startsWith(date);
+
+      const matchType =
+        type === "전체" || order.order_type === type;
+
       const matchStatus =
         status === "전체" || order.order_status === status;
 
@@ -37,14 +40,19 @@ const [date, setDate] = useState(
     })
     .sort((a, b) => b.order_id - a.order_id);
 
-  // 상태 변경
-  const handleStatusChange = async (orderId, currentStatus) => {
-    let nextStatus = currentStatus;
+  // 상태 변경: 접수 → 조리중 → 완료
+  const handleStatusChange = async (
+    orderId,
+    currentStatus
+  ) => {
+    let nextStatus;
 
     if (currentStatus === "접수") {
       nextStatus = "조리중";
     } else if (currentStatus === "조리중") {
       nextStatus = "완료";
+    } else {
+      return;
     }
 
     await changeOrderStatus(orderId, nextStatus);
@@ -52,9 +60,28 @@ const [date, setDate] = useState(
 
   // 주문 취소
   const handleCancel = async (orderId) => {
-    if (!window.confirm("주문을 취소하시겠습니까?")) return;
+    if (!window.confirm("주문을 취소하시겠습니까?")) {
+      return;
+    }
 
     await storeCancelOrder(orderId);
+  };
+
+  // 주문 상태에 따른 버튼 문구
+  const getStatusButtonText = (orderStatus) => {
+    if (orderStatus === "접수") {
+      return "조리 시작";
+    }
+
+    if (orderStatus === "조리중") {
+      return "조리 완료";
+    }
+
+    if (orderStatus === "취소") {
+      return "취소됨";
+    }
+
+    return "완료됨";
   };
 
   return (
@@ -78,30 +105,44 @@ const [date, setDate] = useState(
         <input
           type="date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={(e) => {
+            setDate(e.target.value);
+            setVisibleCount(5);
+          }}
         />
 
         <select
           value={type}
-          onChange={(e) => setType(e.target.value)}
+          onChange={(e) => {
+            setType(e.target.value);
+            setVisibleCount(5);
+          }}
         >
-          <option>전체</option>
-          <option>매장</option>
-          <option>포장</option>
+          <option value="전체">전체</option>
+          <option value="매장">매장</option>
+          <option value="포장">포장</option>
         </select>
 
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setVisibleCount(5);
+          }}
         >
-          <option>전체</option>
-          <option>접수</option>
-          <option>조리중</option>
-          <option>완료</option>
-          <option>취소</option>
+          <option value="전체">전체</option>
+          <option value="접수">접수</option>
+          <option value="조리중">조리중</option>
+          <option value="완료">완료</option>
+          <option value="취소">취소</option>
         </select>
 
-        <button className="search-btn">검색</button>
+        <button
+          type="button"
+          className="search-btn"
+        >
+          검색
+        </button>
       </section>
 
       <div className="order-table-box">
@@ -120,57 +161,64 @@ const [date, setDate] = useState(
           <tbody>
             {filteredOrders
               .slice(0, visibleCount)
-              .map((order) => (
-                <tr key={order.order_id}>
-                  <td>{order.order_number}</td>
-                  <td>{order.created_at}</td>
-                  <td>{order.order_type}</td>
-                  <td>{order.order_status}</td>
-                  <td>
-                    {order.total_price.toLocaleString()}원
-                  </td>
+              .map((order) => {
+                const isFinished =
+                  order.order_status === "완료" ||
+                  order.order_status === "취소";
 
-                  <td>
-                    <div className="order-action">
-                      <button
-                        onClick={() =>
-                          handleStatusChange(
-                            order.order_id,
+                return (
+                  <tr key={order.order_id}>
+                    <td>{order.order_number}</td>
+                    <td>{order.created_at}</td>
+                    <td>{order.order_type}</td>
+                    <td>{order.order_status}</td>
+                    <td>
+                      {order.total_price.toLocaleString()}원
+                    </td>
+
+                    <td>
+                      <div className="order-action">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleStatusChange(
+                              order.order_id,
+                              order.order_status
+                            )
+                          }
+                          disabled={isFinished}
+                        >
+                          {getStatusButtonText(
                             order.order_status
-                          )
-                        }
-                        disabled={
-                          order.order_status === "완료" ||
-                          order.order_status === "취소"
-                        }
-                      >
-                        {order.order_status === "접수"
-                          ? "조리 시작"
-                          : order.order_status === "조리중"
-                          ? "조리 완료"
-                          : "완료"}
-                      </button>
+                          )}
+                        </button>
 
-                      <button
-                        onClick={() =>
-                          handleCancel(order.order_id)
-                        }
-                        disabled={
-                          order.order_status === "완료" ||
-                          order.order_status === "취소"
-                        }
-                      >
-                        취소
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleCancel(order.order_id)
+                          }
+                          disabled={isFinished}
+                        >
+                          취소
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
 
+        {filteredOrders.length === 0 && (
+          <div className="empty-order">
+            조회된 주문이 없습니다.
+          </div>
+        )}
+
         {visibleCount < filteredOrders.length && (
           <button
+            type="button"
             className="load-more"
             onClick={() =>
               setVisibleCount((prev) => prev + 5)
@@ -182,6 +230,7 @@ const [date, setDate] = useState(
 
         <div className="bottom-area">
           <button
+            type="button"
             className="order-back-btn"
             onClick={() => navigate("/adminmenu")}
           >

@@ -7,3 +7,4 @@ export const login = (id, password) => {
     password === ADMIN_PASSWORD
   );
 };
+//나중에 수정

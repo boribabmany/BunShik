@@ -11,22 +11,22 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const result = await login(id, password);
+    try {
+      const result = await login(id, password);
 
-    // JWT 저장
-    sessionStorage.setItem("accessToken", result.accessToken);
+      // JWT 저장
+      sessionStorage.setItem("accessToken", result.data.accessToken);
 
-    // 로그인 여부 저장
-    sessionStorage.setItem("isAdminLoggedIn", "true");
+      // 로그인 여부 저장
+      sessionStorage.setItem("isAdminLoggedIn", "true");
 
-    navigate("/adminmenu");
-  } catch (error) {
-    alert("아이디 또는 비밀번호가 올바르지 않습니다.");
-  }
-};
+      navigate("/adminmenu");
+    } catch (error) {
+      alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
+  };
 
   // 이미 로그인된 경우
   useEffect(() => {

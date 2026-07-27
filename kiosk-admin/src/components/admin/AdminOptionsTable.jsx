@@ -29,15 +29,21 @@ export default function AdminOptionsTable() {
               <tr key={option.option_id}>
                 <td className="number-col">{option.option_id}</td>
                 <td>
-                  <img src={option.option_image} alt={option.option_name}/>
+                  <img src={option.option_image} alt={option.option_name} />
                 </td>
                 <td>{option.option_name}</td>
                 <td>{option.option_price.toLocaleString()}원</td>
                 <td>{option.option_is_available ? "판매중" : "품절"}</td>
                 <td>
-                  <button className="option-edit-btn"
-                    onClick={() => navigate("/adminmenuedit", {state: { type: "option", item: option,},
-                    })}>수정
+                  <button
+                    className="option-edit-btn"
+                    onClick={() =>
+                      navigate("/adminmenuedit", {
+                        state: { type: "option", item: option },
+                      })
+                    }
+                  >
+                    수정
                   </button>
                 </td>
               </tr>
@@ -47,7 +53,10 @@ export default function AdminOptionsTable() {
 
         {/* 하단 버튼 */}
         <div className="table-button-area">
-          <button className="option-edit-btn" onClick={() => navigate("/adminmenuedit")}>
+          <button
+            className="option-edit-btn"
+            onClick={() => navigate("/adminmenuedit")}
+          >
             옵션 수정
           </button>
         </div>

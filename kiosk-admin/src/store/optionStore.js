@@ -24,11 +24,7 @@ const useOptionStore = create((set) => ({
 
   // 옵션 수정
   editOption: async (option, file) => {
-    await updateOption(
-      option.option_id,
-      option,
-      file
-    );
+    await updateOption(option.option_id, option, file);
 
     const options = await getOptions();
     set({ optionList: options });

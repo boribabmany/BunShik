@@ -15,7 +15,7 @@ export default function SalesHistoryTable() {
 
   const currentSales = salesHistory.slice(
     startIndex,
-    startIndex + itemsPerPage
+    startIndex + itemsPerPage,
   );
 
   const totalPages = Math.ceil(salesHistory.length / itemsPerPage);
@@ -38,28 +38,21 @@ export default function SalesHistoryTable() {
             <tr key={item.salesDate}>
               <td>{item.salesDate}</td>
 
-              <td>
-                {item.orderCount ?? 0}건
-              </td>
+              <td>{item.orderCount ?? 0}건</td>
 
-              <td>
-                ₩{(item.totalSales ?? 0).toLocaleString()}
-              </td>
+              <td>₩{(item.totalSales ?? 0).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-
       <div className="pagination">
-
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
           이전
         </button>
-
 
         {Array.from({ length: totalPages }, (_, index) => (
           <button
@@ -71,16 +64,13 @@ export default function SalesHistoryTable() {
           </button>
         ))}
 
-
         <button
           onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           다음
         </button>
-
       </div>
-
     </div>
   );
 }

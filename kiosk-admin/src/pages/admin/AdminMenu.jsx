@@ -9,38 +9,33 @@ export default function AdminMenu() {
   const navigate = useNavigate();
   //로그아웃
   const handleLogout = () => {
-  sessionStorage.removeItem("isAdminLoggedIn");
-  navigate("/adminlogin");
-};
+    sessionStorage.removeItem("isAdminLoggedIn");
+    navigate("/adminlogin");
+  };
 
   return (
     <div className="admin-menu-page">
       <header className="admin-header">
-  <div className="admin-title">
-    <img
-      src={bunshikLogo}
-      alt="분식 로고"
-      className="admin-logo"
-    />
+        <div className="admin-title">
+          <img src={bunshikLogo} alt="분식 로고" className="admin-logo" />
 
-    <h1>관리자 메뉴 관리</h1>
-  </div>
+          <h1>관리자 메뉴 관리</h1>
+        </div>
 
-  <button className="logout-btn" onClick={handleLogout}>
-    로그아웃
-  </button>
-</header>
+        <button className="logout-btn" onClick={handleLogout}>
+          로그아웃
+        </button>
+      </header>
 
       <main className="admin-layout">
         <section className="left-panel">
-          <AdminSummary onMoveOrder={() => navigate("/adminorder")}/>
+          <AdminSummary onMoveOrder={() => navigate("/adminorder")} />
         </section>
 
         <section className="right-panel">
           <AdminMenusTable />
           <AdminOptionsTable />
         </section>
-
       </main>
     </div>
   );

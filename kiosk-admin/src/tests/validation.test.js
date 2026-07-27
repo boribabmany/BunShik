@@ -8,7 +8,7 @@ describe("메뉴 검증", () => {
         category: "김밥",
         price: 2000,
         image_url: "test.jpg",
-      })
+      }),
     ).toBe("메뉴명을 입력하세요.");
   });
 
@@ -19,7 +19,7 @@ describe("메뉴 검증", () => {
         category: "김밥",
         price: 500,
         image_url: "test.jpg",
-      })
+      }),
     ).toBe("가격은 1000원 이상이어야 합니다.");
   });
 
@@ -30,7 +30,7 @@ describe("메뉴 검증", () => {
         category: "김밥",
         price: 3000,
         image_url: "test.jpg",
-      })
+      }),
     ).toBe(null);
   });
 });
@@ -42,7 +42,7 @@ describe("옵션 검증", () => {
         option_name: "",
         option_price: 1000,
         option_image: "test.jpg",
-      })
+      }),
     ).toBe("옵션메뉴명을 입력하세요.");
   });
 
@@ -52,7 +52,7 @@ describe("옵션 검증", () => {
         option_name: "치즈 추가",
         option_price: 500,
         option_image: "test.jpg",
-      })
+      }),
     ).toBe("옵션가격은 1000원 이상이어야 합니다.");
   });
 
@@ -62,7 +62,7 @@ describe("옵션 검증", () => {
         option_name: "치즈 추가",
         option_price: 1000,
         option_image: "test.jpg",
-      })
+      }),
     ).toBe(null);
   });
 });

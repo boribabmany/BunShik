@@ -19,9 +19,7 @@ export default function PopularMenu() {
               {index + 1}. {menu.menuName}
             </span>
 
-            <strong>
-              {menu.orderCount}개
-            </strong>
+            <strong>{menu.orderCount}개</strong>
           </li>
         ))}
       </ul>

@@ -6,13 +6,11 @@ export const getSalesSummary = async () => {
   return response.data.data;
 };
 
-
 // 인기 메뉴 TOP5
 export const getPopularMenus = async () => {
   const response = await api.get("/api/admin/sales/popular");
   return response.data.data;
 };
-
 
 // 매출 이력
 export const getSalesHistory = async () => {

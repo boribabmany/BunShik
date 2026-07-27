@@ -1,63 +1,86 @@
-import {
-  getMenus,
-  createMenu,
-  updateMenu,
-  deleteMenu,
-} from "../api/menuApi";
+import api from "../api/axios";
+import { getMenus, createMenu, updateMenu, deleteMenu } from "../api/menuApi";
+
+jest.mock("../api/axios", () => ({
+  __esModule: true,
+  default: {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+  },
+}));
 
 describe("menuApi", () => {
-  test("메뉴 조회", async () => {
-    const menus = await getMenus();
-
-    expect(menus).toBeDefined();
-    expect(Array.isArray(menus)).toBe(true);
-    expect(menus.length).toBeGreaterThan(0);
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("메뉴 등록", async () => {
-    const newMenu = {
-      menu_name: "테스트메뉴",
-      category: "테스트",
-      price: 5000,
-      image_url: "test.jpg",
-      is_available: true,
-    };
-
-    await createMenu(newMenu);
+  test("메뉴 조회 응답을 화면용 데이터로 변환한다", async () => {
+    api.get.mockResolvedValue({
+      data: {
+        data: [
+          {
+            menuId: 1,
+            menuName: "떡볶이",
+            category: "분식",
+            price: 5000,
+            imageUrl: "/images/tteokbokki.webp",
+            isAvailable: true,
+            description: "매운 떡볶이",
+          },
+        ],
+      },
+    });
 
     const menus = await getMenus();
 
-    expect(
-      menus.some((menu) => menu.menu_name === "테스트메뉴")
-    ).toBe(true);
+    expect(api.get).toHaveBeenCalledWith("/api/admin/menus");
+    expect(menus).toEqual([
+      {
+        menu_id: 1,
+        menu_name: "떡볶이",
+        category: "분식",
+        price: 5000,
+        image_url: "http://localhost:8080/images/tteokbokki.webp",
+        is_available: true,
+        description: "매운 떡볶이",
+        option_ids: [],
+      },
+    ]);
   });
 
-  test("메뉴 수정", async () => {
-    const menus = await getMenus();
+  test("메뉴 등록 요청을 전송하고 응답 데이터를 반환한다", async () => {
+    const formData = new FormData();
+    const createdMenu = { menuId: 2, menuName: "순대" };
+    api.post.mockResolvedValue({ data: { data: createdMenu } });
 
-    const menu = {
-      ...menus[0],
-      menu_name: "수정된메뉴",
-    };
-
-    await updateMenu(menu);
-
-    const updatedMenus = await getMenus();
-
-    expect(updatedMenus[0].menu_name).toBe("수정된메뉴");
+    await expect(createMenu(formData)).resolves.toEqual(createdMenu);
+    expect(api.post).toHaveBeenCalledWith("/api/admin/menus", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   });
 
-  test("메뉴 삭제", async () => {
-    const menus = await getMenus();
+  test("메뉴 수정 요청에 메뉴 ID와 폼 데이터를 전달한다", async () => {
+    const formData = new FormData();
+    const updatedMenu = { menuId: 1, menuName: "수정된 메뉴" };
+    api.put.mockResolvedValue({ data: { data: updatedMenu } });
 
-    const deleteId = menus[0].menu_id;
+    await expect(updateMenu(1, formData)).resolves.toEqual(updatedMenu);
+    expect(api.put).toHaveBeenCalledWith("/api/admin/menus/1", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  });
 
-    await deleteMenu(deleteId);
+  test("메뉴 삭제 요청을 전송하고 응답 데이터를 반환한다", async () => {
+    const deletedMenu = { menuId: 1 };
+    api.delete.mockResolvedValue({ data: { data: deletedMenu } });
 
-    const updatedMenus = await getMenus();
-
-    expect(
-      updatedMenus.find((menu) => menu.menu_id === deleteId)
-    ).toBeUndefined();
+    await expect(deleteMenu(1)).resolves.toEqual(deletedMenu);
+    expect(api.delete).toHaveBeenCalledWith("/api/admin/menus/1");
   });
 });

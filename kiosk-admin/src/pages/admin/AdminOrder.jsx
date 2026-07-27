@@ -14,9 +14,7 @@ export default function AdminOrder() {
     cancelOrder: storeCancelOrder,
   } = useAdminOrderStore();
 
-  const [date, setDate] = useState(
-    new Date().toISOString().slice(0, 10)
-  );
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
   const [visibleCount, setVisibleCount] = useState(5);
@@ -27,24 +25,18 @@ export default function AdminOrder() {
 
   const filteredOrders = orders
     .filter((order) => {
-      const matchDate =
-        date === "" || order.created_at.startsWith(date);
+      const matchDate = date === "" || order.created_at.startsWith(date);
 
-      const matchType =
-        type === "전체" || order.order_type === type;
+      const matchType = type === "전체" || order.order_type === type;
 
-      const matchStatus =
-        status === "전체" || order.order_status === status;
+      const matchStatus = status === "전체" || order.order_status === status;
 
       return matchDate && matchType && matchStatus;
     })
     .sort((a, b) => b.order_id - a.order_id);
 
   // 상태 변경: 접수 → 조리중 → 완료
-  const handleStatusChange = async (
-    orderId,
-    currentStatus
-  ) => {
+  const handleStatusChange = async (orderId, currentStatus) => {
     let nextStatus;
 
     if (currentStatus === "접수") {
@@ -88,11 +80,7 @@ export default function AdminOrder() {
     <div className="admin-order-page">
       <header className="order-header">
         <div className="order-title">
-          <img
-            src={bunshikLogo}
-            alt="분식로고"
-            className="order-logo"
-          />
+          <img src={bunshikLogo} alt="분식로고" className="order-logo" />
 
           <div>
             <h1>관리자 주문 관리</h1>
@@ -137,10 +125,7 @@ export default function AdminOrder() {
           <option value="취소">취소</option>
         </select>
 
-        <button
-          type="button"
-          className="search-btn"
-        >
+        <button type="button" className="search-btn">
           검색
         </button>
       </section>
@@ -159,70 +144,54 @@ export default function AdminOrder() {
           </thead>
 
           <tbody>
-            {filteredOrders
-              .slice(0, visibleCount)
-              .map((order) => {
-                const isFinished =
-                  order.order_status === "완료" ||
-                  order.order_status === "취소";
+            {filteredOrders.slice(0, visibleCount).map((order) => {
+              const isFinished =
+                order.order_status === "완료" || order.order_status === "취소";
 
-                return (
-                  <tr key={order.order_id}>
-                    <td>{order.order_number}</td>
-                    <td>{order.created_at}</td>
-                    <td>{order.order_type}</td>
-                    <td>{order.order_status}</td>
-                    <td>
-                      {order.total_price.toLocaleString()}원
-                    </td>
+              return (
+                <tr key={order.order_id}>
+                  <td>{order.order_number}</td>
+                  <td>{order.created_at}</td>
+                  <td>{order.order_type}</td>
+                  <td>{order.order_status}</td>
+                  <td>{order.total_price.toLocaleString()}원</td>
 
-                    <td>
-                      <div className="order-action">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleStatusChange(
-                              order.order_id,
-                              order.order_status
-                            )
-                          }
-                          disabled={isFinished}
-                        >
-                          {getStatusButtonText(
-                            order.order_status
-                          )}
-                        </button>
+                  <td>
+                    <div className="order-action">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleStatusChange(order.order_id, order.order_status)
+                        }
+                        disabled={isFinished}
+                      >
+                        {getStatusButtonText(order.order_status)}
+                      </button>
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleCancel(order.order_id)
-                          }
-                          disabled={isFinished}
-                        >
-                          취소
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                      <button
+                        type="button"
+                        onClick={() => handleCancel(order.order_id)}
+                        disabled={isFinished}
+                      >
+                        취소
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
         {filteredOrders.length === 0 && (
-          <div className="empty-order">
-            조회된 주문이 없습니다.
-          </div>
+          <div className="empty-order">조회된 주문이 없습니다.</div>
         )}
 
         {visibleCount < filteredOrders.length && (
           <button
             type="button"
             className="load-more"
-            onClick={() =>
-              setVisibleCount((prev) => prev + 5)
-            }
+            onClick={() => setVisibleCount((prev) => prev + 5)}
           >
             더 보기
           </button>

@@ -29,8 +29,7 @@ export default function AdminLogin() {
 
   // 이미 로그인된 경우
   useEffect(() => {
-    const isLogin =
-      sessionStorage.getItem("isAdminLoggedIn") === "true";
+    const isLogin = sessionStorage.getItem("isAdminLoggedIn") === "true";
 
     if (isLogin) {
       navigate("/adminmenu");

@@ -39,25 +39,17 @@ export const createOption = async (option, file) => {
     formData.append("file", file);
   }
 
-  const response = await api.post(
-    "/api/admin/options",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.post("/api/admin/options", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data.data;
 };
 
 // 옵션 수정
-export const updateOption = async (
-  optionId,
-  option,
-  file
-) => {
+export const updateOption = async (optionId, option, file) => {
   const formData = new FormData();
 
   const request = {
@@ -72,24 +64,18 @@ export const updateOption = async (
     formData.append("file", file);
   }
 
-  const response = await api.put(
-    `/api/admin/options/${optionId}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.put(`/api/admin/options/${optionId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
   return response.data.data;
 };
 
 // 옵션 삭제
 export const deleteOption = async (optionId) => {
-  const response = await api.delete(
-    `/api/admin/options/${optionId}`
-  );
+  const response = await api.delete(`/api/admin/options/${optionId}`);
 
   return response.data.data;
 };

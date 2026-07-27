@@ -25,10 +25,7 @@ export default function UpdateHistory() {
 
       <div className="history-list">
         {histories.map((history) => (
-          <div
-            key={history.id}
-            className="history-item"
-          >
+          <div key={history.id} className="history-item">
             <strong>{history.title}</strong>
             <p>{history.description}</p>
           </div>

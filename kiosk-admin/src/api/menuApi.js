@@ -23,7 +23,6 @@ export const getMenus = async () => {
     price: menu.price,
     image_url: getImageUrl(menu.imageUrl),
     is_available: menu.isAvailable,
-    status: menu.isAvailable ? "판매중" : "품절",
     description: menu.description,
     option_ids: [],
   }));

@@ -4,7 +4,6 @@ import {
   updateOrderStatus,
   cancelOrder,
 } from "../api/adminOrderApi";
-import useHistoryStore from "./historyStore";
 
 const useAdminOrderStore = create((set, get) => ({
   orders: [],
@@ -60,11 +59,6 @@ const useAdminOrderStore = create((set, get) => ({
 
       await get().loadOrders();
 
-      useHistoryStore.getState().addHistory(
-        "주문 상태 변경",
-        `주문(ID: ${orderId})의 상태가 ${orderStatus}(으)로 변경되었습니다.`
-      );
-
     } catch (error) {
       console.error("상태 변경 실패:", error);
       throw error;
@@ -83,11 +77,6 @@ const useAdminOrderStore = create((set, get) => ({
       await cancelOrder(orderId);
 
       await get().loadOrders();
-
-      useHistoryStore.getState().addHistory(
-        "주문 취소",
-        `주문(ID: ${orderId})이 취소되었습니다.`
-      );
 
     } catch (error) {
       console.error("주문 취소 실패:", error);

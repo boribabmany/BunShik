@@ -28,15 +28,6 @@ export default function AdminMenuEdit() {
     await loadMenus();
     await loadOptions();};
   fetchData();}, [loadMenus, loadOptions]);
-  //페이지 매칭
-  useEffect(() => {
-  if (location.state?.item) {
-    setEditMode(location.state.type);
-    setSelectedItem(location.state.item);
-    setIsAddMode(false);
-  }
-  }, [location.state]);
-//-------------
   useEffect(() => {
   if (!location.state) return;
   // 등록 모드
@@ -200,10 +191,7 @@ const handleSave = async () => {
     }
 
 
-    await addMenu(
-  formData,
-  selectedItem.menu_name
-);
+    await addMenu(formData);
 
 
     alert("등록되었습니다.");

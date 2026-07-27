@@ -20,7 +20,6 @@ export const getOptions = async () => {
     option_price: option.optionPrice,
     option_image: getImageUrl(option.optionImage),
     option_is_available: option.optionIsAvailable,
-    status: option.optionIsAvailable ? "판매중" : "품절",
   }));
 };
 

@@ -5,7 +5,6 @@ import {
   updateOption,
   deleteOption,
 } from "../api/optionApi";
-import useHistoryStore from "./historyStore";
 
 const useOptionStore = create((set) => ({
   optionList: [],
@@ -21,11 +20,6 @@ const useOptionStore = create((set) => ({
 
     const options = await getOptions();
     set({ optionList: options });
-
-    useHistoryStore.getState().addHistory(
-      "옵션 등록",
-      `${option.option_name}이(가) 신규 등록되었습니다.`
-    );
   },
 
   // 옵션 수정
@@ -38,11 +32,6 @@ const useOptionStore = create((set) => ({
 
     const options = await getOptions();
     set({ optionList: options });
-
-    useHistoryStore.getState().addHistory(
-      "옵션 수정",
-      `${option.option_name}이(가) 수정되었습니다.`
-    );
   },
 
   // 옵션 삭제
@@ -51,11 +40,6 @@ const useOptionStore = create((set) => ({
 
     const options = await getOptions();
     set({ optionList: options });
-
-    useHistoryStore.getState().addHistory(
-      "옵션 삭제",
-      `옵션(ID: ${optionId})이(가) 삭제되었습니다.`
-    );
   },
 }));
 

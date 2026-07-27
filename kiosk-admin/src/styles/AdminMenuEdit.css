@@ -177,11 +177,6 @@
     font-size:13px;
 }
 
-.image-link{
-    height:70px !important;
-    border-radius:8px !important;
-    padding:8px !important;
-}
 .image-upload{
     flex:1;
     height:36px;              /* 다른 input과 동일한 높이 */

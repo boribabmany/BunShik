@@ -1,7 +1,10 @@
-const ADMIN_ID = process.env.REACT_APP_ADMIN_ID;
-const ADMIN_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD;
+import api from "./axios";
 
-export const login = (id, password) => {
-  return id === ADMIN_ID && password === ADMIN_PASSWORD;
+export const login = async (username, password) => {
+  const response = await api.post("/api/admin/login", {
+    username,
+    password,
+  });
+
+  return response.data;
 };
-//나중에 수정 jwt

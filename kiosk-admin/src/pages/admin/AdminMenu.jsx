@@ -9,9 +9,14 @@ export default function AdminMenu() {
   const navigate = useNavigate();
   //로그아웃
   const handleLogout = () => {
-    sessionStorage.removeItem("isAdminLoggedIn");
-    navigate("/adminlogin");
-  };
+  // JWT 삭제
+  sessionStorage.removeItem("accessToken");
+
+  // 로그인 상태 삭제
+  sessionStorage.removeItem("isAdminLoggedIn");
+
+  navigate("/adminlogin");
+};
 
   return (
     <div className="admin-menu-page">

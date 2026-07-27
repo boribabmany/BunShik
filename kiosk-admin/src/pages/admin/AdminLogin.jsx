@@ -43,7 +43,7 @@ export default function AdminLogin() {
         <img src={logo} alt="분식 로고" className="login-logo" />
 
         <h1 className="login-title">
-          관리자 로그인(아이디 admin / 비밀번호 1234)
+          관리자 로그인
         </h1>
 
         <div className="login-info">

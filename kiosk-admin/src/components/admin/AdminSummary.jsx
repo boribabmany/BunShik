@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 import useMenuStore from "../../store/menuStore";
 import useAdminOrderStore from "../../store/adminOrderStore";
@@ -9,15 +8,9 @@ import UpdateHistory from "./UpdateHistory";
 export default function AdminSummary({ onMoveOrder }) {
   const navigate = useNavigate();
 
-  const { menuList, loadMenus } = useMenuStore();
-  const { optionList, loadOptions } = useOptionStore();
-  const { orders, loadOrders, todaySales } = useAdminOrderStore();
-
-  useEffect(() => {
-    if (loadMenus) loadMenus();
-    if (loadOrders) loadOrders();
-    if (loadOptions) loadOptions();
-  }, [loadMenus, loadOrders, loadOptions]);
+  const menuList = useMenuStore((state) => state.menuList);
+  const optionList = useOptionStore((state) => state.optionList);
+  const { orders, todaySales } = useAdminOrderStore();
 
   /* ==========================================
       실시간 데이터 통계 계산

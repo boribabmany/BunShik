@@ -1,7 +1,8 @@
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -19,6 +20,22 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  },
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("isAdminLoggedIn");
+
+      if (window.location.pathname !== "/adminlogin") {
+        window.location.replace("/adminlogin");
+      }
+    }
+
     return Promise.reject(error);
   },
 );

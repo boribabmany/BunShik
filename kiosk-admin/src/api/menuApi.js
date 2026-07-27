@@ -1,4 +1,5 @@
 import api from "./axios";
+import { API_BASE_URL } from "../config/api";
 
 const getImageUrl = (imageUrl) => {
   if (!imageUrl) return "";
@@ -7,7 +8,7 @@ const getImageUrl = (imageUrl) => {
     return imageUrl;
   }
 
-  return `http://localhost:8080${imageUrl}`;
+  return `${API_BASE_URL}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
 };
 
 // 메뉴 목록 조회

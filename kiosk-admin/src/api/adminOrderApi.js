@@ -21,11 +21,7 @@ const formatDateTime = (dateTime) => {
 // 주문 목록 조회
 export const getOrders = async () => {
   try {
-    console.log("adminOrderApi getOrders 실행");
-
     const response = await api.get("/api/admin/orders");
-
-    console.log("백엔드 응답:", response.data);
 
     return response.data.data.map((order) => ({
       order_id: order.orderId,
@@ -48,8 +44,6 @@ export const updateOrderStatus = async (orderId, orderStatus) => {
       orderStatus,
     });
 
-    console.log("주문 상태 변경:", response.data);
-
     return response.data.data;
   } catch (error) {
     console.error("주문 상태 변경 실패:", error);
@@ -61,8 +55,6 @@ export const updateOrderStatus = async (orderId, orderStatus) => {
 export const cancelOrder = async (orderId) => {
   try {
     const response = await api.patch(`/api/admin/orders/${orderId}/cancel`);
-
-    console.log("주문 취소:", response.data);
 
     return response.data.data;
   } catch (error) {

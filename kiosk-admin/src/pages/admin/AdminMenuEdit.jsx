@@ -108,7 +108,7 @@ export default function AdminMenuEdit() {
       setImageFile(null);
       setIsAddMode(false);
     } catch (error) {
-      console.log(error);
+      console.error("메뉴 수정 실패:", error);
       alert("수정 실패");
     }
   };
@@ -146,7 +146,7 @@ export default function AdminMenuEdit() {
       setImageFile(null);
       setIsAddMode(false);
     } catch (error) {
-      console.log(error);
+      console.error("메뉴 등록 실패:", error);
       alert("등록 실패");
     }
   };

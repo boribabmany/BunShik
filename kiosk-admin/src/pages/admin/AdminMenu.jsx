@@ -1,12 +1,26 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminSummary from "../../components/admin/AdminSummary";
 import AdminMenusTable from "../../components/admin/AdminMenusTable";
 import AdminOptionsTable from "../../components/admin/AdminOptionsTable";
+import useMenuStore from "../../store/menuStore";
+import useOptionStore from "../../store/optionStore";
+import useAdminOrderStore from "../../store/adminOrderStore";
 import "../../styles/AdminMenu.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
 export default function AdminMenu() {
   const navigate = useNavigate();
+  const loadMenus = useMenuStore((state) => state.loadMenus);
+  const loadOptions = useOptionStore((state) => state.loadOptions);
+  const loadOrders = useAdminOrderStore((state) => state.loadOrders);
+
+  useEffect(() => {
+    loadMenus();
+    loadOptions();
+    loadOrders();
+  }, [loadMenus, loadOptions, loadOrders]);
+
   //로그아웃
   const handleLogout = () => {
     // JWT 삭제

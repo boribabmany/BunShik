@@ -12,11 +12,7 @@ const useAdminOrderStore = create((set, get) => ({
   // 주문 목록 조회
   loadOrders: async () => {
     try {
-      console.log("loadOrders 실행");
-
       const data = await getOrders();
-
-      console.log("store 받은 주문:", data);
 
       const today = new Date().toISOString().slice(0, 10);
 
@@ -40,8 +36,6 @@ const useAdminOrderStore = create((set, get) => ({
   // 주문 상태 변경
   changeOrderStatus: async (orderId, orderStatus) => {
     try {
-      console.log("주문 상태 변경 요청:", orderId, orderStatus);
-
       await updateOrderStatus(orderId, orderStatus);
 
       await get().loadOrders();
@@ -54,8 +48,6 @@ const useAdminOrderStore = create((set, get) => ({
   // 주문 취소
   cancelOrder: async (orderId) => {
     try {
-      console.log("주문 취소 요청:", orderId);
-
       await cancelOrder(orderId);
 
       await get().loadOrders();

@@ -1,9 +1,11 @@
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import trashIcon from "../../images/trash.png";
 import {
   translations,
   getLocalizedName,
   formatPrice,
 } from "../../i18n/translations";
+import { fitFontSizeByDOM } from "../../utils/fitFontSize";
 
 function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
   const t = translations[language].cart;
@@ -14,7 +16,31 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
     item.menu_name_en,
   );
 
-  const isTteokbokkiEn = language === "en" && item.menu_name === "떡볶이";
+  const nameRef = useRef(null);
+  const [fontsReady, setFontsReady] = useState(false);
+  const [fontSize, setFontSize] = useState(46);
+
+  useEffect(() => {
+    document.fonts.ready.then(() => setFontsReady(true));
+  }, []);
+
+  useLayoutEffect(() => {
+    if (language !== "en") {
+      setFontSize(46);
+      return;
+    }
+    if (!nameRef.current) return;
+
+    const availableWidth = nameRef.current.getBoundingClientRect().width - 2;
+
+    const size = fitFontSizeByDOM(itemName, availableWidth, {
+      max: 46,
+      min: 36,
+      fontWeight: 500,
+      fontFamily: "Pretendard, sans-serif",
+    });
+    setFontSize(size);
+  }, [itemName, language, fontsReady]);
 
   const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
   const itemTotal = (item.base_price + optionTotal) * item.quantity;
@@ -25,9 +51,14 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
         <img src={item.image_url} alt={itemName} className="cart-item-image" />
 
         <p
+          ref={nameRef}
           className={`cart-item-name${
-            isTteokbokkiEn ? " cart-item-name--tteokbokki-en" : ""
+            language === "en" ? " cart-item-name--en" : ""
           }`}
+          style={{
+            fontSize: `${fontSize}px`,
+            fontWeight: language === "en" ? 500 : undefined,
+          }}
         >
           {itemName}
         </p>

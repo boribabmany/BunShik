@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import { getMenus, createMenu, updateMenu, deleteMenu } from "../api/menuApi";
+import {
+  getMenus,
+  createMenu,
+  updateMenu,
+  stopMenu,
+  resumeMenu,
+} from "../api/menuApi";
 
 const useMenuStore = create((set) => ({
   menuList: [],
@@ -13,7 +19,8 @@ const useMenuStore = create((set) => ({
     });
   },
 
-  // 메뉴 등록 (파일 업로드 지원)
+
+  // 메뉴 등록
   addMenu: async (formData) => {
     await createMenu(formData);
 
@@ -23,6 +30,7 @@ const useMenuStore = create((set) => ({
       menuList: menus,
     });
   },
+
 
   // 메뉴 수정
   editMenu: async (menuId, formData) => {
@@ -35,9 +43,10 @@ const useMenuStore = create((set) => ({
     });
   },
 
-  // 메뉴 삭제
-  removeMenu: async (menuId) => {
-    await deleteMenu(menuId);
+
+  // 메뉴 판매중단
+  stopMenu: async (menuId) => {
+    await stopMenu(menuId);
 
     const menus = await getMenus();
 
@@ -45,6 +54,19 @@ const useMenuStore = create((set) => ({
       menuList: menus,
     });
   },
+
+
+  // 메뉴 판매재개
+  resumeMenu: async (menuId) => {
+    await resumeMenu(menuId);
+
+    const menus = await getMenus();
+
+    set({
+      menuList: menus,
+    });
+  },
+
 }));
 
 export default useMenuStore;

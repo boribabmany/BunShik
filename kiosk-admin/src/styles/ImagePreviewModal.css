@@ -1,0 +1,84 @@
+.image-preview-trigger {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.image-preview-trigger:focus-visible {
+  outline: 3px solid #5b7f56;
+  outline-offset: 3px;
+}
+
+.edit-table button.image-preview-trigger {
+  width: auto;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.image-preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.image-preview-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.image-preview-content img {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.image-preview-close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  z-index: 1;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #222;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.image-preview-close:hover {
+  background: #e5e7eb;
+}
+
+@media (max-width: 600px) {
+  .image-preview-modal {
+    padding: 24px;
+  }
+
+  .image-preview-close {
+    top: -16px;
+    right: -10px;
+  }
+}

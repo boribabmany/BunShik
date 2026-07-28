@@ -28,6 +28,7 @@ describe("optionApi", () => {
           {
             optionId: 1,
             optionName: "치즈",
+            optionNameEn: "Cheese",
             optionPrice: 1000,
             optionImage: "/images/cheese.png",
             optionIsAvailable: true,
@@ -43,6 +44,7 @@ describe("optionApi", () => {
       {
         option_id: 1,
         option_name: "치즈",
+        option_name_en: "Cheese",
         option_price: 1000,
         option_image: "http://localhost:8080/images/cheese.png",
         option_is_available: true,
@@ -53,6 +55,7 @@ describe("optionApi", () => {
   test("옵션 등록 데이터를 multipart 요청으로 전송한다", async () => {
     const option = {
       option_name: "계란",
+      option_name_en: "Egg",
       option_price: "1000",
       option_is_available: true,
     };
@@ -66,6 +69,7 @@ describe("optionApi", () => {
     expect(url).toBe("/api/admin/options");
     expect(JSON.parse(formData.get("option"))).toEqual({
       optionName: "계란",
+      optionNameEn: "Egg",
       optionPrice: 1000,
       optionIsAvailable: true,
     });
@@ -80,6 +84,7 @@ describe("optionApi", () => {
   test("옵션 수정 요청에 옵션 ID와 multipart 데이터를 전달한다", async () => {
     const option = {
       option_name: "추가 치즈",
+      option_name_en: "Extra cheese",
       option_price: 1500,
       option_is_available: false,
     };
@@ -92,6 +97,7 @@ describe("optionApi", () => {
     expect(url).toBe("/api/admin/options/3");
     expect(JSON.parse(formData.get("option"))).toEqual({
       optionName: "추가 치즈",
+      optionNameEn: "Extra cheese",
       optionPrice: 1500,
       optionIsAvailable: false,
     });

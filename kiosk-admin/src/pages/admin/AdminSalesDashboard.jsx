@@ -13,7 +13,10 @@ export default function AdminSalesDashboard() {
       <header className="sales-header">
         <h1> 매출 대시보드</h1>
 
-        <button className="back-btn" onClick={() => navigate("/adminmenu")}>
+        <button
+          className="sales-back-btn"
+          onClick={() => navigate("/adminmenu")}
+        >
           ← 관리자 메뉴
         </button>
       </header>

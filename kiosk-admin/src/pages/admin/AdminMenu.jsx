@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminSummary from "../../components/admin/AdminSummary";
 import AdminMenusTable from "../../components/admin/AdminMenusTable";
 import AdminOptionsTable from "../../components/admin/AdminOptionsTable";
+import ImagePreviewModal from "../../components/admin/ImagePreviewModal";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
 import useAdminOrderStore from "../../store/adminOrderStore";
@@ -11,6 +12,7 @@ import bunshikLogo from "../../images/bunshiklogo.png";
 
 export default function AdminMenu() {
   const navigate = useNavigate();
+  const [previewImage, setPreviewImage] = useState(null);
   const loadMenus = useMenuStore((state) => state.loadMenus);
   const loadOptions = useOptionStore((state) => state.loadOptions);
   const loadOrders = useAdminOrderStore((state) => state.loadOrders);
@@ -30,6 +32,11 @@ export default function AdminMenu() {
     sessionStorage.removeItem("isAdminLoggedIn");
 
     navigate("/adminlogin");
+  };
+
+  const handleImageClick = (imageUrl, alt) => {
+    if (!imageUrl) return;
+    setPreviewImage({ imageUrl, alt });
   };
 
   return (
@@ -52,10 +59,16 @@ export default function AdminMenu() {
         </section>
 
         <section className="right-panel">
-          <AdminMenusTable />
-          <AdminOptionsTable />
+          <AdminMenusTable onImageClick={handleImageClick} />
+          <AdminOptionsTable onImageClick={handleImageClick} />
         </section>
       </main>
+
+      <ImagePreviewModal
+        imageUrl={previewImage?.imageUrl}
+        alt={previewImage?.alt}
+        onClose={() => setPreviewImage(null)}
+      />
     </div>
   );
 }

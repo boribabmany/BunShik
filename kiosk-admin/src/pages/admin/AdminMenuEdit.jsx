@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { validateMenu, validateOption } from "../../utils/validation";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
+import ImagePreviewModal from "../../components/admin/ImagePreviewModal";
 import "../../styles/AdminMenuEdit.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
@@ -10,9 +11,11 @@ const createMenuFormData = (menu, imageFile) => {
   const formData = new FormData();
 
   formData.append("menuName", menu.menu_name);
+  formData.append("menuNameEn", menu.menu_name_en);
   formData.append("price", menu.price);
   formData.append("category", menu.category);
   formData.append("description", menu.description || "");
+  formData.append("descriptionEn", menu.description_en || "");
   formData.append("isAvailable", menu.is_available);
 
   if (imageFile) {
@@ -24,14 +27,22 @@ const createMenuFormData = (menu, imageFile) => {
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
-  const { menuList, loadMenus, addMenu, editMenu, removeMenu } = useMenuStore();
-  const { optionList, loadOptions, addOption, editOption, removeOption } =
-    useOptionStore();
+  const { menuList, loadMenus, addMenu, editMenu, stopMenu, resumeMenu } =
+    useMenuStore();
+  const {
+    optionList,
+    loadOptions,
+    addOption,
+    editOption,
+    stopOption,
+    resumeOption,
+  } = useOptionStore();
   const [selectedItem, setSelectedItem] = useState(null);
   const [editMode, setEditMode] = useState("menu");
   const [isAddMode, setIsAddMode] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [enlargedImage, setEnlargedImage] = useState(null);
   const location = useLocation();
 
   const [menuPage, setMenuPage] = useState(1);
@@ -62,14 +73,18 @@ export default function AdminMenuEdit() {
       if (location.state.type === "menu") {
         setSelectedItem({
           menu_name: "",
+          menu_name_en: "",
           category: "",
           price: 0,
           is_available: true,
           image_url: "",
+          description: "",
+          description_en: "",
         });
       } else {
         setSelectedItem({
           option_name: "",
+          option_name_en: "",
           option_price: 0,
           option_is_available: true,
           option_image: "",
@@ -95,17 +110,28 @@ export default function AdminMenuEdit() {
 
   //--메뉴리스트-------------------------------------------------
   //메뉴삭제
-  const handleDeleteMenu = async (menuId) => {
-    if (!window.confirm("삭제하시겠습니까?")) return;
-    await removeMenu(menuId);
-    if (selectedItem?.menu_id === menuId) {
+  // 메뉴 판매중단 / 판매재개
+  const handleToggleMenu = async (menu) => {
+    const message = menu.is_visible
+      ? "메뉴 판매를 중단하시겠습니까?"
+      : "메뉴 판매를 재개하시겠습니까?";
+
+    if (!window.confirm(message)) return;
+
+    if (menu.is_visible) {
+      await stopMenu(menu.menu_id);
+    } else {
+      await resumeMenu(menu.menu_id);
+    }
+
+    if (selectedItem?.menu_id === menu.menu_id) {
       setSelectedItem(null);
       setIsAddMode(false);
     }
   };
   //메뉴수정
   const handleSave = async () => {
-    const error = validateMenu(selectedItem);
+    const error = validateMenu(selectedItem, imageFile);
 
     if (error) {
       alert(error);
@@ -130,7 +156,7 @@ export default function AdminMenuEdit() {
   };
   //메뉴등록
   const handleAddMenu = async () => {
-    const error = validateMenu(selectedItem);
+    const error = validateMenu(selectedItem, imageFile);
 
     if (error) {
       alert(error);
@@ -193,7 +219,7 @@ export default function AdminMenuEdit() {
   //옴션------------------------------------------------------------
   // 옵션 등록
   const handleAddOption = async () => {
-    const error = validateOption(selectedItem);
+    const error = validateOption(selectedItem, imageFile);
     if (error) {
       alert(error);
       return;
@@ -212,10 +238,20 @@ export default function AdminMenuEdit() {
   };
 
   //옵션삭제
-  const handleDeleteOption = async (optionId) => {
-    if (!window.confirm("삭제하시겠습니까?")) return;
-    await removeOption(optionId);
-    if (selectedItem?.option_id === optionId) {
+  const handleToggleOption = async (option) => {
+    const message = option.is_visible
+      ? "판매를 중단하시겠습니까?"
+      : "판매를 재개하시겠습니까?";
+
+    if (!window.confirm(message)) return;
+
+    if (option.is_visible) {
+      await stopOption(option.option_id);
+    } else {
+      await resumeOption(option.option_id);
+    }
+
+    if (selectedItem?.option_id === option.option_id) {
       setSelectedItem(null);
       setImageFile(null);
       setImagePreviewUrl(null);
@@ -225,7 +261,7 @@ export default function AdminMenuEdit() {
 
   //옵션 수정
   const handleSaveOption = async () => {
-    const error = validateOption(selectedItem);
+    const error = validateOption(selectedItem, imageFile);
     if (error) {
       alert(error);
       return;
@@ -252,6 +288,21 @@ export default function AdminMenuEdit() {
     optionStart + OPTION_PER_PAGE,
   );
   const optionTotalPage = Math.ceil(optionList.length / OPTION_PER_PAGE);
+
+  const selectedImageUrl =
+    editMode === "menu"
+      ? imagePreviewUrl || selectedItem?.image_url || bunshikLogo
+      : imagePreviewUrl || selectedItem?.option_image || bunshikLogo;
+  const selectedImageAlt =
+    editMode === "menu"
+      ? selectedItem?.menu_name || "기본 이미지"
+      : selectedItem?.option_name || "기본 이미지";
+
+  const handleImageClick = (imageUrl, alt) => {
+    if (!imageUrl) return;
+    setEnlargedImage({ imageUrl, alt });
+  };
+
   // -----------------------------------------------------------------------
   return (
     <div className="admin-edit-page">
@@ -262,7 +313,7 @@ export default function AdminMenuEdit() {
 
           <h2 className="edit-title">관리자 메뉴 수정 및 등록</h2>
         </div>
-        <div style={{ marginBottom: "10px" }}>
+        <div className="register-button-area">
           <button
             className="register-btn"
             onClick={() => {
@@ -272,10 +323,13 @@ export default function AdminMenuEdit() {
               setImagePreviewUrl(null);
               setSelectedItem({
                 menu_name: "",
+                menu_name_en: "",
                 category: "",
                 price: 0,
                 is_available: true,
                 image_url: "",
+                description: "",
+                description_en: "",
               });
             }}
           >
@@ -291,6 +345,7 @@ export default function AdminMenuEdit() {
               <tr>
                 <th>사진</th>
                 <th>메뉴명</th>
+                <th>영문명</th>
                 <th>카테고리</th>
                 <th>가격</th>
                 <th>상태</th>
@@ -301,24 +356,38 @@ export default function AdminMenuEdit() {
               {currentMenus.map((menu) => (
                 <tr key={menu.menu_id}>
                   <td>
-                    <img
-                      src={menu.image_url}
-                      alt={menu.menu_name}
-                      width={60}
-                      height={60}
-                      style={{ objectFit: "cover", borderRadius: "8px" }}
-                    />
+                    {menu.image_url ? (
+                      <button
+                        type="button"
+                        className="image-preview-trigger"
+                        aria-label={`${menu.menu_name} 사진 확대`}
+                        onClick={() =>
+                          handleImageClick(menu.image_url, menu.menu_name)
+                        }
+                      >
+                        <img src={menu.image_url} alt={menu.menu_name} />
+                      </button>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                   <td>{menu.menu_name}</td>
+                  <td>{menu.menu_name_en || "-"}</td>
                   <td>{menu.category}</td>
                   <td>{menu.price.toLocaleString()}원</td>
-                  <td>{menu.is_available ? "판매중" : "품절"}</td>
+                  <td>
+                    {!menu.is_visible
+                      ? "판매중단"
+                      : menu.is_available
+                        ? "판매중"
+                        : "품절"}
+                  </td>
                   <td>
                     <button onClick={() => handleEditClick("menu", menu)}>
                       수정
                     </button>
-                    <button onClick={() => handleDeleteMenu(menu.menu_id)}>
-                      삭제
+                    <button onClick={() => handleToggleMenu(menu)}>
+                      {menu.is_visible ? "판매중단" : "판매재개"}
                     </button>
                   </td>
                 </tr>
@@ -339,7 +408,7 @@ export default function AdminMenuEdit() {
         </div>
 
         {/* 옵션 등록 버튼 */}
-        <div style={{ marginBottom: "10px" }}>
+        <div className="register-button-area">
           <button
             className="register-btn"
             onClick={() => {
@@ -349,6 +418,7 @@ export default function AdminMenuEdit() {
               setImagePreviewUrl(null);
               setSelectedItem({
                 option_name: "",
+                option_name_en: "",
                 option_price: 0,
                 option_is_available: true,
                 option_image: "",
@@ -366,6 +436,7 @@ export default function AdminMenuEdit() {
               <tr>
                 <th>사진</th>
                 <th>옵션명</th>
+                <th>영문명</th>
                 <th>추가 가격</th>
                 <th>상태</th>
                 <th>관리</th>
@@ -375,25 +446,43 @@ export default function AdminMenuEdit() {
               {currentOptions.map((option) => (
                 <tr key={option.option_id}>
                   <td>
-                    <img
-                      src={option.option_image}
-                      alt={option.option_name}
-                      width={60}
-                      height={60}
-                      style={{ objectFit: "cover", borderRadius: "8px" }}
-                    />
+                    {option.option_image ? (
+                      <button
+                        type="button"
+                        className="image-preview-trigger"
+                        aria-label={`${option.option_name} 사진 확대`}
+                        onClick={() =>
+                          handleImageClick(
+                            option.option_image,
+                            option.option_name,
+                          )
+                        }
+                      >
+                        <img
+                          src={option.option_image}
+                          alt={option.option_name}
+                        />
+                      </button>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                   <td>{option.option_name}</td>
+                  <td>{option.option_name_en || "-"}</td>
                   <td>+{option.option_price.toLocaleString()}원</td>
-                  <td>{option.option_is_available ? "판매중" : "품절"}</td>
+                  <td>
+                    {!option.is_visible
+                      ? "판매중단"
+                      : option.option_is_available
+                        ? "판매중"
+                        : "품절"}
+                  </td>
                   <td>
                     <button onClick={() => handleEditClick("option", option)}>
                       수정
                     </button>
-                    <button
-                      onClick={() => handleDeleteOption(option.option_id)}
-                    >
-                      삭제
+                    <button onClick={() => handleToggleOption(option)}>
+                      {option.is_visible ? "판매중단" : "판매재개"}
                     </button>
                   </td>
                 </tr>
@@ -417,18 +506,16 @@ export default function AdminMenuEdit() {
       <div className="edit-right">
         <div className="edit-content">
           <div className="preview-box">
-            <img
-              src={
-                editMode === "menu"
-                  ? imagePreviewUrl || selectedItem?.image_url || bunshikLogo
-                  : imagePreviewUrl || selectedItem?.option_image || bunshikLogo
+            <button
+              type="button"
+              className="image-preview-trigger"
+              aria-label={`${selectedImageAlt} 사진 확대`}
+              onClick={() =>
+                handleImageClick(selectedImageUrl, selectedImageAlt)
               }
-              alt={
-                editMode === "menu"
-                  ? selectedItem?.menu_name || "기본 이미지"
-                  : selectedItem?.option_name || "기본 이미지"
-              }
-            />
+            >
+              <img src={selectedImageUrl} alt={selectedImageAlt} />
+            </button>
 
             <div className="preview-title">
               <span className="preview-label">
@@ -440,6 +527,11 @@ export default function AdminMenuEdit() {
                   ? selectedItem?.menu_name
                   : selectedItem?.option_name}
               </h3>
+              <p className="preview-name-en">
+                {editMode === "menu"
+                  ? selectedItem?.menu_name_en
+                  : selectedItem?.option_name_en}
+              </p>
             </div>
           </div>
 
@@ -456,15 +548,48 @@ export default function AdminMenuEdit() {
             />
           </div>
 
+          <div className="form-group">
+            <label>영문명</label>
+            <input
+              name={editMode === "menu" ? "menu_name_en" : "option_name_en"}
+              value={
+                editMode === "menu"
+                  ? selectedItem?.menu_name_en || ""
+                  : selectedItem?.option_name_en || ""
+              }
+              onChange={handleInputChange}
+            />
+          </div>
+
           {editMode === "menu" && (
-            <div className="form-group">
-              <label>카테고리</label>
-              <input
-                name="category"
-                value={selectedItem?.category || ""}
-                onChange={handleInputChange}
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label>카테고리</label>
+                <input
+                  name="category"
+                  value={selectedItem?.category || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>설명</label>
+                <input
+                  name="description"
+                  value={selectedItem?.description || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>영문 설명</label>
+                <input
+                  name="description_en"
+                  value={selectedItem?.description_en || ""}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </>
           )}
 
           <div className="form-group">
@@ -517,7 +642,10 @@ export default function AdminMenuEdit() {
           </div>
         </div>
         <div className="edit-bottom">
-          <button className="back-btn" onClick={() => navigate("/adminmenu")}>
+          <button
+            className="edit-back-btn"
+            onClick={() => navigate("/adminmenu")}
+          >
             뒤로가기
           </button>
           <button
@@ -548,6 +676,12 @@ export default function AdminMenuEdit() {
           </button>
         </div>
       </div>
+
+      <ImagePreviewModal
+        imageUrl={enlargedImage?.imageUrl}
+        alt={enlargedImage?.alt}
+        onClose={() => setEnlargedImage(null)}
+      />
     </div>
   );
 }

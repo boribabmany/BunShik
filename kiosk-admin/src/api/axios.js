@@ -24,14 +24,18 @@ api.interceptors.request.use(
   },
 );
 
+// 로그인 만료 또는 권한 오류 공통 처리
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+
+    if (status === 401 || status === 403) {
       sessionStorage.removeItem("accessToken");
       sessionStorage.removeItem("isAdminLoggedIn");
 
       if (window.location.pathname !== "/adminlogin") {
+        alert("로그인 시간이 만료되었습니다. 다시 로그인해주세요.");
         window.location.replace("/adminlogin");
       }
     }

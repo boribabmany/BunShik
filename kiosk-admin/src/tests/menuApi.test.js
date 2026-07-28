@@ -23,11 +23,13 @@ describe("menuApi", () => {
           {
             menuId: 1,
             menuName: "떡볶이",
+            menuNameEn: "Tteokbokki",
             category: "분식",
             price: 5000,
             imageUrl: "/images/tteokbokki.webp",
             isAvailable: true,
             description: "매운 떡볶이",
+            descriptionEn: "Spicy rice cakes",
           },
         ],
       },
@@ -40,11 +42,13 @@ describe("menuApi", () => {
       {
         menu_id: 1,
         menu_name: "떡볶이",
+        menu_name_en: "Tteokbokki",
         category: "분식",
         price: 5000,
         image_url: "http://localhost:8080/images/tteokbokki.webp",
         is_available: true,
         description: "매운 떡볶이",
+        description_en: "Spicy rice cakes",
         option_ids: [],
       },
     ]);

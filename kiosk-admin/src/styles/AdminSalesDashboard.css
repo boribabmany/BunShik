@@ -24,7 +24,7 @@
 }
 
 /* 뒤로가기 버튼 */
-.back-btn {
+.sales-back-btn {
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
@@ -35,7 +35,7 @@
   transition: 0.2s;
 }
 
-.back-btn:hover {
+.sales-back-btn:hover {
   background: #555;
 }
 
@@ -104,13 +104,13 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.summary-card h3 {
+.sale-summary-card h3 {
   font-size: 18px;
   color: #666;
   margin-bottom: 15px;
 }
 
-.summary-card strong {
+.sale-summary-card strong {
   font-size: 32px;
   color: #333;
 }

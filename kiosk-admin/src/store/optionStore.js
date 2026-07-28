@@ -3,12 +3,14 @@ import {
   getOptions,
   createOption,
   updateOption,
-  deleteOption,
+  stopOption,
+  resumeOption,
 } from "../api/optionApi";
 
 const useOptionStore = create((set) => ({
   optionList: [],
 
+  // 옵션 조회
   loadOptions: async () => {
     const options = await getOptions();
     set({ optionList: options });
@@ -30,9 +32,17 @@ const useOptionStore = create((set) => ({
     set({ optionList: options });
   },
 
-  // 옵션 삭제
-  removeOption: async (optionId) => {
-    await deleteOption(optionId);
+  // 옵션 판매중단
+  stopOption: async (optionId) => {
+    await stopOption(optionId);
+
+    const options = await getOptions();
+    set({ optionList: options });
+  },
+
+  // 옵션 판매재개
+  resumeOption: async (optionId) => {
+    await resumeOption(optionId);
 
     const options = await getOptions();
     set({ optionList: options });

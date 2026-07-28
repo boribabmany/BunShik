@@ -18,16 +18,22 @@ export const getMenus = async () => {
   return response.data.data.map((menu) => ({
     menu_id: menu.menuId,
     menu_name: menu.menuName,
+    menu_name_en: menu.menuNameEn,
     category: menu.category,
     price: menu.price,
     image_url: getImageUrl(menu.imageUrl),
+
     is_available: menu.isAvailable,
+    is_visible: menu.isVisible,
+
     description: menu.description,
+    description_en: menu.descriptionEn,
+
     option_ids: [],
   }));
 };
 
-// 메뉴 등록 (multipart)
+// 메뉴 등록
 export const createMenu = async (formData) => {
   const response = await api.post("/api/admin/menus", formData, {
     headers: {
@@ -38,7 +44,7 @@ export const createMenu = async (formData) => {
   return response.data.data;
 };
 
-// 메뉴 수정 (multipart)
+// 메뉴 수정
 export const updateMenu = async (menuId, formData) => {
   const response = await api.put(`/api/admin/menus/${menuId}`, formData, {
     headers: {
@@ -49,9 +55,16 @@ export const updateMenu = async (menuId, formData) => {
   return response.data.data;
 };
 
-// 메뉴 삭제
-export const deleteMenu = async (menuId) => {
-  const response = await api.delete(`/api/admin/menus/${menuId}`);
+// 메뉴 판매중단
+export const stopMenu = async (menuId) => {
+  const response = await api.patch(`/api/admin/menus/${menuId}/stop`);
+
+  return response.data.data;
+};
+
+// 메뉴 판매재개
+export const resumeMenu = async (menuId) => {
+  const response = await api.patch(`/api/admin/menus/${menuId}/resume`);
 
   return response.data.data;
 };

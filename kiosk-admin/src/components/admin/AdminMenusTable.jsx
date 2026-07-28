@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import useMenuStore from "../../store/menuStore";
 
-export default function AdminMenusTable() {
+export default function AdminMenusTable({ onImageClick }) {
   const navigate = useNavigate();
   const menuList = useMenuStore((state) => state.menuList);
 
@@ -27,8 +27,20 @@ export default function AdminMenusTable() {
               <tr key={menu.menu_id}>
                 <td className="number-col">{menu.menu_id}</td>
                 <td>
-                  {" "}
-                  <img src={menu.image_url} alt={menu.menu_name} />
+                  {menu.image_url ? (
+                    <button
+                      type="button"
+                      className="image-preview-trigger"
+                      aria-label={`${menu.menu_name} 사진 확대`}
+                      onClick={() =>
+                        onImageClick?.(menu.image_url, menu.menu_name)
+                      }
+                    >
+                      <img src={menu.image_url} alt={menu.menu_name} />
+                    </button>
+                  ) : (
+                    "-"
+                  )}
                 </td>
                 <td>{menu.menu_name}</td>
                 <td>{menu.category}</td>

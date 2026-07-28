@@ -2,16 +2,10 @@
    관리자 메뉴 수정 페이지
 ========================= */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .admin-edit-page {
   width: 100%;
   height: 100vh;
-  background: #f5f5f5;
+  background: #f3f5f1;
   display: flex;
   overflow: hidden;
 }
@@ -21,39 +15,37 @@
 ========================= */
 
 .edit-left {
-  width: 74%;
-  padding: 18px 22px;
-}
-
-.edit-title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 14px;
+  width: 72%;
+  padding: 22px 26px;
+  overflow-y: auto;
 }
 
 .register-btn {
-  padding: 6px 16px;
-  border: none;
-  border-radius: 18px;
-  background: #666;
+  padding: 8px 17px;
+  border: 1px solid #5b7f56;
+  border-radius: 8px;
+  background: #5b7f56;
   color: #fff;
   cursor: pointer;
-  margin-bottom: 10px;
-  font-size: 13px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
 }
 
 .register-btn:hover {
-  background: #444;
+  background: #486845;
 }
 
 .edit-table-box {
   background: #fff;
-  border: 1px solid #ddd;
-  margin-bottom: 14px;
+  border: 1px solid #e2e6df;
+  border-radius: 12px;
+  margin-bottom: 16px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 16px rgba(47, 54, 48, 0.05);
 }
 
 .edit-table {
@@ -63,16 +55,26 @@
 }
 
 .edit-table th {
-  background: #f4f4f4;
-  padding: 8px;
-  font-size: 18px;
+  background: #f1f4ef;
+  padding: 10px 8px;
+  color: #4b534d;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .edit-table td {
-  padding: 6px;
+  padding: 8px 6px;
   text-align: center;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #e7e9e6;
   font-size: 14px;
+}
+
+.edit-table tbody tr {
+  transition: background 0.15s;
+}
+
+.edit-table tbody tr:hover {
+  background: #f8faf7;
 }
 
 .edit-table img {
@@ -83,19 +85,28 @@
 }
 
 .edit-table button {
-  width: 65px;
-  height: 32px;
+  min-width: 58px;
+  height: 31px;
   margin: 0 4px;
-  border: 1px solid #ccc;
+  border: 1px solid #d5dad3;
   background: #fff;
+  color: #4b534d;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   border-radius: 6px;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.edit-table button:hover {
+  border-color: #5b7f56;
+  background: #eef6e8;
 }
 
 .edit-table button:last-child {
-  color: #ff4a4a;
+  color: #d14b4b;
 }
 
 /* =========================
@@ -103,50 +114,60 @@
 ========================= */
 
 .edit-right {
-  width: 26%;
+  width: 28%;
   background: #eef7de;
-  border-left: 3px solid #444;
-  padding: 18px;
-
+  border-left: 1px solid #d5dfcf;
+  padding: 26px 24px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 .edit-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 20px;
 }
 
 .preview-box {
   text-align: center;
-  margin-bottom: 18px;
-  margin-top: -100px;
+  margin-bottom: 24px;
 }
 
 .preview-box img {
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 8px;
+  border: 4px solid #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(47, 54, 48, 0.14);
 }
 
 .preview-title {
-  margin-top: 15px;
+  margin-top: 14px;
 }
 
 .preview-label {
   display: block;
-  font-size: 40px;
-  color: #666;
+  color: #667064;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .preview-name {
-  font-size: 40px;
+  margin: 0;
+  color: #303731;
+  font-size: 26px;
   font-weight: 700;
+  letter-spacing: -0.4px;
+}
+
+.preview-name-en {
+  margin-top: 3px;
+  color: #667064;
+  font-size: 15px;
 }
 
 /* =========================
@@ -156,53 +177,53 @@
 .form-group {
   display: flex;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .form-group label {
-  width: 70px;
-  font-size: 16px;
+  width: 72px;
+  color: #4b534d;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .form-group input,
 .form-group select {
   flex: 1;
-  height: 36px;
-  border: none;
-  border-radius: 18px;
+  height: 38px;
+  border: 1px solid #dbe1d7;
+  border-radius: 8px;
   background: #fff;
   padding: 0 12px;
-  font-size: 13px;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #5b7f56;
+  box-shadow: 0 0 0 3px rgba(91, 127, 86, 0.12);
 }
 
 .image-upload {
   flex: 1;
-  height: 36px; /* 다른 input과 동일한 높이 */
-  padding: 6px 12px;
+  height: 38px;
+  padding: 7px 12px;
   background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 18px; /* 다른 input과 동일하게 */
-  font-size: 13px;
+  border: 1px solid #dbe1d7;
+  border-radius: 8px;
+  font-size: 14px;
   display: flex;
   align-items: center;
-}
-.image-upload::file-selector-button {
-  height: 24px;
-  padding: 0 10px;
-  margin-right: 10px;
-  border: none;
-  border-radius: 6px;
-  background: #666;
-  color: #fff;
   cursor: pointer;
-  font-size: 12px;
 }
 
-.image-upload::file-selector-button:hover {
-  background: #444;
+.form-group label.image-upload {
+  width: auto;
 }
-
 /* =========================
    하단 버튼
 ========================= */
@@ -210,28 +231,43 @@
 .edit-bottom {
   display: flex;
   justify-content: space-between;
+  gap: 12px;
+  padding-top: 18px;
 }
 
-.back-btn,
+.edit-back-btn,
 .save-btn {
-  width: 150px; /* 기존 95px */
-  height: 50px; /* 기존 36px */
-
-  border: none;
-  border-radius: 25px;
-
-  background: #666;
-  color: #fff;
-
+  flex: 1;
+  height: 44px;
+  border: 1px solid transparent;
+  border-radius: 9px;
   cursor: pointer;
-
-  font-size: 17px; /* 기존 13px */
+  font-size: 15px;
   font-weight: 600;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
 }
 
-.back-btn:hover,
+.edit-back-btn {
+  border-color: #ccd3c9;
+  background: #fff;
+  color: #4b534d;
+}
+
+.save-btn {
+  background: #5b7f56;
+  color: #fff;
+}
+
+.edit-back-btn:hover {
+  border-color: #5b7f56;
+  color: #486845;
+}
+
 .save-btn:hover {
-  background: #444;
+  background: #486845;
 }
 /* =========================
    페이지 번호
@@ -244,13 +280,13 @@
   gap: 8px;
   padding: 12px 0;
   background: #fff;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #e7e9e6;
 }
 
 .pagination button {
   width: 34px;
   height: 34px;
-  border: 1px solid #ccc;
+  border: 1px solid #d5dad3;
   border-radius: 6px;
   background: #fff;
   cursor: pointer;
@@ -262,16 +298,16 @@
 }
 
 .pagination button.active {
-  background: #666;
+  background: #5b7f56;
   color: #fff;
-  border-color: #666;
+  border-color: #5b7f56;
 }
 .edit-header {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .edit-logo {
@@ -282,6 +318,13 @@
 
 .edit-title {
   margin: 0;
-  font-size: 30px;
+  text-align: center;
+  color: #303731;
+  font-size: 28px;
   font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.register-button-area {
+  margin-bottom: 10px;
 }

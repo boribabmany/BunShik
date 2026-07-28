@@ -3,7 +3,7 @@
 import { useNavigate } from "react-router-dom";
 import useOptionStore from "../../store/optionStore";
 
-export default function AdminOptionsTable() {
+export default function AdminOptionsTable({ onImageClick }) {
   const navigate = useNavigate();
   const optionList = useOptionStore((state) => state.optionList);
 
@@ -29,7 +29,20 @@ export default function AdminOptionsTable() {
               <tr key={option.option_id}>
                 <td className="number-col">{option.option_id}</td>
                 <td>
-                  <img src={option.option_image} alt={option.option_name} />
+                  {option.option_image ? (
+                    <button
+                      type="button"
+                      className="image-preview-trigger"
+                      aria-label={`${option.option_name} 사진 확대`}
+                      onClick={() =>
+                        onImageClick?.(option.option_image, option.option_name)
+                      }
+                    >
+                      <img src={option.option_image} alt={option.option_name} />
+                    </button>
+                  ) : (
+                    "-"
+                  )}
                 </td>
                 <td>{option.option_name}</td>
                 <td>{option.option_price.toLocaleString()}원</td>

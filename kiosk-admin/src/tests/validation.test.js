@@ -5,6 +5,7 @@ describe("메뉴 검증", () => {
     expect(
       validateMenu({
         menu_name: "",
+        menu_name_en: "Kimbap",
         category: "김밥",
         price: 2000,
         image_url: "test.jpg",
@@ -12,10 +13,23 @@ describe("메뉴 검증", () => {
     ).toBe("메뉴명을 입력하세요.");
   });
 
+  test("메뉴 영문명이 없으면 실패", () => {
+    expect(
+      validateMenu({
+        menu_name: "김밥",
+        menu_name_en: "",
+        category: "김밥",
+        price: 2000,
+        image_url: "test.jpg",
+      }),
+    ).toBe("메뉴 영문명을 입력하세요.");
+  });
+
   test("가격이 1000원 미만이면 실패", () => {
     expect(
       validateMenu({
         menu_name: "김밥",
+        menu_name_en: "Kimbap",
         category: "김밥",
         price: 500,
         image_url: "test.jpg",
@@ -27,11 +41,43 @@ describe("메뉴 검증", () => {
     expect(
       validateMenu({
         menu_name: "김밥",
+        menu_name_en: "Kimbap",
         category: "김밥",
         price: 3000,
         image_url: "test.jpg",
       }),
     ).toBe(null);
+  });
+
+  test("기존 이미지가 없어도 새 사진 파일이 있으면 통과", () => {
+    const imageFile = new File(["image"], "menu.jpg", {
+      type: "image/jpeg",
+    });
+
+    expect(
+      validateMenu(
+        {
+          menu_name: "김밥",
+          menu_name_en: "Kimbap",
+          category: "김밥",
+          price: 3000,
+          image_url: "",
+        },
+        imageFile,
+      ),
+    ).toBe(null);
+  });
+
+  test("기존 이미지와 새 사진 파일이 모두 없으면 실패", () => {
+    expect(
+      validateMenu({
+        menu_name: "김밥",
+        menu_name_en: "Kimbap",
+        category: "김밥",
+        price: 3000,
+        image_url: "",
+      }),
+    ).toBe("메뉴 사진을 등록하세요.");
   });
 });
 
@@ -40,16 +86,29 @@ describe("옵션 검증", () => {
     expect(
       validateOption({
         option_name: "",
+        option_name_en: "Cheese",
         option_price: 1000,
         option_image: "test.jpg",
       }),
     ).toBe("옵션메뉴명을 입력하세요.");
   });
 
+  test("옵션 영문명이 없으면 실패", () => {
+    expect(
+      validateOption({
+        option_name: "치즈 추가",
+        option_name_en: "",
+        option_price: 1000,
+        option_image: "test.jpg",
+      }),
+    ).toBe("옵션 영문명을 입력하세요.");
+  });
+
   test("가격이 1000원 미만이면 실패", () => {
     expect(
       validateOption({
         option_name: "치즈 추가",
+        option_name_en: "Extra cheese",
         option_price: 500,
         option_image: "test.jpg",
       }),
@@ -60,9 +119,39 @@ describe("옵션 검증", () => {
     expect(
       validateOption({
         option_name: "치즈 추가",
+        option_name_en: "Extra cheese",
         option_price: 1000,
         option_image: "test.jpg",
       }),
     ).toBe(null);
+  });
+
+  test("기존 이미지가 없어도 새 사진 파일이 있으면 통과", () => {
+    const imageFile = new File(["image"], "option.jpg", {
+      type: "image/jpeg",
+    });
+
+    expect(
+      validateOption(
+        {
+          option_name: "치즈 추가",
+          option_name_en: "Extra cheese",
+          option_price: 1000,
+          option_image: "",
+        },
+        imageFile,
+      ),
+    ).toBe(null);
+  });
+
+  test("기존 이미지와 새 사진 파일이 모두 없으면 실패", () => {
+    expect(
+      validateOption({
+        option_name: "치즈 추가",
+        option_name_en: "Extra cheese",
+        option_price: 1000,
+        option_image: "",
+      }),
+    ).toBe("옵션 사진을 등록하세요.");
   });
 });

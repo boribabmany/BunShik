@@ -18,9 +18,11 @@ export const getOptions = async () => {
   return response.data.data.map((option) => ({
     option_id: option.optionId,
     option_name: option.optionName,
+    option_name_en: option.optionNameEn,
     option_price: option.optionPrice,
     option_image: getImageUrl(option.optionImage),
     option_is_available: option.optionIsAvailable,
+    is_visible: option.isVisible,
   }));
 };
 
@@ -30,6 +32,7 @@ export const createOption = async (option, file) => {
 
   const request = {
     optionName: option.option_name,
+    optionNameEn: option.option_name_en,
     optionPrice: Number(option.option_price),
     optionIsAvailable: option.option_is_available,
   };
@@ -55,6 +58,7 @@ export const updateOption = async (optionId, option, file) => {
 
   const request = {
     optionName: option.option_name,
+    optionNameEn: option.option_name_en,
     optionPrice: Number(option.option_price),
     optionIsAvailable: option.option_is_available,
   };
@@ -74,9 +78,16 @@ export const updateOption = async (optionId, option, file) => {
   return response.data.data;
 };
 
-// 옵션 삭제
-export const deleteOption = async (optionId) => {
-  const response = await api.delete(`/api/admin/options/${optionId}`);
+// 옵션 판매중단
+export const stopOption = async (optionId) => {
+  const response = await api.patch(`/api/admin/options/${optionId}/stop`);
+
+  return response.data.data;
+};
+
+// 옵션 판매재개
+export const resumeOption = async (optionId) => {
+  const response = await api.patch(`/api/admin/options/${optionId}/resume`);
 
   return response.data.data;
 };

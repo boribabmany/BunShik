@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
@@ -15,27 +14,14 @@ function OrderComplete() {
   const language = useLanguageStore((state) => state.language);
   const t = translations[language].orderComplete;
 
-  const [printMode, setPrintMode] = useState(null);
-
-  useEffect(() => {
-    const handleAfterPrint = () => {
-      setPrintMode(null);
-      resetOrder();
-      navigate("/");
-    };
-
-    window.addEventListener("afterprint", handleAfterPrint);
-    return () => window.removeEventListener("afterprint", handleAfterPrint);
-  }, [navigate, resetOrder]);
-
   const handleReceiptPrint = () => {
-    setPrintMode("receipt");
-    requestAnimationFrame(() => window.print());
+    resetOrder();
+    navigate("/");
   };
 
   const handleOrderNumberPrint = () => {
-    setPrintMode("orderNumber");
-    requestAnimationFrame(() => window.print());
+    resetOrder();
+    navigate("/");
   };
 
   return (
@@ -77,27 +63,6 @@ function OrderComplete() {
       >
         {t.printNumberOnly}
       </button>
-
-      <div className="complete-print-area">
-        {printMode === "receipt" && (
-          <div className="print-receipt">
-            <p className="print-receipt-heading">{t.title.replace("!", "")}</p>
-            <p className="print-receipt-label">{t.orderNumberLabel}</p>
-            <p className="print-receipt-number">{orderNumber}</p>
-            <p className="print-receipt-total">
-              {t.totalLabel}{" "}
-              {totalPrice != null ? formatPrice(language, totalPrice) : ""}
-            </p>
-          </div>
-        )}
-
-        {printMode === "orderNumber" && (
-          <div className="print-ordernumber">
-            <p className="print-ordernumber-label">{t.orderNumberLabel}</p>
-            <p className="print-ordernumber-value">{orderNumber}</p>
-          </div>
-        )}
-      </div>
     </div>
   );
 }

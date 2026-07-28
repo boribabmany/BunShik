@@ -3,7 +3,8 @@ import {
   getOptions,
   createOption,
   updateOption,
-  deleteOption,
+  stopOption,
+  resumeOption,
 } from "../api/optionApi";
 
 jest.mock("../api/axios", () => ({
@@ -12,7 +13,7 @@ jest.mock("../api/axios", () => ({
     get: jest.fn(),
     post: jest.fn(),
     put: jest.fn(),
-    delete: jest.fn(),
+    patch: jest.fn(),
   },
 }));
 
@@ -32,6 +33,7 @@ describe("optionApi", () => {
             optionPrice: 1000,
             optionImage: "/images/cheese.png",
             optionIsAvailable: true,
+            isVisible: true,
           },
         ],
       },
@@ -48,6 +50,7 @@ describe("optionApi", () => {
         option_price: 1000,
         option_image: "http://localhost:8080/images/cheese.png",
         option_is_available: true,
+        is_visible: true,
       },
     ]);
   });
@@ -109,11 +112,17 @@ describe("optionApi", () => {
     });
   });
 
-  test("옵션 삭제 요청을 전송하고 응답 데이터를 반환한다", async () => {
-    const deletedOption = { optionId: 1 };
-    api.delete.mockResolvedValue({ data: { data: deletedOption } });
+  test("옵션 판매중단 요청을 전송하고 응답 데이터를 반환한다", async () => {
+    api.patch.mockResolvedValue({ data: { data: 1 } });
 
-    await expect(deleteOption(1)).resolves.toEqual(deletedOption);
-    expect(api.delete).toHaveBeenCalledWith("/api/admin/options/1");
+    await expect(stopOption(1)).resolves.toBe(1);
+    expect(api.patch).toHaveBeenCalledWith("/api/admin/options/1/stop");
+  });
+
+  test("옵션 판매재개 요청을 전송하고 응답 데이터를 반환한다", async () => {
+    api.patch.mockResolvedValue({ data: { data: 1 } });
+
+    await expect(resumeOption(1)).resolves.toBe(1);
+    expect(api.patch).toHaveBeenCalledWith("/api/admin/options/1/resume");
   });
 });

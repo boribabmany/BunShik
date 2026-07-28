@@ -1,7 +1,7 @@
 .login-page {
   width: 100%;
   height: 100vh;
-  background: #f8f8f8;
+  background: #eaf4de;
 
   display: flex;
   justify-content: center;
@@ -11,7 +11,7 @@
 .login-box {
   width: 650px;
   background: #fff;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #cfdcc3;
 
   padding: 50px 40px;
 
@@ -53,7 +53,7 @@
   width: 100%;
   height: 48px;
 
-  border: 1px solid #ddd;
+  border: 1px solid #c4c7c7;
   padding: 0 15px;
 
   margin-bottom: 12px;
@@ -63,7 +63,7 @@
 
 .login-form input:focus {
   outline: none;
-  border-color: #6ea84f;
+  border-color: #6da12f;
 }
 
 .login-form button {
@@ -72,7 +72,7 @@
 
   border: none;
 
-  background: #666;
+  background: #6da12f;
   color: #fff;
 
   font-size: 16px;
@@ -84,5 +84,5 @@
 }
 
 .login-form button:hover {
-  background: #4f4f4f;
+  background: #5b8928;
 }

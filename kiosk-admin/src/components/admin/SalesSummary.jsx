@@ -1,15 +1,10 @@
-import { useEffect } from "react";
 import useSalesStore from "../../store/salesStore";
 
 export default function SalesSummary() {
-  const { salesSummary, loadSalesSummary } = useSalesStore();
-
-  useEffect(() => {
-    loadSalesSummary();
-  }, [loadSalesSummary]);
+  const salesSummary = useSalesStore((state) => state.salesSummary);
 
   if (!salesSummary) {
-    return <div>매출 데이터 불러오는 중...</div>;
+    return <div className="sales-loading">매출 데이터를 불러오는 중...</div>;
   }
 
   return (

@@ -5,10 +5,10 @@
   align-items: center;
   margin-bottom: 22px;
   padding: 16px 20px;
-  border: 1px solid #e2e6df;
+  border: 1px solid #d7e3d1;
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 4px 16px rgba(47, 54, 48, 0.06);
+  background: #dfeccc;
+  box-shadow: 0 4px 16px rgba(72, 104, 69, 0.07);
 }
 .admin-header h1 {
   margin: 0;
@@ -34,8 +34,8 @@
     border-color 0.2s;
 }
 .logout-btn:hover {
-  border-color: #5b7f56;
-  background: #5b7f56;
+  border-color: #668d61;
+  background: #668d61;
   color: #fff;
 }
 /*  메인 레이아웃/ 왼쪽 요약 / 오른쪽 테이블 */
@@ -89,10 +89,14 @@
 }
 
 .menu-table th {
-  background: #f1f4ef;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #dce9d8;
   color: #4b534d;
   font-size: 14px;
   font-weight: 600;
+  box-shadow: 0 1px 0 #cfdccc;
 }
 
 .menu-table tbody tr {
@@ -100,7 +104,7 @@
 }
 
 .menu-table tbody tr:hover {
-  background: #f8faf7;
+  background: #f5f9f2;
 }
 
 .menu-table tbody tr:last-child td {
@@ -140,8 +144,8 @@
 
 .menu-edit-btn:hover,
 .option-edit-btn:hover {
-  border-color: #5b7f56;
-  background: #5b7f56;
+  border-color: #668d61;
+  background: #668d61;
   color: #fff;
 }
 
@@ -150,7 +154,7 @@
 .admin-menu-page {
   width: 100%;
   height: 100vh;
-  background: #f3f5f1;
+  background: #fff;
   padding: 24px 30px;
   overflow: hidden;
 }
@@ -159,19 +163,31 @@
 .option-table-box {
   background: #fff;
   padding: 18px;
-  border: 1px solid #e2e6df;
+  border: 1px solid #dbe5d6;
   border-radius: 14px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 16px rgba(47, 54, 48, 0.05);
+  box-shadow: 0 4px 16px rgba(72, 104, 69, 0.06);
 }
 
 .menu-table-box {
-  max-height: 470px;
-  overflow-y: auto;
+  max-height: 446px;
+  overflow: hidden;
 }
 
 .option-table-box {
-  max-height: 270px; /* 또는 원하는 높이 */
+  max-height: 294px;
+  overflow: hidden;
+}
+
+.menu-table-scroll {
+  max-height: 366px;
+  padding-right: 4px;
+  overflow-y: auto;
+}
+
+.option-table-scroll {
+  max-height: 214px;
+  padding-right: 4px;
   overflow-y: auto;
 }
 
@@ -198,8 +214,8 @@
 }
 
 .summary-card {
-  background: #eef6e8;
-  border: 1px solid #dde8d8;
+  background: #f0f7eb;
+  border: 1px solid #dbe8d5;
   border-radius: 12px;
   padding: 10px 14px;
   height: 72px;
@@ -221,7 +237,7 @@
   height: 40px;
   border: none;
   border-radius: 8px;
-  background: #5b7f56;
+  background: #668d61;
   color: #fff;
   font-weight: 600;
   cursor: pointer;
@@ -229,15 +245,15 @@
 }
 
 .summary-btn:hover {
-  background: #486845;
+  background: #557b51;
 }
 
 .add-btn {
-  background: #6b7280;
+  background: #7d8c79;
 }
 
 .add-btn:hover {
-  background: #4b5563;
+  background: #687665;
 }
 
 /*------------------UpdateHistory 좌측하단-----------------------------------------*/
@@ -247,11 +263,11 @@
   padding: 18px;
   background: #fff;
   border-radius: 12px;
-  border: 1px solid #e2e6df;
+  border: 1px solid #dbe5d6;
   height: 300px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(47, 54, 48, 0.05);
+  box-shadow: 0 4px 16px rgba(72, 104, 69, 0.06);
 }
 
 .history-list {
@@ -324,7 +340,7 @@
   border: none;
   border-radius: 6px;
 
-  background: #5b7f56;
+  background: #668d61;
   color: #fff;
 
   font-size: 12px;
@@ -332,5 +348,5 @@
 }
 
 .sales-dashboard-btn:hover {
-  background: #666;
+  background: #557b51;
 }

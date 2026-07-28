@@ -58,7 +58,7 @@ export default function AdminSummary({ onMoveOrder }) {
             className="sales-dashboard-btn"
             onClick={() => navigate("/adminsales")}
           >
-            매출 대쉬보드 자세히 보기
+            매출 대시보드 자세히보기
           </button>
         </div>
       </div>

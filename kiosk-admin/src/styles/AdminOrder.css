@@ -5,7 +5,7 @@
 .admin-order-page {
   width: 100%;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #fff;
   padding: 25px 35px;
 }
 
@@ -31,9 +31,9 @@
   grid-template-columns: 1fr 1fr 1fr 170px;
   gap: 12px;
 
-  background: #fff;
+  background: #eaf4de;
   padding: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid #cfdcc3;
   border-radius: 8px;
 
   margin-bottom: 15px;
@@ -42,7 +42,7 @@
 .search-area input,
 .search-area select {
   height: 40px;
-  border: 1px solid #ccc;
+  border: 1px solid #c4c7c7;
   border-radius: 6px;
   padding: 0 12px;
   font-size: 14px;
@@ -51,13 +51,13 @@
 .search-btn {
   border: none;
   border-radius: 6px;
-  background: #666;
+  background: #6da12f;
   color: #fff;
   cursor: pointer;
 }
 
 .search-btn:hover {
-  background: #444;
+  background: #5b8928;
 }
 
 /* =========================
@@ -66,7 +66,7 @@
 
 .order-table-box {
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #cfdcc3;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -77,10 +77,10 @@
 }
 
 .order-table th {
-  background: #f3f4f6;
+  background: #eaf4de;
   padding: 12px;
   font-size: 14px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #cfdcc3;
 }
 
 .order-table td {
@@ -91,7 +91,7 @@
 }
 
 .order-table tbody tr:hover {
-  background: #fafafa;
+  background: #f5faef;
 }
 
 /* =========================
@@ -115,7 +115,7 @@
 }
 
 .order-action button:first-child {
-  background: #16a34a;
+  background: #6da12f;
   color: #fff;
 }
 
@@ -133,7 +133,7 @@
   height: 45px;
   margin-top: 10px;
 
-  border: 1px solid #ddd;
+  border: 1px solid #cfdcc3;
   border-radius: 6px;
 
   background: #fff;
@@ -141,7 +141,7 @@
 }
 
 .load-more:hover {
-  background: #f2f2f2;
+  background: #eaf4de;
 }
 
 /* =========================
@@ -158,14 +158,14 @@
   height: 40px;
   border: none;
   border-radius: 15px;
-  background: #666;
+  background: #5e5e5e;
   color: #fff;
   cursor: pointer;
   margin: 20px 30px;
 }
 
 .order-back-btn:hover {
-  background: #444;
+  background: #4a4a4a;
 }
 .order-title {
   display: flex;

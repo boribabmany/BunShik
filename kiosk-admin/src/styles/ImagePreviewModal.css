@@ -8,7 +8,7 @@
 }
 
 .image-preview-trigger:focus-visible {
-  outline: 3px solid #5b7f56;
+  outline: 3px solid #6da12f;
   outline-offset: 3px;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .image-preview-close:hover {
-  background: #e5e7eb;
+  background: #eaf4de;
 }
 
 @media (max-width: 600px) {

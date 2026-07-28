@@ -8,6 +8,8 @@ const api = axios.create({
   },
 });
 
+let isRedirectingToLogin = false;
+
 // 관리자 API 요청 전에 JWT 자동 추가
 api.interceptors.request.use(
   (config) => {
@@ -34,7 +36,11 @@ api.interceptors.response.use(
       sessionStorage.removeItem("accessToken");
       sessionStorage.removeItem("isAdminLoggedIn");
 
-      if (window.location.pathname !== "/adminlogin") {
+      if (
+        window.location.pathname !== "/adminlogin" &&
+        !isRedirectingToLogin
+      ) {
+        isRedirectingToLogin = true;
         alert("로그인 시간이 만료되었습니다. 다시 로그인해주세요.");
         window.location.replace("/adminlogin");
       }

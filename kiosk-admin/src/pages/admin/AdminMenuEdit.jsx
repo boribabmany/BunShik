@@ -21,22 +21,13 @@ const createMenuFormData = (menu, imageFile) => {
   if (imageFile) {
     formData.append("file", imageFile);
   }
-
   return formData;
 };
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
-  const { menuList, loadMenus, addMenu, editMenu, stopMenu, resumeMenu } =
-    useMenuStore();
-  const {
-    optionList,
-    loadOptions,
-    addOption,
-    editOption,
-    stopOption,
-    resumeOption,
-  } = useOptionStore();
+  const { menuList, loadMenus, addMenu, editMenu, stopMenu, resumeMenu } = useMenuStore();
+  const { optionList, loadOptions, addOption, editOption, stopOption, resumeOption, } = useOptionStore();
   const [selectedItem, setSelectedItem] = useState(null);
   const [editMode, setEditMode] = useState("menu");
   const [isAddMode, setIsAddMode] = useState(false);
@@ -44,13 +35,10 @@ export default function AdminMenuEdit() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [enlargedImage, setEnlargedImage] = useState(null);
   const location = useLocation();
-
   const [menuPage, setMenuPage] = useState(1);
   const [optionPage, setOptionPage] = useState(1);
-
   const MENU_PER_PAGE = 5;
   const OPTION_PER_PAGE = 3;
-
   //페이지가 처음 열릴 때 메뉴와 옵션 데이터를 불러오는 역할
   useEffect(() => {
     const fetchData = async () => {
@@ -71,23 +59,10 @@ export default function AdminMenuEdit() {
       setIsAddMode(true);
 
       if (location.state.type === "menu") {
-        setSelectedItem({
-          menu_name: "",
-          menu_name_en: "",
-          category: "",
-          price: 0,
-          is_available: true,
-          image_url: "",
-          description: "",
-          description_en: "",
+        setSelectedItem({ menu_name: "", menu_name_en: "",  category: "", price: 0, is_available: true, image_url: "", description: "", description_en: "",
         });
       } else {
-        setSelectedItem({
-          option_name: "",
-          option_name_en: "",
-          option_price: 0,
-          option_is_available: true,
-          option_image: "",
+        setSelectedItem({ option_name: "", option_name_en: "", option_price: 0, option_is_available: true, option_image: "",
         });
       }
       return;
@@ -107,7 +82,6 @@ export default function AdminMenuEdit() {
       }
     };
   }, [imagePreviewUrl]);
-
   //--메뉴리스트-------------------------------------------------
   //메뉴삭제
   // 메뉴 판매중단 / 판매재개
@@ -137,14 +111,10 @@ export default function AdminMenuEdit() {
       alert(error);
       return;
     }
-
     try {
       const formData = createMenuFormData(selectedItem, imageFile);
-
       await editMenu(selectedItem.menu_id, formData);
-
       alert("수정되었습니다.");
-
       setSelectedItem(null);
       setImageFile(null);
       setImagePreviewUrl(null);
@@ -157,19 +127,15 @@ export default function AdminMenuEdit() {
   //메뉴등록
   const handleAddMenu = async () => {
     const error = validateMenu(selectedItem, imageFile);
-
     if (error) {
       alert(error);
       return;
     }
-
     try {
       const formData = createMenuFormData(selectedItem, imageFile);
 
       await addMenu(formData);
-
       alert("등록되었습니다.");
-
       setSelectedItem(null);
       setImageFile(null);
       setImagePreviewUrl(null);
@@ -211,9 +177,7 @@ export default function AdminMenuEdit() {
     if (!file) return;
 
     setImageFile(file);
-
     const previewUrl = URL.createObjectURL(file);
-
     setImagePreviewUrl(previewUrl);
   };
   //옴션------------------------------------------------------------
@@ -288,7 +252,6 @@ export default function AdminMenuEdit() {
     optionStart + OPTION_PER_PAGE,
   );
   const optionTotalPage = Math.ceil(optionList.length / OPTION_PER_PAGE);
-
   const selectedImageUrl =
     editMode === "menu"
       ? imagePreviewUrl || selectedItem?.image_url || bunshikLogo
@@ -297,12 +260,10 @@ export default function AdminMenuEdit() {
     editMode === "menu"
       ? selectedItem?.menu_name || "기본 이미지"
       : selectedItem?.option_name || "기본 이미지";
-
   const handleImageClick = (imageUrl, alt) => {
     if (!imageUrl) return;
     setEnlargedImage({ imageUrl, alt });
   };
-
   // -----------------------------------------------------------------------
   return (
     <div className="admin-edit-page">
@@ -310,7 +271,6 @@ export default function AdminMenuEdit() {
       <div className="edit-left">
         <div className="edit-header">
           <img src={bunshikLogo} alt="분식 로고" className="edit-logo" />
-
           <h2 className="edit-title">관리자 메뉴 수정 및 등록</h2>
         </div>
         <div className="register-button-area">
@@ -354,7 +314,10 @@ export default function AdminMenuEdit() {
             </thead>
             <tbody>
               {currentMenus.map((menu) => (
-                <tr key={menu.menu_id}>
+                <tr
+                  key={menu.menu_id}
+                  className={!menu.is_visible ? "stopped-row" : ""}
+                >
                   <td>
                     {menu.image_url ? (
                       <button
@@ -376,17 +339,32 @@ export default function AdminMenuEdit() {
                   <td>{menu.category}</td>
                   <td>{menu.price.toLocaleString()}원</td>
                   <td>
-                    {!menu.is_visible
-                      ? "판매중단"
-                      : menu.is_available
-                        ? "판매중"
-                        : "품절"}
+                    <span
+                      className={`status-badge ${
+                        !menu.is_visible
+                          ? "status-stopped"
+                          : menu.is_available
+                            ? "status-active"
+                            : "status-soldout"
+                      }`}
+                    >
+                      {!menu.is_visible
+                        ? "판매중단"
+                        : menu.is_available
+                          ? "판매중"
+                          : "품절"}
+                    </span>
                   </td>
                   <td>
                     <button onClick={() => handleEditClick("menu", menu)}>
                       수정
                     </button>
-                    <button onClick={() => handleToggleMenu(menu)}>
+                    <button
+                      className={`visibility-toggle-btn ${
+                        menu.is_visible ? "stop-btn" : "resume-btn"
+                      }`}
+                      onClick={() => handleToggleMenu(menu)}
+                    >
                       {menu.is_visible ? "판매중단" : "판매재개"}
                     </button>
                   </td>
@@ -444,7 +422,10 @@ export default function AdminMenuEdit() {
             </thead>
             <tbody>
               {currentOptions.map((option) => (
-                <tr key={option.option_id}>
+                <tr
+                  key={option.option_id}
+                  className={!option.is_visible ? "stopped-row" : ""}
+                >
                   <td>
                     {option.option_image ? (
                       <button
@@ -471,17 +452,32 @@ export default function AdminMenuEdit() {
                   <td>{option.option_name_en || "-"}</td>
                   <td>+{option.option_price.toLocaleString()}원</td>
                   <td>
-                    {!option.is_visible
-                      ? "판매중단"
-                      : option.option_is_available
-                        ? "판매중"
-                        : "품절"}
+                    <span
+                      className={`status-badge ${
+                        !option.is_visible
+                          ? "status-stopped"
+                          : option.option_is_available
+                            ? "status-active"
+                            : "status-soldout"
+                      }`}
+                    >
+                      {!option.is_visible
+                        ? "판매중단"
+                        : option.option_is_available
+                          ? "판매중"
+                          : "품절"}
+                    </span>
                   </td>
                   <td>
                     <button onClick={() => handleEditClick("option", option)}>
                       수정
                     </button>
-                    <button onClick={() => handleToggleOption(option)}>
+                    <button
+                      className={`visibility-toggle-btn ${
+                        option.is_visible ? "stop-btn" : "resume-btn"
+                      }`}
+                      onClick={() => handleToggleOption(option)}
+                    >
                       {option.is_visible ? "판매중단" : "판매재개"}
                     </button>
                   </td>

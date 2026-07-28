@@ -1,5 +1,11 @@
 import api from "../api/axios";
-import { getMenus, createMenu, updateMenu, deleteMenu } from "../api/menuApi";
+import {
+  getMenus,
+  createMenu,
+  updateMenu,
+  stopMenu,
+  resumeMenu,
+} from "../api/menuApi";
 
 jest.mock("../api/axios", () => ({
   __esModule: true,
@@ -7,7 +13,7 @@ jest.mock("../api/axios", () => ({
     get: jest.fn(),
     post: jest.fn(),
     put: jest.fn(),
-    delete: jest.fn(),
+    patch: jest.fn(),
   },
 }));
 
@@ -28,6 +34,7 @@ describe("menuApi", () => {
             price: 5000,
             imageUrl: "/images/tteokbokki.webp",
             isAvailable: true,
+            isVisible: true,
             description: "매운 떡볶이",
             descriptionEn: "Spicy rice cakes",
           },
@@ -47,6 +54,7 @@ describe("menuApi", () => {
         price: 5000,
         image_url: "http://localhost:8080/images/tteokbokki.webp",
         is_available: true,
+        is_visible: true,
         description: "매운 떡볶이",
         description_en: "Spicy rice cakes",
         option_ids: [],
@@ -80,11 +88,17 @@ describe("menuApi", () => {
     });
   });
 
-  test("메뉴 삭제 요청을 전송하고 응답 데이터를 반환한다", async () => {
-    const deletedMenu = { menuId: 1 };
-    api.delete.mockResolvedValue({ data: { data: deletedMenu } });
+  test("메뉴 판매중단 요청을 전송하고 응답 데이터를 반환한다", async () => {
+    api.patch.mockResolvedValue({ data: { data: 1 } });
 
-    await expect(deleteMenu(1)).resolves.toEqual(deletedMenu);
-    expect(api.delete).toHaveBeenCalledWith("/api/admin/menus/1");
+    await expect(stopMenu(1)).resolves.toBe(1);
+    expect(api.patch).toHaveBeenCalledWith("/api/admin/menus/1/stop");
+  });
+
+  test("메뉴 판매재개 요청을 전송하고 응답 데이터를 반환한다", async () => {
+    api.patch.mockResolvedValue({ data: { data: 1 } });
+
+    await expect(resumeMenu(1)).resolves.toBe(1);
+    expect(api.patch).toHaveBeenCalledWith("/api/admin/menus/1/resume");
   });
 });

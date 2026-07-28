@@ -1,15 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSalesStore from "../../store/salesStore";
 
 export default function SalesHistoryTable() {
-  const { salesHistory, loadSalesHistory } = useSalesStore();
+  const salesHistory = useSalesStore((state) => state.salesHistory);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
-  useEffect(() => {
-    loadSalesHistory();
-  }, [loadSalesHistory]);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
 

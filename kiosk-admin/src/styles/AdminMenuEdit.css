@@ -5,7 +5,7 @@
 .admin-edit-page {
   width: 100%;
   height: 100vh;
-  background: #f3f5f1;
+  background: #fff;
   display: flex;
   overflow: hidden;
 }
@@ -17,14 +17,15 @@
 .edit-left {
   width: 72%;
   padding: 22px 26px;
+  background: #fff;
   overflow-y: auto;
 }
 
 .register-btn {
   padding: 8px 17px;
-  border: 1px solid #5b7f56;
+  border: 1px solid #6da12f;
   border-radius: 8px;
-  background: #5b7f56;
+  background: #6da12f;
   color: #fff;
   cursor: pointer;
   margin-bottom: 0;
@@ -34,12 +35,12 @@
 }
 
 .register-btn:hover {
-  background: #486845;
+  background: #5b8928;
 }
 
 .edit-table-box {
   background: #fff;
-  border: 1px solid #e2e6df;
+  border: 1px solid #cfdcc3;
   border-radius: 12px;
   margin-bottom: 16px;
   overflow: hidden;
@@ -55,7 +56,7 @@
 }
 
 .edit-table th {
-  background: #f1f4ef;
+  background: #eaf4de;
   padding: 10px 8px;
   color: #4b534d;
   font-size: 15px;
@@ -74,7 +75,7 @@
 }
 
 .edit-table tbody tr:hover {
-  background: #f8faf7;
+  background: #f5faef;
 }
 
 .edit-table img {
@@ -101,12 +102,70 @@
 }
 
 .edit-table button:hover {
-  border-color: #5b7f56;
-  background: #eef6e8;
+  border-color: #6da12f;
+  background: #eaf4de;
 }
 
-.edit-table button:last-child {
-  color: #d14b4b;
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-active {
+  background: #eaf4de;
+  color: #4f7823;
+}
+
+.status-soldout {
+  background: #f2f3f1;
+  color: #656b66;
+}
+
+.status-stopped {
+  background: #7d8c79;
+  color: #fff;
+}
+
+.edit-table tbody tr.stopped-row,
+.edit-table tbody tr.stopped-row:hover {
+  background: #f7f8f6;
+}
+
+.stopped-row td:not(:last-child) {
+  color: #7a807a;
+}
+
+.stopped-row img {
+  filter: grayscale(100%);
+  opacity: 0.55;
+}
+
+.edit-table .visibility-toggle-btn.stop-btn {
+  border-color: #d5dad3;
+  background: #f7f8f6;
+  color: #656b66;
+}
+
+.edit-table .visibility-toggle-btn.stop-btn:hover {
+  border-color: #8b938c;
+  background: #ecefeb;
+}
+
+.edit-table .visibility-toggle-btn.resume-btn {
+  border-color: #6da12f;
+  background: #6da12f;
+  color: #fff;
+}
+
+.edit-table .visibility-toggle-btn.resume-btn:hover {
+  border-color: #5b8928;
+  background: #5b8928;
 }
 
 /* =========================
@@ -115,8 +174,8 @@
 
 .edit-right {
   width: 28%;
-  background: #eef7de;
-  border-left: 1px solid #d5dfcf;
+  background: #eaf4de;
+  border-left: 1px solid #cfdcc3;
   padding: 26px 24px;
   display: flex;
   flex-direction: column;
@@ -191,7 +250,7 @@
 .form-group select {
   flex: 1;
   height: 38px;
-  border: 1px solid #dbe1d7;
+  border: 1px solid #cfdcc3;
   border-radius: 8px;
   background: #fff;
   padding: 0 12px;
@@ -204,8 +263,8 @@
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #5b7f56;
-  box-shadow: 0 0 0 3px rgba(91, 127, 86, 0.12);
+  border-color: #6da12f;
+  box-shadow: 0 0 0 3px rgba(109, 161, 47, 0.14);
 }
 
 .image-upload {
@@ -213,7 +272,7 @@
   height: 38px;
   padding: 7px 12px;
   background: #fff;
-  border: 1px solid #dbe1d7;
+  border: 1px solid #cfdcc3;
   border-radius: 8px;
   font-size: 14px;
   display: flex;
@@ -257,17 +316,17 @@
 }
 
 .save-btn {
-  background: #5b7f56;
+  background: #6da12f;
   color: #fff;
 }
 
 .edit-back-btn:hover {
-  border-color: #5b7f56;
-  color: #486845;
+  border-color: #6da12f;
+  color: #4f7823;
 }
 
 .save-btn:hover {
-  background: #486845;
+  background: #5b8928;
 }
 /* =========================
    페이지 번호
@@ -298,9 +357,9 @@
 }
 
 .pagination button.active {
-  background: #5b7f56;
+  background: #6da12f;
   color: #fff;
-  border-color: #5b7f56;
+  border-color: #6da12f;
 }
 .edit-header {
   display: flex;

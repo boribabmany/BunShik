@@ -2,292 +2,286 @@
    관리자 메뉴 수정 페이지
 ========================= */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.admin-edit-page{
-    width:100%;
-    height:100vh;
-    background:#f5f5f5;
-    display:flex;
-    overflow:hidden;
+.admin-edit-page {
+  width: 100%;
+  height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  overflow: hidden;
 }
 
 /* =========================
    왼쪽 영역
 ========================= */
 
-.edit-left{
-    width:74%;
-    padding:18px 22px;
+.edit-left {
+  width: 74%;
+  padding: 18px 22px;
 }
 
-.edit-title{
-    text-align:center;
-    font-size:26px;
-    font-weight:700;
-    margin-bottom:14px;
+.edit-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 14px;
 }
 
-.register-btn{
-    padding:6px 16px;
-    border:none;
-    border-radius:18px;
-    background:#666;
-    color:#fff;
-    cursor:pointer;
-    margin-bottom:10px;
-    font-size:13px;
+.register-btn {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 18px;
+  background: #666;
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-size: 13px;
 }
 
-.register-btn:hover{
-    background:#444;
+.register-btn:hover {
+  background: #444;
 }
 
-.edit-table-box{
-    background:#fff;
-    border:1px solid #ddd;
-    margin-bottom:14px;
-    overflow:hidden;
-    display:flex;
-    flex-direction:column;
+.edit-table-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  margin-bottom: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.edit-table{
-    width:100%;
-    border-collapse:collapse;
-    table-layout:fixed;
+.edit-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
-.edit-table th{
-    background:#f4f4f4;
-    padding:8px;
-    font-size:18px;
+.edit-table th {
+  background: #f4f4f4;
+  padding: 8px;
+  font-size: 18px;
 }
 
-.edit-table td{
-    padding:6px;
-    text-align:center;
-    border-top:1px solid #eee;
-    font-size:14px;
+.edit-table td {
+  padding: 6px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  font-size: 14px;
 }
 
-.edit-table img{
-    width:44px;
-    height:44px;
-    object-fit:cover;
-    border-radius:6px;
+.edit-table img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
-.edit-table button{
-    width:65px;
-    height:32px;
-    margin:0 4px;
-    border:1px solid #ccc;
-    background:#fff;
-    cursor:pointer;
-    font-size:14px;
-    font-weight:600;
-    border-radius:6px;
+.edit-table button {
+  width: 65px;
+  height: 32px;
+  margin: 0 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
 }
 
-.edit-table button:last-child{
-    color:#ff4a4a;
+.edit-table button:last-child {
+  color: #ff4a4a;
 }
 
 /* =========================
    오른쪽 수정 패널
 ========================= */
 
-.edit-right{
-    width:26%;
-    background:#eef7de;
-    border-left:3px solid #444;
-    padding:18px;
+.edit-right {
+  width: 26%;
+  background: #eef7de;
+  border-left: 3px solid #444;
+  padding: 18px;
 
-    display:flex;
-    flex-direction:column;
+  display: flex;
+  flex-direction: column;
 }
-.edit-content{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
-
-
-.preview-box{
-    text-align:center;
-    margin-bottom:18px;
-    margin-top:-100px;
+.edit-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.preview-box img{
-    width:200px;
-    height:200px;
-    object-fit:cover;
-    border-radius:10px;
-    margin-bottom:8px;
+.preview-box {
+  text-align: center;
+  margin-bottom: 18px;
+  margin-top: -100px;
 }
 
-.preview-title{
-    margin-top:15px;
+.preview-box img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 8px;
 }
 
-.preview-label{
-    display:block;
-    font-size:40px;
-    color:#666;
-    font-weight:600;
-    margin-bottom:8px;
+.preview-title {
+  margin-top: 15px;
 }
 
-.preview-name{
-    font-size:40px;
-    font-weight:700;
+.preview-label {
+  display: block;
+  font-size: 40px;
+  color: #666;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.preview-name {
+  font-size: 40px;
+  font-weight: 700;
 }
 
 /* =========================
    입력폼
 ========================= */
 
-.form-group{
-    display:flex;
-    align-items:center;
-    margin-bottom:14px;
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
-.form-group label{
-    width:70px;
-    font-size:16px;
-    font-weight:600;
+.form-group label {
+  width: 70px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .form-group input,
-.form-group select{
-    flex:1;
-    height:36px;
-    border:none;
-    border-radius:18px;
-    background:#fff;
-    padding:0 12px;
-    font-size:13px;
+.form-group select {
+  flex: 1;
+  height: 36px;
+  border: none;
+  border-radius: 18px;
+  background: #fff;
+  padding: 0 12px;
+  font-size: 13px;
 }
 
-.image-link{
-    height:70px !important;
-    border-radius:8px !important;
-    padding:8px !important;
+.image-upload {
+  flex: 1;
+  height: 36px; /* 다른 input과 동일한 높이 */
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 18px; /* 다른 input과 동일하게 */
+  font-size: 13px;
+  display: flex;
+  align-items: center;
 }
-.image-upload{
-    flex:1;
-    height:36px;              /* 다른 input과 동일한 높이 */
-    padding:6px 12px;
-    background:#fff;
-    border:1px solid #ccc;
-    border-radius:18px;       /* 다른 input과 동일하게 */
-    font-size:13px;
-    display:flex;
-    align-items:center;
-}
-.image-upload::file-selector-button{
-    height:24px;
-    padding:0 10px;
-    margin-right:10px;
-    border:none;
-    border-radius:6px;
-    background:#666;
-    color:#fff;
-    cursor:pointer;
-    font-size:12px;
+.image-upload::file-selector-button {
+  height: 24px;
+  padding: 0 10px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #666;
+  color: #fff;
+  cursor: pointer;
+  font-size: 12px;
 }
 
-.image-upload::file-selector-button:hover{
-    background:#444;
+.image-upload::file-selector-button:hover {
+  background: #444;
 }
 
 /* =========================
    하단 버튼
 ========================= */
 
-.edit-bottom{
-    display:flex;
-    justify-content:space-between;
+.edit-bottom {
+  display: flex;
+  justify-content: space-between;
 }
 
 .back-btn,
-.save-btn{
-    width:150px;      /* 기존 95px */
-    height:50px;      /* 기존 36px */
+.save-btn {
+  width: 150px; /* 기존 95px */
+  height: 50px; /* 기존 36px */
 
-    border:none;
-    border-radius:25px;
+  border: none;
+  border-radius: 25px;
 
-    background:#666;
-    color:#fff;
+  background: #666;
+  color: #fff;
 
-    cursor:pointer;
+  cursor: pointer;
 
-    font-size:17px;   /* 기존 13px */
-    font-weight:600;
+  font-size: 17px; /* 기존 13px */
+  font-weight: 600;
 }
 
 .back-btn:hover,
-.save-btn:hover{
-    background:#444;
+.save-btn:hover {
+  background: #444;
 }
 /* =========================
    페이지 번호
 ========================= */
 
-.pagination{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
-    padding:12px 0;
-    background:#fff;
-    border-top:1px solid #eee;
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  background: #fff;
+  border-top: 1px solid #eee;
 }
 
-.pagination button{
-    width:34px;
-    height:34px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    background:#fff;
-    cursor:pointer;
-    transition:.2s;
+.pagination button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.pagination button:hover{
-    background:#f3f3f3;
+.pagination button:hover {
+  background: #f3f3f3;
 }
 
-.pagination button.active{
-    background:#666;
-    color:#fff;
-    border-color:#666;
+.pagination button.active {
+  background: #666;
+  color: #fff;
+  border-color: #666;
 }
-.edit-header{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-    margin-bottom:20px;
-}
-
-.edit-logo{
-    width:55px;
-    height:55px;
-    object-fit:contain;
+.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.edit-title{
-    margin:0;
-    font-size:30px;
-    font-weight:700;
+.edit-logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+
+.edit-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
 }

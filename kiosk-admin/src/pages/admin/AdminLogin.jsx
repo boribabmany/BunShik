@@ -16,9 +16,10 @@ export default function AdminLogin() {
     try {
       const result = await login(id, password);
 
-      // 백엔드에서 JWT를 반환하는 경우
-      sessionStorage.setItem("token", result.token);
+      // JWT 저장
+      sessionStorage.setItem("accessToken", result.data.accessToken);
 
+      // 로그인 여부 저장
       sessionStorage.setItem("isAdminLoggedIn", "true");
 
       navigate("/adminmenu");
@@ -29,8 +30,7 @@ export default function AdminLogin() {
 
   // 이미 로그인된 경우
   useEffect(() => {
-    const isLogin =
-      sessionStorage.getItem("isAdminLoggedIn") === "true";
+    const isLogin = sessionStorage.getItem("isAdminLoggedIn") === "true";
 
     if (isLogin) {
       navigate("/adminmenu");
@@ -43,7 +43,7 @@ export default function AdminLogin() {
         <img src={logo} alt="분식 로고" className="login-logo" />
 
         <h1 className="login-title">
-          관리자 로그인(아이디 admin / 비밀번호 1234)
+          관리자 로그인
         </h1>
 
         <div className="login-info">

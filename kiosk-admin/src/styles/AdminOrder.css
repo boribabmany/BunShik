@@ -2,185 +2,185 @@
    관리자 주문 페이지
 ========================= */
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.admin-order-page{
-    width:100%;
-    min-height:100vh;
-    background:#f5f5f5;
-    padding:25px 35px;
+.admin-order-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 25px 35px;
 }
 
 /* =========================
    제목
 ========================= */
 
-.order-header{
-    margin-bottom:20px;
+.order-header {
+  margin-bottom: 20px;
 }
 
-.order-header h1{
-    font-size:30px;
-    font-weight:700;
+.order-header h1 {
+  font-size: 30px;
+  font-weight: 700;
 }
 
 /* =========================
    검색 영역
 ========================= */
 
-.search-area{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr 170px;
-    gap:12px;
+.search-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 170px;
+  gap: 12px;
 
-    background:#fff;
-    padding:15px;
-    border:1px solid #ddd;
-    border-radius:8px;
+  background: #fff;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 
-    margin-bottom:15px;
+  margin-bottom: 15px;
 }
 
 .search-area input,
-.search-area select{
-    height:40px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    padding:0 12px;
-    font-size:14px;
+.search-area select {
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 14px;
 }
 
-.search-btn{
-    border:none;
-    border-radius:6px;
-    background:#666;
-    color:#fff;
-    cursor:pointer;
+.search-btn {
+  border: none;
+  border-radius: 6px;
+  background: #666;
+  color: #fff;
+  cursor: pointer;
 }
 
-.search-btn:hover{
-    background:#444;
+.search-btn:hover {
+  background: #444;
 }
 
 /* =========================
    주문 테이블
 ========================= */
 
-.order-table-box{
-    background:#fff;
-    border:1px solid #ddd;
-    border-radius:8px;
-    overflow:hidden;
+.order-table-box {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.order-table{
-    width:100%;
-    border-collapse:collapse;
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.order-table th{
-    background:#f3f4f6;
-    padding:12px;
-    font-size:14px;
-    border-bottom:1px solid #ddd;
+.order-table th {
+  background: #f3f4f6;
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
 }
 
-.order-table td{
-    padding:14px 12px;
-    text-align:center;
-    border-bottom:1px solid #eee;
-    font-size:14px;
+.order-table td {
+  padding: 14px 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
 }
 
-.order-table tbody tr:hover{
-    background:#fafafa;
+.order-table tbody tr:hover {
+  background: #fafafa;
 }
 
 /* =========================
    상태 버튼
 ========================= */
 
-.order-action{
-    display:flex;
-    justify-content:center;
-    gap:8px;
+.order-action {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
 }
 
-.order-action button{
-    width:80px;      /* 고정 너비 */
-    height:32px;     /* 고정 높이 */
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:12px;
-    font-weight:500;
+.order-action button {
+  width: 80px; /* 고정 너비 */
+  height: 32px; /* 고정 높이 */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.order-action button:first-child{
-    background:#16A34A;
-    color:#fff;
+.order-action button:first-child {
+  background: #16a34a;
+  color: #fff;
 }
 
-.order-action button:last-child{
-    background:#f05c5c;
-    color:#fff;
+.order-action button:last-child {
+  background: #f05c5c;
+  color: #fff;
 }
 
 /* =========================
    더보기
 ========================= */
 
-.load-more{
-    width:100%;
-    height:45px;
-    margin-top:10px;
+.load-more {
+  width: 100%;
+  height: 45px;
+  margin-top: 10px;
 
-    border:1px solid #ddd;
-    border-radius:6px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 
-    background:#fff;
-    cursor:pointer;
+  background: #fff;
+  cursor: pointer;
 }
 
-.load-more:hover{
-    background:#f2f2f2;
+.load-more:hover {
+  background: #f2f2f2;
 }
 
 /* =========================
    하단 버튼
 ========================= */
 
-.bottom-area{
-    display:flex;
-    justify-content:flex-end;
-    margin-top:25px;
+.bottom-area {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 25px;
 }
-.order-back-btn{
-    width:120px;
-    height:40px;
-    border:none;
-    border-radius:15px;
-    background:#666;
-    color:#fff;
-    cursor:pointer;
-    margin:20px 30px;
-}
-
-.order-back-btn:hover{
-    background:#444;
-}
-.order-title{
-    display:flex;
-    align-items:center;
-    gap:15px;
+.order-back-btn {
+  width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 15px;
+  background: #666;
+  color: #fff;
+  cursor: pointer;
+  margin: 20px 30px;
 }
 
-.order-logo{
-    width:60px;
-    height:60px;
-    object-fit:contain;
+.order-back-btn:hover {
+  background: #444;
+}
+.order-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.order-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }

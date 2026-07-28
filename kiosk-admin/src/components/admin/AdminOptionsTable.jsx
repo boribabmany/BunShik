@@ -5,7 +5,7 @@ import useOptionStore from "../../store/optionStore";
 
 export default function AdminOptionsTable() {
   const navigate = useNavigate();
-  const { optionList } = useOptionStore();
+  const optionList = useOptionStore((state) => state.optionList);
 
   return (
     <div className="option-table-box">

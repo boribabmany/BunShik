@@ -17,10 +17,10 @@ export default function AdminSummary({ onMoveOrder }) {
      ========================================== */
 
   // 총 메뉴 수
-  const totalMenus = menuList ? menuList.length : 0;
+  const totalMenus = menuList.length;
 
   // 총 옵션 수
-  const totalOptions = optionList ? optionList.length : 0;
+  const totalOptions = optionList.length;
 
   // 오늘 주문 수
   const todayDate = new Date().toISOString().slice(0, 10);

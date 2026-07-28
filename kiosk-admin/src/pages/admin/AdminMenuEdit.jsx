@@ -6,6 +6,22 @@ import useOptionStore from "../../store/optionStore";
 import "../../styles/AdminMenuEdit.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
+const createMenuFormData = (menu, imageFile) => {
+  const formData = new FormData();
+
+  formData.append("menuName", menu.menu_name);
+  formData.append("price", menu.price);
+  formData.append("category", menu.category);
+  formData.append("description", menu.description || "");
+  formData.append("isAvailable", menu.is_available);
+
+  if (imageFile) {
+    formData.append("file", imageFile);
+  }
+
+  return formData;
+};
+
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
   const { menuList, loadMenus, addMenu, editMenu, removeMenu } = useMenuStore();
@@ -15,6 +31,7 @@ export default function AdminMenuEdit() {
   const [editMode, setEditMode] = useState("menu");
   const [isAddMode, setIsAddMode] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const location = useLocation();
 
   const [menuPage, setMenuPage] = useState(1);
@@ -33,6 +50,10 @@ export default function AdminMenuEdit() {
   }, [loadMenus, loadOptions]);
   useEffect(() => {
     if (!location.state) return;
+
+    setImageFile(null);
+    setImagePreviewUrl(null);
+
     // 등록 모드
     if (location.state.isAddMode) {
       setEditMode(location.state.type);
@@ -64,6 +85,14 @@ export default function AdminMenuEdit() {
     }
   }, [location.state]);
 
+  useEffect(() => {
+    return () => {
+      if (imagePreviewUrl) {
+        URL.revokeObjectURL(imagePreviewUrl);
+      }
+    };
+  }, [imagePreviewUrl]);
+
   //--메뉴리스트-------------------------------------------------
   //메뉴삭제
   const handleDeleteMenu = async (menuId) => {
@@ -84,21 +113,7 @@ export default function AdminMenuEdit() {
     }
 
     try {
-      const formData = new FormData();
-
-      formData.append("menuName", selectedItem.menu_name);
-
-      formData.append("price", selectedItem.price);
-
-      formData.append("category", selectedItem.category);
-
-      formData.append("description", selectedItem.description || "");
-
-      formData.append("isAvailable", selectedItem.is_available);
-
-      if (imageFile) {
-        formData.append("file", imageFile);
-      }
+      const formData = createMenuFormData(selectedItem, imageFile);
 
       await editMenu(selectedItem.menu_id, formData);
 
@@ -106,6 +121,7 @@ export default function AdminMenuEdit() {
 
       setSelectedItem(null);
       setImageFile(null);
+      setImagePreviewUrl(null);
       setIsAddMode(false);
     } catch (error) {
       console.error("메뉴 수정 실패:", error);
@@ -122,21 +138,7 @@ export default function AdminMenuEdit() {
     }
 
     try {
-      const formData = new FormData();
-
-      formData.append("menuName", selectedItem.menu_name);
-
-      formData.append("price", selectedItem.price);
-
-      formData.append("category", selectedItem.category);
-
-      formData.append("description", selectedItem.description || "");
-
-      formData.append("isAvailable", selectedItem.is_available);
-
-      if (imageFile) {
-        formData.append("file", imageFile);
-      }
+      const formData = createMenuFormData(selectedItem, imageFile);
 
       await addMenu(formData);
 
@@ -144,6 +146,7 @@ export default function AdminMenuEdit() {
 
       setSelectedItem(null);
       setImageFile(null);
+      setImagePreviewUrl(null);
       setIsAddMode(false);
     } catch (error) {
       console.error("메뉴 등록 실패:", error);
@@ -157,6 +160,7 @@ export default function AdminMenuEdit() {
     setEditMode(type);
     setSelectedItem(item);
     setImageFile(null);
+    setImagePreviewUrl(null);
     setIsAddMode(false);
   };
   // 메뉴와 옵션 이름 수정
@@ -184,10 +188,7 @@ export default function AdminMenuEdit() {
 
     const previewUrl = URL.createObjectURL(file);
 
-    setSelectedItem((prev) => ({
-      ...prev,
-      [editMode === "menu" ? "image_url" : "option_image"]: previewUrl,
-    }));
+    setImagePreviewUrl(previewUrl);
   };
   //옴션------------------------------------------------------------
   // 옵션 등록
@@ -202,6 +203,8 @@ export default function AdminMenuEdit() {
       alert("옵션추가되었습니다.");
 
       setSelectedItem(null);
+      setImageFile(null);
+      setImagePreviewUrl(null);
       setIsAddMode(false);
     } catch {
       alert("옵션추가 실패");
@@ -214,6 +217,8 @@ export default function AdminMenuEdit() {
     await removeOption(optionId);
     if (selectedItem?.option_id === optionId) {
       setSelectedItem(null);
+      setImageFile(null);
+      setImagePreviewUrl(null);
       setIsAddMode(false);
     }
   };
@@ -263,6 +268,8 @@ export default function AdminMenuEdit() {
             onClick={() => {
               setEditMode("menu");
               setIsAddMode(true);
+              setImageFile(null);
+              setImagePreviewUrl(null);
               setSelectedItem({
                 menu_name: "",
                 category: "",
@@ -339,6 +346,7 @@ export default function AdminMenuEdit() {
               setEditMode("option");
               setIsAddMode(true);
               setImageFile(null);
+              setImagePreviewUrl(null);
               setSelectedItem({
                 option_name: "",
                 option_price: 0,
@@ -412,8 +420,8 @@ export default function AdminMenuEdit() {
             <img
               src={
                 editMode === "menu"
-                  ? selectedItem?.image_url || bunshikLogo
-                  : selectedItem?.option_image || bunshikLogo
+                  ? imagePreviewUrl || selectedItem?.image_url || bunshikLogo
+                  : imagePreviewUrl || selectedItem?.option_image || bunshikLogo
               }
               alt={
                 editMode === "menu"

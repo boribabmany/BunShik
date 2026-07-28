@@ -116,7 +116,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 52px;
+  gap: 36px;
   width: 100%;
   height: 172px;
 }
@@ -138,6 +138,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.cart-item-name--tteokbokki-en {
+  font-size: 34px;
 }
 
 .cart-item-qty-box {
@@ -171,6 +175,8 @@
   color: #000000;
   margin: 0;
   flex-shrink: 0;
+  width: 220px;
+  text-align: right;
 }
 
 .cart-item-delete {

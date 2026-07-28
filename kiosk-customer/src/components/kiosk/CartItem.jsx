@@ -14,6 +14,8 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
     item.menu_name_en,
   );
 
+  const isTteokbokkiEn = language === "en" && item.menu_name === "떡볶이";
+
   const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
   const itemTotal = (item.base_price + optionTotal) * item.quantity;
 
@@ -22,7 +24,13 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
       <div className="cart-item-toprow">
         <img src={item.image_url} alt={itemName} className="cart-item-image" />
 
-        <p className="cart-item-name">{itemName}</p>
+        <p
+          className={`cart-item-name${
+            isTteokbokkiEn ? " cart-item-name--tteokbokki-en" : ""
+          }`}
+        >
+          {itemName}
+        </p>
 
         <div className="cart-item-qty-box">
           <button

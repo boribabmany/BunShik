@@ -64,6 +64,8 @@ export const translations = {
       cardErrorTitle: "결제 실패",
       declinedTitle: "결제 거절",
       timeoutTitle: "결제 응답 지연",
+      networkErrorTitle: "네트워크 연결 오류",
+      orderErrorTitle: "주문 확인 필요",
       systemErrorTitle: "일시적인 오류",
       cardErrorMessage:
         "IC 카드를 인식할 수 없습니다. 카드를 다시 삽입해 주세요. 계속 인식되지 않으면 카드를 긁어(MS) 결제하거나 다른 결제수단을 이용해 주세요.",
@@ -73,10 +75,15 @@ export const translations = {
           : "카드사에서 결제를 승인하지 않았습니다. 다른 카드로 시도하시거나 카드사에 문의해 주세요.",
       timeoutMessage:
         "결제 응답이 지연되고 있습니다. 네트워크 상태를 확인하신 후 다시 시도해 주세요.",
+      networkErrorMessage:
+        "인터넷 연결을 확인할 수 없습니다. 네트워크 상태를 확인하신 후 다시 시도해 주세요.",
+      orderErrorMessage:
+        "선택하신 메뉴 중 일부가 변경되었어요. 메뉴를 다시 확인해주세요.",
       systemErrorMessage:
         "결제 처리 중 문제가 발생했습니다. 잠시 후 다시 시도해 주시고, 계속되면 직원을 호출해 주세요.",
       back: "뒤로가기",
       backAlt: "돌아가기",
+      backToMenu: "메뉴 다시 보기",
       retry: "재시도",
     },
     emptyCart: {
@@ -166,6 +173,8 @@ export const translations = {
       cardErrorTitle: "Payment Failed",
       declinedTitle: "Payment Declined",
       timeoutTitle: "Payment Delayed",
+      networkErrorTitle: "Network Connection Error",
+      orderErrorTitle: "Order Needs Review",
       systemErrorTitle: "Temporary Error",
       cardErrorMessage:
         "Unable to read the IC card. Please reinsert your card. If the problem continues, try swiping (MS) or use another payment method.",
@@ -175,10 +184,15 @@ export const translations = {
           : "Your card issuer declined the payment. Please try another card or contact your card issuer.",
       timeoutMessage:
         "The payment response is delayed. Please check your network and try again.",
+      networkErrorMessage:
+        "Unable to connect to the network. Please check your connection and try again.",
+      orderErrorMessage:
+        "Some items in your order have changed. Please check the menu again.",
       systemErrorMessage:
         "An error occurred while processing your payment. Please try again, or call a staff member if this continues.",
       back: "Back",
       backAlt: "Go Back",
+      backToMenu: "Back to Menu",
       retry: "Retry",
     },
     emptyCart: {

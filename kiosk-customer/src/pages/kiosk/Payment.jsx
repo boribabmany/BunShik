@@ -4,7 +4,7 @@ import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
 import { translations, formatPrice } from "../../i18n/translations";
-import { createOrder, submitPayment } from "../../api/orderApi";
+import { createOrder, submitPayment, withRetry } from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
 import EmptyCartModal from "../../components/kiosk/EmptyCartModal";
 import PaymentMethodModal from "../../components/kiosk/PaymentMethodModal";
@@ -66,14 +66,16 @@ function Payment() {
     }
 
     try {
-      const orderResult = await createOrder({
-        items: items.map((item) => ({
-          menu_id: item.menu_id,
-          quantity: item.quantity,
-          option_ids: item.options.map((option) => option.option_id),
-        })),
-        order_type: orderType === "dine-in" ? "매장" : "포장",
-      });
+      const orderResult = await withRetry(() =>
+        createOrder({
+          items: items.map((item) => ({
+            menu_id: item.menu_id,
+            quantity: item.quantity,
+            option_ids: item.options.map((option) => option.option_id),
+          })),
+          order_type: orderType === "dine-in" ? "매장" : "포장",
+        }),
+      );
 
       if (orderResult.status !== "대기") {
         setFailType("order-error");
@@ -81,10 +83,12 @@ function Payment() {
         return;
       }
 
-      const paymentResult = await submitPayment({
-        order_id: orderResult.order_id,
-        payment_method: paymentMethod,
-      });
+      const paymentResult = await withRetry(() =>
+        submitPayment({
+          order_id: orderResult.order_id,
+          payment_method: paymentMethod,
+        }),
+      );
 
       if (paymentResult.status === "성공") {
         setOrderNumber(orderResult.order_number);
@@ -92,21 +96,25 @@ function Payment() {
         clearCart();
         navigate("/complete");
       } else {
-        setFailType("declined");
+        setFailType(paymentResult.fail_type ?? "declined");
         setFailReason(paymentResult.fail_reason ?? null);
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
       setFailReason(null);
-
-      if (error.message === "TIMEOUT") {
-        setFailType("timeout");
-      } else {
-        setFailType("system-error");
-      }
+      setFailType(error.failType ?? "system-error");
     } finally {
       setIsPaying(false);
     }
+  };
+
+  // order-error는 메뉴 자체가 바뀐 상황이라 결제 화면에 머물지 않고 메뉴로 돌려보냄
+  const handleFailCardBack = () => {
+    if (failType === "order-error") {
+      navigate("/menu", { replace: true });
+      return;
+    }
+    setFailType(null);
   };
 
   if (isCartEmpty) {
@@ -172,7 +180,7 @@ function Payment() {
           type={failType}
           failReason={failReason}
           onRetry={() => handlePay(lastMethod)}
-          onBack={() => setFailType(null)}
+          onBack={handleFailCardBack}
           language={language}
         />
       )}

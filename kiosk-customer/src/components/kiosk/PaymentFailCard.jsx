@@ -7,6 +7,8 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
   const isCardError = type === "card-error";
   const isDeclined = type === "declined";
   const isTimeout = type === "timeout";
+  const isNetworkError = type === "network-error";
+  const isOrderError = type === "order-error";
 
   const title = isCardError
     ? t.cardErrorTitle
@@ -14,7 +16,11 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
       ? t.declinedTitle
       : isTimeout
         ? t.timeoutTitle
-        : t.systemErrorTitle;
+        : isNetworkError
+          ? t.networkErrorTitle
+          : isOrderError
+            ? t.orderErrorTitle
+            : t.systemErrorTitle;
 
   const message = isCardError
     ? t.cardErrorMessage
@@ -22,7 +28,14 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
       ? t.declinedMessage(failReason)
       : isTimeout
         ? t.timeoutMessage
-        : t.systemErrorMessage;
+        : isNetworkError
+          ? t.networkErrorMessage
+          : isOrderError
+            ? t.orderErrorMessage
+            : t.systemErrorMessage;
+
+  // 재시도해도 의미 없는 유형(카드 인식 불가, 주문 데이터 오류)은 버튼 1개만
+  const singleButton = isCardError || isOrderError;
 
   return (
     <div className="fail-card-backdrop">
@@ -32,20 +45,23 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
         {(isDeclined || isCardError) && (
           <img src={cardErrorIcon} alt="" className="fail-card-icon-img" />
         )}
-        {(isTimeout || (!isCardError && !isDeclined)) && (
+        {(isTimeout ||
+          isNetworkError ||
+          isOrderError ||
+          (!isCardError && !isDeclined)) && (
           <div className="fail-card-icon fail-card-icon-error">!</div>
         )}
 
         <p className="fail-card-message">{message}</p>
 
         <div className="fail-card-buttons">
-          {isCardError ? (
+          {singleButton ? (
             <button
               type="button"
               onClick={onBack}
               className="fail-card-btn-outline"
             >
-              {t.back}
+              {isOrderError ? t.backToMenu : t.back}
             </button>
           ) : (
             <>

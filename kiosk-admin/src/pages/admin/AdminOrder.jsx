@@ -78,7 +78,14 @@ export default function AdminOrder() {
       return;
     }
 
-    await changeOrderStatus(orderId, nextStatus);
+    try {
+      await changeOrderStatus(orderId, nextStatus);
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+          "주문 상태를 변경하지 못했습니다.",
+      );
+    }
   };
 
   // 주문 취소
@@ -87,7 +94,14 @@ export default function AdminOrder() {
       return;
     }
 
-    await storeCancelOrder(orderId);
+    try {
+      await storeCancelOrder(orderId);
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+          "주문을 취소하지 못했습니다.",
+      );
+    }
   };
 
   // 주문 상태에 따른 버튼 문구

@@ -6,7 +6,6 @@ export default function SalesSummary() {
   if (!salesSummary) {
     return <div className="sales-loading">매출 데이터를 불러오는 중...</div>;
   }
-
   return (
     <div className="sales-summary">
       <div className="today-sales-card">

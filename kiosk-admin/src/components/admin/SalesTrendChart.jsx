@@ -1,13 +1,4 @@
-import {
-  Area,
-  CartesianGrid,
-  ComposedChart,
-  Line,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis,} from "recharts";
 import useSalesStore from "../../store/salesStore";
 
 const formatShortDate = (date) => {

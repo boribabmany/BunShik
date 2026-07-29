@@ -8,12 +8,15 @@ import { createOrder, submitPayment, withRetry } from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
 import EmptyCartModal from "../../components/kiosk/EmptyCartModal";
 import PaymentMethodModal from "../../components/kiosk/PaymentMethodModal";
+import EasyPayQRModal from "../../components/kiosk/EasyPayQRModal";
 import PaymentItem from "../../components/kiosk/PaymentItem";
 import logo from "../../images/bunshiklogo.png";
 import backIcon from "../../images/backicon.png";
 import "../../styles/common.css";
 import "../../styles/Payment.css";
 import "../../styles/PaymentMethodModal.css";
+
+const QR_METHODS = ["naverpay", "kakaopay"];
 
 function Payment() {
   const navigate = useNavigate();
@@ -34,6 +37,7 @@ function Payment() {
   const [failReason, setFailReason] = useState(null);
   const [isMethodModalOpen, setIsMethodModalOpen] = useState(false);
   const [lastMethod, setLastMethod] = useState("card");
+  const [qrMethod, setQrMethod] = useState(null); // "naverpay" | "kakaopay" | null
 
   const isCartEmpty = items.length === 0;
   const totalPrice = getTotalPrice();
@@ -42,15 +46,13 @@ function Payment() {
     navigate("/menu", { replace: true });
   };
 
-  const handlePay = async (method) => {
-    setIsMethodModalOpen(false);
+  const runPayment = async (method) => {
     setIsPaying(true);
     setFailType(null);
     setFailReason(null);
     setLastMethod(method);
 
     let paymentMethod;
-
     switch (method) {
       case "card":
         paymentMethod = "카드";
@@ -108,7 +110,25 @@ function Payment() {
     }
   };
 
-  // order-error는 메뉴 자체가 바뀐 상황이라 결제 화면에 머물지 않고 메뉴로 돌려보냄
+  // 결제수단 모달에서 선택했을 때 호출됨
+  const handlePay = (method) => {
+    setIsMethodModalOpen(false);
+
+    if (QR_METHODS.includes(method)) {
+      setQrMethod(method); // QR 화면부터 보여줌
+      return;
+    }
+
+    runPayment(method); // 카드는 바로 진행
+  };
+
+  // QR 화면이 끝나면(타이머 종료) 실제 결제 로직 진행
+  const handleQrComplete = () => {
+    const method = qrMethod;
+    setQrMethod(null);
+    runPayment(method);
+  };
+
   const handleFailCardBack = () => {
     if (failType === "order-error") {
       navigate("/menu", { replace: true });
@@ -140,7 +160,6 @@ function Payment() {
       <div className="payment-divider-bottom" />
 
       <p className="payment-total-label">{t.totalLabel}</p>
-
       <p className="payment-total-price">{formatPrice(language, totalPrice)}</p>
 
       <button
@@ -171,6 +190,15 @@ function Payment() {
         <PaymentMethodModal
           onSelect={handlePay}
           onClose={() => setIsMethodModalOpen(false)}
+          language={language}
+        />
+      )}
+
+      {qrMethod && (
+        <EasyPayQRModal
+          method={qrMethod}
+          amount={totalPrice}
+          onComplete={handleQrComplete}
           language={language}
         />
       )}

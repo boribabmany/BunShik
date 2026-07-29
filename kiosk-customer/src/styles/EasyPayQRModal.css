@@ -1,0 +1,48 @@
+.easypay-qr-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.easypay-qr-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 60px 50px;
+  width: 600px;
+  text-align: center;
+}
+
+.easypay-qr-brand {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.easypay-qr-title {
+  font-size: 36px;
+  font-weight: 600;
+  margin: 0 0 32px;
+  line-height: 1.3;
+}
+
+.easypay-qr-shell {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.easypay-qr-amount {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.easypay-qr-timer {
+  font-size: 20px;
+  color: #888888;
+  margin: 0;
+}

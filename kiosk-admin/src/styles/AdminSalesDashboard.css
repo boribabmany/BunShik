@@ -6,7 +6,7 @@
 .admin-sales-page {
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: #f1f2f4;
   padding: 25px 35px;
 }
 
@@ -20,13 +20,13 @@
 
 .sales-header h1 {
   font-size: 32px;
-  color: #333;
+  color: #343940;
   margin: 0;
 }
 
 .sales-header p {
   margin: 7px 0 0;
-  color: #777;
+  color: #68717e;
   font-size: 15px;
 }
 
@@ -35,7 +35,7 @@
   padding: 10px 18px;
   border: none;
   border-radius: 8px;
-  background: #5e5e5e;
+  background: #7f8da3;
   color: #fff;
   font-size: 15px;
   cursor: pointer;
@@ -43,7 +43,7 @@
 }
 
 .sales-back-btn:hover {
-  background: #4a4a4a;
+  background: #69778d;
 }
 
 /* 컴포넌트 배치 */
@@ -59,9 +59,9 @@
   align-items: center;
   justify-content: center;
   background: #fff;
-  border: 1px solid #cfdcc3;
+  border: 1px solid #e3e6ea;
   border-radius: 12px;
-  color: #777;
+  color: #68717e;
 }
 
 /* =========================
@@ -77,29 +77,29 @@
 /* 오늘의 매출 */
 .today-sales-card {
   background: #ffffff;
-  border: 1px solid #cfdcc3;
+  border: 1px solid #e3e6ea;
   border-radius: 12px;
   padding: 35px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
 }
 
 .today-sales-card h2 {
   font-size: 24px;
   margin-bottom: 15px;
-  color: #555;
+  color: #68717e;
 }
 
 .today-sales-amount {
   font-size: 42px;
   font-weight: 700;
-  color: #6da12f;
+  color: #66885f;
   margin-bottom: 12px;
 }
 
 .today-sales-card p {
   font-size: 18px;
-  color: #666;
+  color: #68717e;
 }
 
 /* 요약 카드 */
@@ -110,8 +110,8 @@
 }
 
 .sale-summary-card {
-  background: #eaf4de;
-  border: 1px solid #d2e3bf;
+  background: #edf6e8;
+  border: 1px solid #dcebd5;
   border-radius: 12px;
   padding: 25px;
   min-height: 140px;
@@ -121,18 +121,18 @@
   justify-content: center;
   align-items: center;
 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
 }
 
 .sale-summary-card h3 {
   font-size: 18px;
-  color: #666;
+  color: #697168;
   margin-bottom: 15px;
 }
 
 .sale-summary-card strong {
   font-size: 32px;
-  color: #333;
+  color: #343940;
 }
 
 /* =========================
@@ -148,10 +148,10 @@
 .sales-trend-chart,
 .popular-menu {
   background: #ffffff;
-  border: 1px solid #cfdcc3;
+  border: 1px solid #e3e6ea;
   border-radius: 12px;
   padding: 25px 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
   min-width: 0;
 }
 
@@ -168,12 +168,12 @@
 .popular-menu h2 {
   font-size: 24px;
   margin: 0;
-  color: #333;
+  color: #343940;
 }
 
 .chart-card-header p {
   margin: 7px 0 0;
-  color: #888;
+  color: #7b8490;
   font-size: 14px;
 }
 
@@ -181,7 +181,7 @@
   display: flex;
   gap: 14px;
   flex-shrink: 0;
-  color: #666;
+  color: #68717e;
   font-size: 13px;
 }
 
@@ -199,11 +199,11 @@
 }
 
 .legend-sales::before {
-  background: #6da12f;
+  background: #66885f;
 }
 
 .legend-orders::before {
-  background: #5e5e5e;
+  background: #7f8da3;
 }
 
 .sales-trend-chart-area,
@@ -218,8 +218,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: #f7faf4;
-  color: #888;
+  background: #f7f9fb;
+  color: #7b8490;
 }
 
 /* =========================
@@ -228,16 +228,16 @@
 
 .sales-history {
   background: #ffffff;
-  border: 1px solid #cfdcc3;
+  border: 1px solid #e3e6ea;
   border-radius: 12px;
   padding: 25px 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
 }
 
 .sales-history h2 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #333;
+  color: #343940;
 }
 
 .sales-history-table {
@@ -246,26 +246,26 @@
 }
 
 .sales-history-table thead {
-  background: #eaf4de;
+  background: #edf6e8;
 }
 
 .sales-history-table th {
   padding: 14px;
   text-align: center;
   font-size: 16px;
-  color: #555;
-  border-bottom: 2px solid #cfdcc3;
+  color: #68717e;
+  border-bottom: 2px solid #dcebd5;
 }
 
 .sales-history-table td {
   padding: 14px;
   text-align: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e8eaed;
   font-size: 15px;
 }
 
 .sales-history-table tbody tr:hover {
-  background: #f5faef;
+  background: #f7f9fb;
 }
 
 .pagination {
@@ -279,17 +279,17 @@
   min-width: 36px;
   height: 36px;
   padding: 0 10px;
-  border: 1px solid #d2e3bf;
+  border: 1px solid #d9dee5;
   border-radius: 7px;
   background: #fff;
-  color: #555;
+  color: #68717e;
   cursor: pointer;
 }
 
 .pagination button:hover:not(:disabled),
 .pagination button.active {
-  background: #6da12f;
-  border-color: #6da12f;
+  background: #66885f;
+  border-color: #66885f;
   color: #fff;
 }
 

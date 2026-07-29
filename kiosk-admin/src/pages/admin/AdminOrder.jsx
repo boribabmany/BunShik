@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import useAdminOrderStore from "../../store/adminOrderStore";
+import { getOrderDetail } from "../../api/adminOrderApi";
 import "../../styles/AdminOrder.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
@@ -18,10 +19,40 @@ export default function AdminOrder() {
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
   const [visibleCount, setVisibleCount] = useState(5);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [orderDetails, setOrderDetails] = useState({});
+  const [detailLoadingId, setDetailLoadingId] = useState(null);
+  const [detailErrorId, setDetailErrorId] = useState(null);
 
   useEffect(() => {
     loadOrders();
   }, [loadOrders]);
+
+  const handleOrderRowClick = async (orderId) => {
+    if (expandedOrderId === orderId) {
+      setExpandedOrderId(null);
+      return;
+    }
+
+    setExpandedOrderId(orderId);
+    setDetailErrorId(null);
+
+    if (orderDetails[orderId]) {
+      return;
+    }
+
+    setDetailLoadingId(orderId);
+
+    try {
+      const detail = await getOrderDetail(orderId);
+      setOrderDetails((prev) => ({ ...prev, [orderId]: detail }));
+    } catch (error) {
+      console.error("주문 상세 조회 실패:", error);
+      setDetailErrorId(orderId);
+    } finally {
+      setDetailLoadingId(null);
+    }
+  };
 
   const filteredOrders = orders
     .filter((order) => {
@@ -147,9 +178,23 @@ export default function AdminOrder() {
             {filteredOrders.slice(0, visibleCount).map((order) => {
               const isFinished =
                 order.order_status === "완료" || order.order_status === "취소";
+              const isExpanded = expandedOrderId === order.order_id;
+              const detail = orderDetails[order.order_id];
 
               return (
-                <tr key={order.order_id}>
+                <Fragment key={order.order_id}>
+                <tr
+                  className={`order-row ${isExpanded ? "expanded" : ""}`}
+                  onClick={() => handleOrderRowClick(order.order_id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleOrderRowClick(order.order_id);
+                    }
+                  }}
+                  tabIndex={0}
+                  aria-expanded={isExpanded}
+                >
                   <td>{order.order_number}</td>
                   <td>{order.created_at}</td>
                   <td>{order.order_type}</td>
@@ -160,9 +205,13 @@ export default function AdminOrder() {
                     <div className="order-action">
                       <button
                         type="button"
-                        onClick={() =>
-                          handleStatusChange(order.order_id, order.order_status)
-                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleStatusChange(
+                            order.order_id,
+                            order.order_status,
+                          );
+                        }}
                         disabled={isFinished}
                       >
                         {getStatusButtonText(order.order_status)}
@@ -170,7 +219,10 @@ export default function AdminOrder() {
 
                       <button
                         type="button"
-                        onClick={() => handleCancel(order.order_id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCancel(order.order_id);
+                        }}
                         disabled={isFinished}
                       >
                         취소
@@ -178,6 +230,82 @@ export default function AdminOrder() {
                     </div>
                   </td>
                 </tr>
+                {isExpanded && (
+                  <tr className="order-detail-row">
+                    <td colSpan="6">
+                      <div className="order-detail-panel">
+                        {detailLoadingId === order.order_id && (
+                          <p className="order-detail-message">
+                            주문 상세를 불러오는 중입니다.
+                          </p>
+                        )}
+
+                        {detailErrorId === order.order_id && (
+                          <p className="order-detail-message error">
+                            주문 상세를 불러오지 못했습니다.
+                          </p>
+                        )}
+
+                        {detail && (
+                          <>
+                            <div className="order-detail-heading">
+                              <strong>주문 상세</strong>
+                              <span>
+                                {detail.order_number} · {detail.order_type}
+                              </span>
+                            </div>
+
+                            <div className="order-detail-items">
+                              {detail.items.length > 0 ? (
+                                detail.items.map((item) => (
+                                  <div
+                                    className="order-detail-item"
+                                    key={item.order_item_id}
+                                  >
+                                    <div className="order-detail-item-main">
+                                      <strong>{item.menu_name}</strong>
+                                      <span>{item.quantity}개</span>
+                                      <span>
+                                        {(
+                                          item.unit_price * item.quantity
+                                        ).toLocaleString()}
+                                        원
+                                      </span>
+                                    </div>
+
+                                    {item.options.length > 0 && (
+                                      <div className="order-detail-options">
+                                        {item.options.map((option) => (
+                                          <span key={option.option_id}>
+                                            + {option.option_name} (
+                                            {option.option_price.toLocaleString()}
+                                            원)
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))
+                              ) : (
+                                <p className="order-detail-message">
+                                  주문 메뉴가 없습니다.
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="order-detail-total">
+                              <span>총 결제금액</span>
+                              <strong>
+                                {detail.total_price.toLocaleString()}원
+                              </strong>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </Fragment>
               );
             })}
           </tbody>

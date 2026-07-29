@@ -5,14 +5,14 @@
   align-items: center;
   margin-bottom: 22px;
   padding: 16px 20px;
-  border: 1px solid #d7e3d1;
+  border: 1px solid #d5e8cc;
   border-radius: 14px;
-  background: #dfeccc;
-  box-shadow: 0 4px 16px rgba(72, 104, 69, 0.07);
+  background: #e5f2de;
+  box-shadow: 0 4px 16px rgba(83, 112, 72, 0.08);
 }
 .admin-header h1 {
   margin: 0;
-  color: #2f3630;
+  color: #30343b;
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.5px;
@@ -21,10 +21,10 @@
 .logout-btn {
   min-width: 110px;
   height: 40px;
-  border: 1px solid #d5dad3;
+  border: 1px solid #778292;
   border-radius: 8px;
-  background: #fff;
-  color: #4b534d;
+  background: #778292;
+  color: #fff;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -34,8 +34,8 @@
     border-color 0.2s;
 }
 .logout-btn:hover {
-  border-color: #668d61;
-  background: #668d61;
+  border-color: #626d7d;
+  background: #626d7d;
   color: #fff;
 }
 /*  메인 레이아웃/ 왼쪽 요약 / 오른쪽 테이블 */
@@ -67,7 +67,7 @@
 /* ----------------------------옵션 테이블------------------------------------ */
 .table-title {
   margin: 0 0 14px;
-  color: #303731;
+  color: #343940;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -84,7 +84,7 @@
 .menu-table td {
   padding: 11px 12px;
   border: 0;
-  border-bottom: 1px solid #e7e9e6;
+  border-bottom: 1px solid #e8eaed;
   text-align: center;
 }
 
@@ -92,11 +92,11 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  background: #dce9d8;
-  color: #4b534d;
+  background: #f6f7f9;
+  color: #68717e;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: 0 1px 0 #cfdccc;
+  box-shadow: 0 1px 0 #e1e4e8;
 }
 
 .menu-table tbody tr {
@@ -104,7 +104,7 @@
 }
 
 .menu-table tbody tr:hover {
-  background: #f5f9f2;
+  background: #f7f9fb;
 }
 
 .menu-table tbody tr:last-child td {
@@ -129,10 +129,10 @@
 .menu-edit-btn,
 .option-edit-btn {
   padding: 9px 18px;
-  border: 1px solid #d5dad3;
+  border: 1px solid #8994a5;
   border-radius: 8px;
-  background: #fff;
-  color: #4b534d;
+  background: #8994a5;
+  color: #fff;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -144,8 +144,8 @@
 
 .menu-edit-btn:hover,
 .option-edit-btn:hover {
-  border-color: #668d61;
-  background: #668d61;
+  border-color: #707b8c;
+  background: #707b8c;
   color: #fff;
 }
 
@@ -154,7 +154,7 @@
 .admin-menu-page {
   width: 100%;
   height: 100vh;
-  background: #fff;
+  background: #f1f2f4;
   padding: 24px 30px;
   overflow: hidden;
 }
@@ -163,10 +163,10 @@
 .option-table-box {
   background: #fff;
   padding: 18px;
-  border: 1px solid #dbe5d6;
+  border: 1px solid #e3e6ea;
   border-radius: 14px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 16px rgba(72, 104, 69, 0.06);
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
 }
 
 .menu-table-box {
@@ -208,14 +208,14 @@
 
 .summary-title {
   margin: 0 0 4px;
-  color: #303731;
+  color: #343940;
   font-size: 22px;
   font-weight: 700;
 }
 
 .summary-card {
-  background: #f0f7eb;
-  border: 1px solid #dbe8d5;
+  background: #edf6e8;
+  border: 1px solid #dcebd5;
   border-radius: 12px;
   padding: 10px 14px;
   height: 72px;
@@ -224,7 +224,7 @@
 .summary-card p {
   margin: 0 0 3px;
   font-size: 14px;
-  color: #666;
+  color: #697168;
 }
 
 .summary-card strong {
@@ -237,7 +237,7 @@
   height: 40px;
   border: none;
   border-radius: 8px;
-  background: #668d61;
+  background: #66885f;
   color: #fff;
   font-weight: 600;
   cursor: pointer;
@@ -245,15 +245,15 @@
 }
 
 .summary-btn:hover {
-  background: #557b51;
+  background: #55764e;
 }
 
 .add-btn {
-  background: #7d8c79;
+  background: #7f8da3;
 }
 
 .add-btn:hover {
-  background: #687665;
+  background: #69778d;
 }
 
 /*------------------UpdateHistory 좌측하단-----------------------------------------*/
@@ -263,11 +263,11 @@
   padding: 18px;
   background: #fff;
   border-radius: 12px;
-  border: 1px solid #dbe5d6;
+  border: 1px solid #e3e6ea;
   height: 300px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 16px rgba(72, 104, 69, 0.06);
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
 }
 
 .history-list {
@@ -284,7 +284,7 @@
 
 .history-item {
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e8eaed;
 }
 
 .history-item:last-child {
@@ -299,7 +299,7 @@
 
 .history-item p {
   font-size: 14px;
-  color: #666;
+  color: #68717e;
 }
 /* 등록버튼 2개*/
 .add-btn-group {
@@ -340,7 +340,7 @@
   border: none;
   border-radius: 6px;
 
-  background: #668d61;
+  background: #66885f;
   color: #fff;
 
   font-size: 12px;
@@ -348,5 +348,5 @@
 }
 
 .sales-dashboard-btn:hover {
-  background: #557b51;
+  background: #55764e;
 }

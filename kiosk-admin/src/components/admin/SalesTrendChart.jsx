@@ -46,24 +46,24 @@ export default function SalesTrendChart() {
             >
               <defs>
                 <linearGradient id="salesGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6da12f" stopOpacity={0.32} />
-                  <stop offset="95%" stopColor="#6da12f" stopOpacity={0.03} />
+                  <stop offset="5%" stopColor="#66885f" stopOpacity={0.32} />
+                  <stop offset="95%" stopColor="#66885f" stopOpacity={0.03} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="#e7eee1" strokeDasharray="4 4" />
+              <CartesianGrid stroke="#e8eaed" strokeDasharray="4 4" />
               <XAxis
                 dataKey="date"
                 axisLine={false}
                 tickLine={false}
                 minTickGap={24}
-                tick={{ fill: "#777", fontSize: 12 }}
+                tick={{ fill: "#68717e", fontSize: 12 }}
               />
               <YAxis
                 yAxisId="sales"
                 axisLine={false}
                 tickLine={false}
                 width={68}
-                tick={{ fill: "#777", fontSize: 12 }}
+                tick={{ fill: "#68717e", fontSize: 12 }}
                 tickFormatter={(value) =>
                   value >= 10000
                     ? `${Math.round(value / 10000).toLocaleString()}만`
@@ -77,7 +77,7 @@ export default function SalesTrendChart() {
                 tickLine={false}
                 width={34}
                 allowDecimals={false}
-                tick={{ fill: "#8a8a8a", fontSize: 12 }}
+                tick={{ fill: "#7b8490", fontSize: 12 }}
               />
               <Tooltip
                 labelFormatter={(_, payload) =>
@@ -90,9 +90,9 @@ export default function SalesTrendChart() {
                   name,
                 ]}
                 contentStyle={{
-                  border: "1px solid #d2e3bf",
+                  border: "1px solid #dcebd5",
                   borderRadius: "10px",
-                  boxShadow: "0 5px 18px rgba(61, 91, 31, 0.12)",
+                  boxShadow: "0 5px 18px rgba(50, 57, 66, 0.10)",
                 }}
               />
               <Area
@@ -100,7 +100,7 @@ export default function SalesTrendChart() {
                 type="monotone"
                 dataKey="sales"
                 name="매출"
-                stroke="#6da12f"
+                stroke="#66885f"
                 strokeWidth={3}
                 fill="url(#salesGradient)"
               />
@@ -109,7 +109,7 @@ export default function SalesTrendChart() {
                 type="monotone"
                 dataKey="orders"
                 name="주문 수"
-                stroke="#5e5e5e"
+                stroke="#7f8da3"
                 strokeWidth={2}
                 dot={false}
                 activeDot={{ r: 5 }}

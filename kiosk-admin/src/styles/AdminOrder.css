@@ -94,6 +94,115 @@
   background: #f5faef;
 }
 
+.order-row {
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.order-row:focus-visible {
+  outline: 2px solid #6da12f;
+  outline-offset: -2px;
+}
+
+.order-row.expanded {
+  background: #f0f7e8;
+}
+
+.order-detail-row:hover,
+.order-detail-row {
+  background: #f8faf7;
+}
+
+.order-detail-row td {
+  padding: 0;
+  text-align: left;
+}
+
+.order-detail-panel {
+  padding: 18px 24px 20px;
+  border-top: 1px solid #dbe7d2;
+  border-bottom: 1px solid #dbe7d2;
+}
+
+.order-detail-heading,
+.order-detail-item-main,
+.order-detail-total {
+  display: flex;
+  align-items: center;
+}
+
+.order-detail-heading {
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.order-detail-heading span {
+  color: #777;
+  font-size: 13px;
+}
+
+.order-detail-items {
+  overflow: hidden;
+  border: 1px solid #dfe7da;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.order-detail-item {
+  padding: 12px 14px;
+  border-bottom: 1px solid #edf0eb;
+}
+
+.order-detail-item:last-child {
+  border-bottom: 0;
+}
+
+.order-detail-item-main {
+  gap: 16px;
+}
+
+.order-detail-item-main strong {
+  flex: 1;
+}
+
+.order-detail-item-main span:last-child {
+  min-width: 90px;
+  text-align: right;
+  font-weight: 600;
+}
+
+.order-detail-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 7px;
+  color: #777;
+  font-size: 13px;
+}
+
+.order-detail-total {
+  justify-content: flex-end;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.order-detail-total strong {
+  color: #557b51;
+  font-size: 18px;
+}
+
+.order-detail-message {
+  margin: 0;
+  padding: 14px;
+  color: #777;
+  text-align: center;
+}
+
+.order-detail-message.error {
+  color: #c34444;
+}
+
 /* =========================
    상태 버튼
 ========================= */

@@ -33,13 +33,13 @@ export default function PopularMenu() {
               layout="vertical"
               margin={{ top: 4, right: 20, bottom: 4, left: 10 }}
             >
-              <CartesianGrid stroke="#edf2e8" horizontal={false} />
+              <CartesianGrid stroke="#e8eaed" horizontal={false} />
               <XAxis
                 type="number"
                 allowDecimals={false}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#777", fontSize: 12 }}
+                tick={{ fill: "#68717e", fontSize: 12 }}
               />
               <YAxis
                 type="category"
@@ -47,15 +47,15 @@ export default function PopularMenu() {
                 width={82}
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#444", fontSize: 13 }}
+                tick={{ fill: "#343940", fontSize: 13 }}
               />
               <Tooltip
-                cursor={{ fill: "#f4f8ef" }}
+                cursor={{ fill: "#f7f9fb" }}
                 formatter={(value) => [`${Number(value).toLocaleString()}개`, "주문 수"]}
               />
               <Bar
                 dataKey="orderCount"
-                fill="#6da12f"
+                fill="#66885f"
                 radius={[0, 7, 7, 0]}
                 barSize={24}
               />

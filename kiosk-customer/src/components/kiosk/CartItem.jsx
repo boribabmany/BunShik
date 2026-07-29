@@ -26,7 +26,7 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
 
   useLayoutEffect(() => {
     if (language !== "en") {
-      setFontSize(46);
+      setFontSize(44);
       return;
     }
     if (!nameRef.current) return;

@@ -14,17 +14,30 @@ export default function AdminLogin() {
     e.preventDefault();
 
     try {
-      const result = await login(id, password);
+      const result = await login(id.trim(), password);
+      const accessToken = result?.data?.accessToken;
+
+      if (!accessToken) {
+        throw new Error("로그인 응답에 인증 토큰이 없습니다.");
+      }
 
       // JWT 저장
-      sessionStorage.setItem("accessToken", result.data.accessToken);
+      sessionStorage.setItem("accessToken", accessToken);
 
       // 로그인 여부 저장
       sessionStorage.setItem("isAdminLoggedIn", "true");
 
       navigate("/adminmenu");
     } catch (error) {
-      alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("isAdminLoggedIn");
+
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "아이디 또는 비밀번호가 올바르지 않습니다.";
+
+      alert(message);
     }
   };
 
@@ -57,6 +70,8 @@ export default function AdminLogin() {
             placeholder="아이디 입력"
             value={id}
             onChange={(e) => setId(e.target.value)}
+            autoComplete="username"
+            required
           />
 
           <input
@@ -64,6 +79,8 @@ export default function AdminLogin() {
             placeholder="비밀번호 입력"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+            required
           />
 
           <button type="submit">로그인</button>

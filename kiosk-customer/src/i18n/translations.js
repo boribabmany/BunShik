@@ -33,6 +33,7 @@ export const translations = {
       toppingAdd: "토핑 추가",
       maxSelect: (n) => `최대 ${n}개 선택`,
       addToCart: "메뉴 담기",
+      soldOut: "품절",
     },
     cart: {
       headerMenu: "메뉴",
@@ -142,6 +143,7 @@ export const translations = {
       toppingAdd: "Add Toppings",
       maxSelect: (n) => `Select up to ${n}`,
       addToCart: "Add to Cart",
+      soldOut: "Sold Out",
     },
     cart: {
       headerMenu: "Item",

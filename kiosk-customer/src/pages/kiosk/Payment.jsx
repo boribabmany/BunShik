@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
 import { translations, formatPrice } from "../../i18n/translations";
-import { createOrder, submitPayment, withRetry } from "../../api/orderApi";
+import {
+  createOrder,
+  submitPayment,
+  cancelOrder,
+  withRetry,
+} from "../../api/orderApi";
 import PaymentFailCard from "../../components/kiosk/PaymentFailCard";
 import EmptyCartModal from "../../components/kiosk/EmptyCartModal";
 import PaymentMethodModal from "../../components/kiosk/PaymentMethodModal";
@@ -37,14 +42,15 @@ function Payment() {
   const [failReason, setFailReason] = useState(null);
   const [isMethodModalOpen, setIsMethodModalOpen] = useState(false);
   const [lastMethod, setLastMethod] = useState("card");
-  const [qrMethod, setQrMethod] = useState(null); // "naverpay" | "kakaopay" | null
+  const [qrMethod, setQrMethod] = useState(null);
+  const [currentOrderId, setCurrentOrderId] = useState(null); // 생성된 주문 id 추적
 
   const isCartEmpty = items.length === 0;
   const totalPrice = getTotalPrice();
 
-  const handleGoToMenu = () => {
+  const handleGoToMenu = useCallback(() => {
     navigate("/menu", { replace: true });
-  };
+  }, [navigate]);
 
   const runPayment = async (method) => {
     setIsPaying(true);
@@ -68,32 +74,42 @@ function Payment() {
     }
 
     try {
-      const orderResult = await withRetry(() =>
-        createOrder({
-          items: items.map((item) => ({
-            menu_id: item.menu_id,
-            quantity: item.quantity,
-            option_ids: item.options.map((option) => option.option_id),
-          })),
-          order_type: orderType === "dine-in" ? "매장" : "포장",
-        }),
-      );
+      // 이미 생성된 주문(결제대기)이 있으면 재사용, 없으면 새로 생성
+      let orderId = currentOrderId;
+      let orderNumber;
 
-      if (orderResult.status !== "대기") {
-        setFailType("order-error");
-        setFailReason(orderResult.message ?? null);
-        return;
+      if (!orderId) {
+        const orderResult = await withRetry(() =>
+          createOrder({
+            items: items.map((item) => ({
+              menu_id: item.menu_id,
+              quantity: item.quantity,
+              option_ids: item.options.map((option) => option.option_id),
+            })),
+            order_type: orderType === "dine-in" ? "매장" : "포장",
+          }),
+        );
+
+        if (orderResult.status !== "대기") {
+          setFailType("order-error");
+          setFailReason(orderResult.message ?? null);
+          return;
+        }
+
+        orderId = orderResult.order_id;
+        orderNumber = orderResult.order_number;
+        setCurrentOrderId(orderId); // 재시도/취소를 위해 기억해둠
       }
 
       const paymentResult = await withRetry(() =>
         submitPayment({
-          order_id: orderResult.order_id,
+          order_id: orderId,
           payment_method: paymentMethod,
         }),
       );
 
       if (paymentResult.status === "성공") {
-        setOrderNumber(orderResult.order_number);
+        setOrderNumber(orderNumber ?? String(orderId));
         setTotalPrice(totalPrice);
         clearCart();
         navigate("/complete");
@@ -110,19 +126,17 @@ function Payment() {
     }
   };
 
-  // 결제수단 모달에서 선택했을 때 호출됨
   const handlePay = (method) => {
     setIsMethodModalOpen(false);
 
     if (QR_METHODS.includes(method)) {
-      setQrMethod(method); // QR 화면부터 보여줌
+      setQrMethod(method);
       return;
     }
 
-    runPayment(method); // 카드는 바로 진행
+    runPayment(method);
   };
 
-  // QR 화면이 끝나면(타이머 종료) 실제 결제 로직 진행
   const handleQrComplete = () => {
     const method = qrMethod;
     setQrMethod(null);
@@ -135,6 +149,25 @@ function Payment() {
       return;
     }
     setFailType(null);
+  };
+
+  // 뒤로가기 = 포기 → 결제대기 상태인 주문이 있으면 취소 처리 후 이동
+  const handleBack = async () => {
+    if (currentOrderId) {
+      const confirmed = window.confirm(
+        "결제를 그만두시겠어요? 진행 중인 주문이 취소됩니다.",
+      );
+      if (!confirmed) return;
+
+      try {
+        await cancelOrder(currentOrderId);
+      } catch (error) {
+        console.error("주문 취소 실패:", error);
+        // 취소 실패해도 화면 이동은 막지 않음 (사용자 경험상 뒤로가기는 항상 가능해야 함)
+      }
+    }
+
+    navigate(-1);
   };
 
   if (isCartEmpty) {
@@ -178,7 +211,7 @@ function Payment() {
       <button
         type="button"
         className="payment-back-button"
-        onClick={() => navigate(-1)}
+        onClick={handleBack}
       >
         <img src={backIcon} alt="" className="payment-back-icon" />
         <span className="payment-back-text">

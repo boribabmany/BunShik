@@ -141,6 +141,45 @@
   border-radius: 20px 20px 0 0;
 }
 
+.option-card-image-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 197px;
+}
+
+.option-card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+}
+
+.option-card-soldout-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px 20px 0 0;
+}
+
+.option-card-soldout-overlay span {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.option-card-toggle-btn:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+
 .option-card-name {
   position: absolute;
   top: 210px;

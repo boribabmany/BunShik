@@ -24,6 +24,8 @@ function OptionModal({ menu, onClose, onAdd, language }) {
   );
 
   const toggleOption = (option) => {
+    if (!option.option_is_available) return; // 품절 옵션은 선택 불가
+
     const exists = selectedOptions.find(
       (o) => o.option_id === option.option_id,
     );
@@ -84,6 +86,7 @@ function OptionModal({ menu, onClose, onAdd, language }) {
               const isSelected = selectedOptions.some(
                 (o) => o.option_id === option.option_id,
               );
+              const isOptionSoldOut = !option.option_is_available;
               const optionName = getLocalizedName(
                 language,
                 option.option_name,
@@ -92,11 +95,19 @@ function OptionModal({ menu, onClose, onAdd, language }) {
 
               return (
                 <div key={option.option_id} className="option-card">
-                  <img
-                    src={option.option_image}
-                    alt={optionName}
-                    className="option-card-image"
-                  />
+                  <div className="option-card-image-wrap">
+                    <img
+                      src={option.option_image}
+                      alt={optionName}
+                      className="option-card-image"
+                    />
+                    {isOptionSoldOut && (
+                      <div className="option-card-soldout-overlay">
+                        <span>{t.soldOut}</span>
+                      </div>
+                    )}
+                  </div>
+
                   <p className="option-card-name">{optionName}</p>
                   <p className="option-card-price">
                     {formatPrice(language, option.option_price)}
@@ -105,6 +116,7 @@ function OptionModal({ menu, onClose, onAdd, language }) {
                   <button
                     type="button"
                     onClick={() => toggleOption(option)}
+                    disabled={isOptionSoldOut}
                     className={`option-card-toggle-btn ${isSelected ? "is-selected" : ""}`}
                   >
                     {isSelected ? "✓" : "+"}

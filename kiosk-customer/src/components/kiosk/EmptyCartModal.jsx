@@ -9,20 +9,21 @@ function EmptyCartModal({ onConfirm, language }) {
   const t = translations[language].emptyCart;
   const [remaining, setRemaining] = useState(AUTO_CLOSE_SECONDS);
 
+  // 1초마다 카운트다운 (여기서는 상태 계산만, 부수효과 없음)
   useEffect(() => {
     const interval = setInterval(() => {
-      setRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          onConfirm();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setRemaining((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [onConfirm]);
+  }, []);
+
+  // remaining이 0이 되는 순간에만 onConfirm 호출 (렌더링과 분리된 별도 effect)
+  useEffect(() => {
+    if (remaining === 0) {
+      onConfirm();
+    }
+  }, [remaining, onConfirm]);
 
   const progressPercent = (remaining / AUTO_CLOSE_SECONDS) * 100;
 

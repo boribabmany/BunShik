@@ -96,3 +96,19 @@ export const submitPayment = async (request) => {
     throw normalizeError(error);
   }
 };
+
+/**
+ * 주문 취소 (결제 포기 시)
+ * @param {number} orderId
+ */
+export const cancelOrder = async (orderId) => {
+  try {
+    const response = await axios.patch(`${ORDER_URL}/${orderId}/cancel`, null, {
+      timeout: REQUEST_TIMEOUT,
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("주문 취소 실패:", error);
+    throw normalizeError(error);
+  }
+};

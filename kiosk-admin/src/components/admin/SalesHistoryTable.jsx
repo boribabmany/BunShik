@@ -25,7 +25,7 @@ export default function SalesHistoryTable() {
           <tr>
             <th>날짜</th>
             <th>주문수</th>
-            <th>매출</th>``
+            <th>매출</th>
           </tr>
         </thead>
 

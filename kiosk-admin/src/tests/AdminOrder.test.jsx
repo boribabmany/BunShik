@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AdminOrder from "../pages/admin/AdminOrder";
 import useAdminOrderStore from "../store/adminOrderStore";
 import { getOrderDetail } from "../api/adminOrderApi";
+import { getKoreaDateString } from "../utils/date";
 
 jest.mock("react-router-dom", () => ({
   useNavigate: () => jest.fn(),
@@ -11,7 +12,7 @@ jest.mock("../api/adminOrderApi", () => ({
   getOrderDetail: jest.fn(),
 }));
 
-const today = new Date().toISOString().slice(0, 10);
+const today = getKoreaDateString();
 
 const order = {
   order_id: 1,

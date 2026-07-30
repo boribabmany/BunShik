@@ -4,6 +4,7 @@ import {
   updateOrderStatus,
   cancelOrder,
 } from "../api/adminOrderApi";
+import { getKoreaDateString } from "../utils/date";
 
 const useAdminOrderStore = create((set, get) => ({
   orders: [],
@@ -14,7 +15,7 @@ const useAdminOrderStore = create((set, get) => ({
     try {
       const data = await getOrders();
 
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getKoreaDateString();
 
       const todaySales = data
         .filter(

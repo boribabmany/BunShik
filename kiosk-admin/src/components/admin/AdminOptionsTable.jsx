@@ -26,7 +26,10 @@ export default function AdminOptionsTable({ onImageClick }) {
 
           <tbody>
             {optionList.map((option) => (
-              <tr key={option.option_id}>
+              <tr
+                key={option.option_id}
+                className={!option.is_visible ? "menu-stopped-row" : ""}
+              >
                 <td className="number-col">{option.option_id}</td>
                 <td>
                   {option.option_image ? (
@@ -46,7 +49,23 @@ export default function AdminOptionsTable({ onImageClick }) {
                 </td>
                 <td>{option.option_name}</td>
                 <td>{option.option_price.toLocaleString()}원</td>
-                <td>{option.option_is_available ? "판매중" : "품절"}</td>
+                <td>
+                  <span
+                    className={`menu-status-badge ${
+                      !option.is_visible
+                        ? "menu-status-stopped"
+                        : option.option_is_available
+                          ? "menu-status-active"
+                          : "menu-status-soldout"
+                    }`}
+                  >
+                    {!option.is_visible
+                      ? "판매중단"
+                      : option.option_is_available
+                        ? "판매중"
+                        : "품절"}
+                  </span>
+                </td>
                 <td>
                   <button
                     className="option-edit-btn"
@@ -64,15 +83,6 @@ export default function AdminOptionsTable({ onImageClick }) {
           </tbody>
         </table>
 
-        {/* 하단 버튼 */}
-        <div className="table-button-area">
-          <button
-            className="option-edit-btn"
-            onClick={() => navigate("/adminmenuedit")}
-          >
-            옵션 수정
-          </button>
-        </div>
       </div>
     </div>
   );

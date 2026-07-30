@@ -4,6 +4,7 @@ import useMenuStore from "../../store/menuStore";
 import useAdminOrderStore from "../../store/adminOrderStore";
 import useOptionStore from "../../store/optionStore";
 import UpdateHistory from "./UpdateHistory";
+import { getKoreaDateString } from "../../utils/date";
 
 export default function AdminSummary({ onMoveOrder }) {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ export default function AdminSummary({ onMoveOrder }) {
   const totalOptions = optionList.length;
 
   // 오늘 주문 수
-  const todayDate = new Date().toISOString().slice(0, 10);
+  const todayDate = getKoreaDateString();
 
   const todayOrdersCount = orders
     ? orders.filter((o) => o.created_at?.startsWith(todayDate)).length

@@ -118,11 +118,44 @@
   border-radius: 8px;
 }
 
-/* 버튼 영역 */
-.table-button-area {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 15px;
+.menu-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.menu-status-active {
+  background: #eaf4de;
+  color: #4f7823;
+}
+
+.menu-status-soldout {
+  background: #f2f3f1;
+  color: #656b66;
+}
+
+.menu-status-stopped {
+  background: #7d8c79;
+  color: #fff;
+}
+
+.menu-table tbody tr.menu-stopped-row,
+.menu-table tbody tr.menu-stopped-row:hover {
+  background: #f7f8f6;
+}
+
+.menu-stopped-row td:not(:last-child) {
+  color: #7a807a;
+}
+
+.menu-stopped-row img {
+  filter: grayscale(100%);
+  opacity: 0.55;
 }
 
 /* 메뉴 수정 버튼, 옵션 수정 버튼 공통 */

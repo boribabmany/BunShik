@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import useAdminOrderStore from "../../store/adminOrderStore";
 import { getOrderDetail } from "../../api/adminOrderApi";
+import { getKoreaDateString } from "../../utils/date";
 import "../../styles/AdminOrder.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
@@ -15,7 +16,7 @@ export default function AdminOrder() {
     cancelOrder: storeCancelOrder,
   } = useAdminOrderStore();
 
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(getKoreaDateString());
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
   const [visibleCount, setVisibleCount] = useState(5);
@@ -170,9 +171,6 @@ export default function AdminOrder() {
           <option value="취소">취소</option>
         </select>
 
-        <button type="button" className="search-btn">
-          검색
-        </button>
       </section>
 
       <div className="order-table-box">

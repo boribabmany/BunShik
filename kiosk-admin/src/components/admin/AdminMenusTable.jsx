@@ -24,7 +24,10 @@ export default function AdminMenusTable({ onImageClick }) {
           </thead>
           <tbody>
             {menuList.map((menu) => (
-              <tr key={menu.menu_id}>
+              <tr
+                key={menu.menu_id}
+                className={!menu.is_visible ? "menu-stopped-row" : ""}
+              >
                 <td className="number-col">{menu.menu_id}</td>
                 <td>
                   {menu.image_url ? (
@@ -45,7 +48,23 @@ export default function AdminMenusTable({ onImageClick }) {
                 <td>{menu.menu_name}</td>
                 <td>{menu.category}</td>
                 <td>{menu.price.toLocaleString()}원</td>
-                <td>{menu.is_available ? "판매중" : "품절"}</td>
+                <td>
+                  <span
+                    className={`menu-status-badge ${
+                      !menu.is_visible
+                        ? "menu-status-stopped"
+                        : menu.is_available
+                          ? "menu-status-active"
+                          : "menu-status-soldout"
+                    }`}
+                  >
+                    {!menu.is_visible
+                      ? "판매중단"
+                      : menu.is_available
+                        ? "판매중"
+                        : "품절"}
+                  </span>
+                </td>
                 <td>
                   {" "}
                   <button
@@ -65,15 +84,6 @@ export default function AdminMenusTable({ onImageClick }) {
           </tbody>
         </table>
 
-        {/* 하단 버튼 */}
-        <div className="table-button-area">
-          <button
-            className="menu-edit-btn"
-            onClick={() => navigate("/adminmenuedit")}
-          >
-            메뉴 수정
-          </button>
-        </div>
       </div>
     </div>
   );

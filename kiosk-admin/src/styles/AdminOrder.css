@@ -28,7 +28,7 @@
 
 .search-area {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 170px;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
 
   background: #eaf4de;
@@ -46,18 +46,6 @@
   border-radius: 6px;
   padding: 0 12px;
   font-size: 14px;
-}
-
-.search-btn {
-  border: none;
-  border-radius: 6px;
-  background: #6da12f;
-  color: #fff;
-  cursor: pointer;
-}
-
-.search-btn:hover {
-  background: #5b8928;
 }
 
 /* =========================

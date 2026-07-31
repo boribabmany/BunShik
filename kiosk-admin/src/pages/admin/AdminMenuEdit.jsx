@@ -190,6 +190,15 @@ export default function AdminMenuEdit() {
       alert(error);
       return;
     }
+
+    if (
+      selectedItem.category?.trim() === "세트" &&
+      selectedComponentIds.length === 0
+    ) {
+      alert("세트 메뉴는 구성 메뉴를 한 개 이상 선택해야 합니다.");
+      return;
+    }
+
     try {
       const formData = createMenuFormData(
         selectedItem,
@@ -215,6 +224,15 @@ export default function AdminMenuEdit() {
       alert(error);
       return;
     }
+
+    if (
+      selectedItem.category?.trim() === "세트" &&
+      selectedComponentIds.length === 0
+    ) {
+      alert("세트 메뉴는 구성 메뉴를 한 개 이상 선택해야 합니다.");
+      return;
+    }
+
     try {
       const formData = createMenuFormData(
         selectedItem,

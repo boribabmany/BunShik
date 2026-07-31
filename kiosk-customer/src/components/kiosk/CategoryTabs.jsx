@@ -2,7 +2,7 @@ import { useRef } from "react";
 import backIcon from "../../images/backicon.png";
 import { translations } from "../../i18n/translations";
 
-const categories = ["전체", "떡볶이", "라면", "김밥", "사이드", "음료"];
+const categories = ["전체", "세트", "떡볶이", "라면", "김밥", "사이드", "음료"];
 
 function CategoryTabs({ selected, onSelect, language }) {
   const scrollRef = useRef(null);

@@ -12,6 +12,7 @@ export const translations = {
     menu: {
       categories: {
         전체: "전체",
+        세트: "세트",
         떡볶이: "떡볶이",
         라면: "라면",
         김밥: "김밥",
@@ -122,6 +123,7 @@ export const translations = {
     menu: {
       categories: {
         전체: "All",
+        세트: "Set",
         떡볶이: "Tteokbokki",
         라면: "Ramen",
         김밥: "Kimbap",

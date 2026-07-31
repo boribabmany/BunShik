@@ -3,6 +3,8 @@ import {
   getMenus,
   createMenu,
   updateMenu,
+  getSetComponents,
+  updateSetComponents,
   stopMenu,
   resumeMenu,
 } from "../api/menuApi";
@@ -22,13 +24,15 @@ const useMenuStore = create((set) => ({
 
   // 메뉴 등록
   addMenu: async (formData) => {
-    await createMenu(formData);
+    const menuId = await createMenu(formData);
 
     const menus = await getMenus();
 
     set({
       menuList: menus,
     });
+
+    return menuId;
   },
 
 
@@ -41,6 +45,17 @@ const useMenuStore = create((set) => ({
     set({
       menuList: menus,
     });
+  },
+
+  loadSetComponents: async (menuId) => {
+    return getSetComponents(menuId);
+  },
+
+  saveSetComponents: async (menuId, componentMenuIds) => {
+    await updateSetComponents(menuId, componentMenuIds);
+
+    const menus = await getMenus();
+    set({ menuList: menus });
   },
 
 

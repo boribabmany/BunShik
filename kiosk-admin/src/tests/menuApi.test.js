@@ -2,6 +2,8 @@ import api from "../api/axios";
 import {
   getMenus,
   createMenu,
+  getSetComponents,
+  updateSetComponents,
   updateMenu,
   stopMenu,
   resumeMenu,
@@ -34,6 +36,7 @@ describe("menuApi", () => {
             price: 5000,
             imageUrl: "/images/tteokbokki.webp",
             isAvailable: true,
+            effectiveAvailable: false,
             isVisible: true,
             description: "매운 떡볶이",
             descriptionEn: "Spicy rice cakes",
@@ -53,13 +56,55 @@ describe("menuApi", () => {
         category: "분식",
         price: 5000,
         image_url: "http://localhost:8080/images/tteokbokki.webp",
-        is_available: true,
+        is_available: false,
+        base_is_available: true,
         is_visible: true,
         description: "매운 떡볶이",
         description_en: "Spicy rice cakes",
         option_ids: [],
       },
     ]);
+  });
+
+  test("세트 구성 메뉴를 조회해 화면용 데이터로 변환한다", async () => {
+    api.get.mockResolvedValue({
+      data: {
+        data: [
+          {
+            menuId: 1,
+            menuName: "떡볶이",
+            category: "떡볶이",
+            price: 5000,
+            isAvailable: true,
+            isVisible: true,
+          },
+        ],
+      },
+    });
+
+    const components = await getSetComponents(10);
+
+    expect(api.get).toHaveBeenCalledWith(
+      "/api/admin/menus/10/components",
+    );
+    expect(components[0]).toMatchObject({
+      menu_id: 1,
+      menu_name: "떡볶이",
+      base_is_available: true,
+      is_available: true,
+    });
+  });
+
+  test("선택한 세트 구성 메뉴 ID 목록을 저장한다", async () => {
+    api.put.mockResolvedValue({ data: { data: 3 } });
+
+    await expect(updateSetComponents(10, [1, 2, 3])).resolves.toBe(3);
+    expect(api.put).toHaveBeenCalledWith(
+      "/api/admin/menus/10/components",
+      {
+        componentMenuIds: [1, 2, 3],
+      },
+    );
   });
 
   test("메뉴 등록 요청을 전송하고 응답 데이터를 반환한다", async () => {

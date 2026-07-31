@@ -49,6 +49,21 @@
   box-shadow: 0 4px 16px rgba(47, 54, 48, 0.05);
 }
 
+.table-section-title {
+  margin: 0;
+  padding: 12px 16px;
+  border-bottom: 1px solid #cfdcc3;
+  background: #f7fbf2;
+  color: #303731;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.empty-table-message {
+  height: 64px;
+  color: #7a807a;
+}
+
 .edit-table {
   width: 100%;
   border-collapse: collapse;
@@ -265,6 +280,68 @@
 .form-group select:focus {
   border-color: #6da12f;
   box-shadow: 0 0 0 3px rgba(109, 161, 47, 0.14);
+}
+
+.set-components-field {
+  margin-bottom: 14px;
+}
+
+.set-components-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4b534d;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.set-components-list {
+  max-height: 190px;
+  overflow-y: auto;
+  border: 1px solid #cfdcc3;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.set-component-option {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-bottom: 1px solid #edf0eb;
+  cursor: pointer;
+}
+
+.set-component-option:last-child {
+  border-bottom: 0;
+}
+
+.set-component-option:hover {
+  background: #f5faef;
+}
+
+.set-component-option input {
+  width: 16px;
+  height: 16px;
+  accent-color: #6da12f;
+}
+
+.set-component-option span {
+  color: #303731;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.set-component-option small,
+.set-components-message {
+  color: #7a807a;
+  font-size: 12px;
+}
+
+.set-components-message {
+  margin: 0;
+  padding: 14px;
+  text-align: center;
 }
 
 .image-upload {

@@ -218,6 +218,26 @@
   overflow-y: auto;
 }
 
+.admin-menu-section + .admin-menu-section {
+  margin-top: 18px;
+}
+
+.menu-section-title {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #e3e6ea;
+  border-bottom: 0;
+  background: #eef5e7;
+  color: #343940;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.menu-empty-message {
+  height: 64px;
+  color: #7a807a;
+}
+
 .option-table-scroll {
   max-height: 214px;
   padding-right: 4px;

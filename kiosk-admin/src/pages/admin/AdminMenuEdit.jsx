@@ -7,7 +7,16 @@ import ImagePreviewModal from "../../components/admin/ImagePreviewModal";
 import "../../styles/AdminMenuEdit.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
-const createMenuFormData = (menu, imageFile) => {
+const MENU_CATEGORIES = [
+  "세트",
+  "떡볶이",
+  "라면",
+  "김밥",
+  "사이드",
+  "음료",
+];
+
+const createMenuFormData = (menu, imageFile, componentMenuIds = []) => {
   const formData = new FormData();
 
   formData.append("menuName", menu.menu_name);
@@ -16,7 +25,16 @@ const createMenuFormData = (menu, imageFile) => {
   formData.append("category", menu.category);
   formData.append("description", menu.description || "");
   formData.append("descriptionEn", menu.description_en || "");
-  formData.append("isAvailable", menu.is_available);
+  formData.append(
+    "isAvailable",
+    menu.base_is_available ?? menu.is_available,
+  );
+
+  if (menu.category?.trim() === "세트") {
+    componentMenuIds.forEach((menuId) => {
+      formData.append("componentMenuIds", menuId);
+    });
+  }
 
   if (imageFile) {
     formData.append("file", imageFile);
@@ -26,7 +44,15 @@ const createMenuFormData = (menu, imageFile) => {
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
-  const { menuList, loadMenus, addMenu, editMenu, stopMenu, resumeMenu } = useMenuStore();
+  const {
+    menuList,
+    loadMenus,
+    addMenu,
+    editMenu,
+    loadSetComponents,
+    stopMenu,
+    resumeMenu,
+  } = useMenuStore();
   const { optionList, loadOptions, addOption, editOption, stopOption, resumeOption, } = useOptionStore();
   const [selectedItem, setSelectedItem] = useState(null);
   const [editMode, setEditMode] = useState("menu");
@@ -34,8 +60,11 @@ export default function AdminMenuEdit() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [enlargedImage, setEnlargedImage] = useState(null);
+  const [selectedComponentIds, setSelectedComponentIds] = useState([]);
+  const [isComponentsLoading, setIsComponentsLoading] = useState(false);
   const location = useLocation();
   const [menuPage, setMenuPage] = useState(1);
+  const [setListPage, setSetListPage] = useState(1);
   const [optionPage, setOptionPage] = useState(1);
   const MENU_PER_PAGE = 5;
   const OPTION_PER_PAGE = 3;
@@ -57,6 +86,7 @@ export default function AdminMenuEdit() {
     if (location.state.isAddMode) {
       setEditMode(location.state.type);
       setIsAddMode(true);
+      setSelectedComponentIds([]);
 
       if (location.state.type === "menu") {
         setSelectedItem({ menu_name: "", menu_name_en: "",  category: "", price: 0, is_available: true, image_url: "", description: "", description_en: "",
@@ -74,6 +104,55 @@ export default function AdminMenuEdit() {
       setIsAddMode(false);
     }
   }, [location.state]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchSetComponents = async () => {
+      if (
+        editMode !== "menu" ||
+        isAddMode ||
+        !selectedItem?.menu_id ||
+        selectedItem.category?.trim() !== "세트"
+      ) {
+        setSelectedComponentIds([]);
+        return;
+      }
+
+      setIsComponentsLoading(true);
+
+      try {
+        const components = await loadSetComponents(selectedItem.menu_id);
+
+        if (!ignore) {
+          setSelectedComponentIds(
+            components.map((component) => component.menu_id),
+          );
+        }
+      } catch (error) {
+        if (!ignore) {
+          console.error("세트 구성 조회 실패:", error);
+          alert("세트 구성을 불러오지 못했습니다.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsComponentsLoading(false);
+        }
+      }
+    };
+
+    fetchSetComponents();
+
+    return () => {
+      ignore = true;
+    };
+  }, [
+    editMode,
+    isAddMode,
+    loadSetComponents,
+    selectedItem?.category,
+    selectedItem?.menu_id,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -112,8 +191,13 @@ export default function AdminMenuEdit() {
       return;
     }
     try {
-      const formData = createMenuFormData(selectedItem, imageFile);
+      const formData = createMenuFormData(
+        selectedItem,
+        imageFile,
+        selectedComponentIds,
+      );
       await editMenu(selectedItem.menu_id, formData);
+
       alert("수정되었습니다.");
       setSelectedItem(null);
       setImageFile(null);
@@ -132,9 +216,14 @@ export default function AdminMenuEdit() {
       return;
     }
     try {
-      const formData = createMenuFormData(selectedItem, imageFile);
+      const formData = createMenuFormData(
+        selectedItem,
+        imageFile,
+        selectedComponentIds,
+      );
 
       await addMenu(formData);
+
       alert("등록되었습니다.");
       setSelectedItem(null);
       setImageFile(null);
@@ -155,6 +244,13 @@ export default function AdminMenuEdit() {
     setImagePreviewUrl(null);
     setIsAddMode(false);
   };
+  const handleComponentToggle = (menuId) => {
+    setSelectedComponentIds((currentIds) =>
+      currentIds.includes(menuId)
+        ? currentIds.filter((id) => id !== menuId)
+        : [...currentIds, menuId],
+    );
+  };
   // 메뉴와 옵션 이름 수정
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -166,6 +262,8 @@ export default function AdminMenuEdit() {
             ? ""
             : Number(value)
           : name === "is_available" || name === "option_is_available"
+            ? value === "true"
+          : name === "base_is_available"
             ? value === "true"
             : value,
     }));
@@ -242,9 +340,24 @@ export default function AdminMenuEdit() {
   };
   //---------------------------------------------------------------------
   //메뉴페이지
+  const regularMenuList = menuList.filter(
+    (menu) => menu.category?.trim() !== "세트",
+  );
+  const setMenuList = menuList.filter(
+    (menu) => menu.category?.trim() === "세트",
+  );
   const menuStart = (menuPage - 1) * MENU_PER_PAGE;
-  const currentMenus = menuList.slice(menuStart, menuStart + MENU_PER_PAGE);
-  const menuTotalPage = Math.ceil(menuList.length / MENU_PER_PAGE);
+  const currentMenus = regularMenuList.slice(
+    menuStart,
+    menuStart + MENU_PER_PAGE,
+  );
+  const menuTotalPage = Math.ceil(regularMenuList.length / MENU_PER_PAGE);
+  const setMenuStart = (setListPage - 1) * MENU_PER_PAGE;
+  const currentSetMenus = setMenuList.slice(
+    setMenuStart,
+    setMenuStart + MENU_PER_PAGE,
+  );
+  const setMenuTotalPage = Math.ceil(setMenuList.length / MENU_PER_PAGE);
   //옵션페이지
   const optionStart = (optionPage - 1) * OPTION_PER_PAGE;
   const currentOptions = optionList.slice(
@@ -263,6 +376,71 @@ export default function AdminMenuEdit() {
   const handleImageClick = (imageUrl, alt) => {
     if (!imageUrl) return;
     setEnlargedImage({ imageUrl, alt });
+  };
+  const renderMenuRows = (menus, emptyMessage) => {
+    if (menus.length === 0) {
+      return (
+        <tr>
+          <td colSpan="7" className="empty-table-message">
+            {emptyMessage}
+          </td>
+        </tr>
+      );
+    }
+
+    return menus.map((menu) => (
+      <tr
+        key={menu.menu_id}
+        className={!menu.is_visible ? "stopped-row" : ""}
+      >
+        <td>
+          {menu.image_url ? (
+            <button
+              type="button"
+              className="image-preview-trigger"
+              aria-label={`${menu.menu_name} 사진 확대`}
+              onClick={() => handleImageClick(menu.image_url, menu.menu_name)}
+            >
+              <img src={menu.image_url} alt={menu.menu_name} />
+            </button>
+          ) : (
+            "-"
+          )}
+        </td>
+        <td>{menu.menu_name}</td>
+        <td>{menu.menu_name_en || "-"}</td>
+        <td>{menu.category}</td>
+        <td>{menu.price.toLocaleString()}원</td>
+        <td>
+          <span
+            className={`status-badge ${
+              !menu.is_visible
+                ? "status-stopped"
+                : menu.is_available
+                  ? "status-active"
+                  : "status-soldout"
+            }`}
+          >
+            {!menu.is_visible
+              ? "판매중단"
+              : menu.is_available
+                ? "판매중"
+                : "품절"}
+          </span>
+        </td>
+        <td>
+          <button onClick={() => handleEditClick("menu", menu)}>수정</button>
+          <button
+            className={`visibility-toggle-btn ${
+              menu.is_visible ? "stop-btn" : "resume-btn"
+            }`}
+            onClick={() => handleToggleMenu(menu)}
+          >
+            {menu.is_visible ? "판매중단" : "판매재개"}
+          </button>
+        </td>
+      </tr>
+    ));
   };
   // -----------------------------------------------------------------------
   return (
@@ -298,8 +476,9 @@ export default function AdminMenuEdit() {
           </button>
         </div>
 
-        {/* 메뉴 테이블 */}
+        {/* 세트 메뉴 테이블 */}
         <div className="edit-table-box">
+          <h3 className="table-section-title">세트 메뉴</h3>
           <table className="edit-table">
             <thead>
               <tr>
@@ -313,63 +492,39 @@ export default function AdminMenuEdit() {
               </tr>
             </thead>
             <tbody>
-              {currentMenus.map((menu) => (
-                <tr
-                  key={menu.menu_id}
-                  className={!menu.is_visible ? "stopped-row" : ""}
-                >
-                  <td>
-                    {menu.image_url ? (
-                      <button
-                        type="button"
-                        className="image-preview-trigger"
-                        aria-label={`${menu.menu_name} 사진 확대`}
-                        onClick={() =>
-                          handleImageClick(menu.image_url, menu.menu_name)
-                        }
-                      >
-                        <img src={menu.image_url} alt={menu.menu_name} />
-                      </button>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td>{menu.menu_name}</td>
-                  <td>{menu.menu_name_en || "-"}</td>
-                  <td>{menu.category}</td>
-                  <td>{menu.price.toLocaleString()}원</td>
-                  <td>
-                    <span
-                      className={`status-badge ${
-                        !menu.is_visible
-                          ? "status-stopped"
-                          : menu.is_available
-                            ? "status-active"
-                            : "status-soldout"
-                      }`}
-                    >
-                      {!menu.is_visible
-                        ? "판매중단"
-                        : menu.is_available
-                          ? "판매중"
-                          : "품절"}
-                    </span>
-                  </td>
-                  <td>
-                    <button onClick={() => handleEditClick("menu", menu)}>
-                      수정
-                    </button>
-                    <button
-                      className={`visibility-toggle-btn ${
-                        menu.is_visible ? "stop-btn" : "resume-btn"
-                      }`}
-                      onClick={() => handleToggleMenu(menu)}
-                    >
-                      {menu.is_visible ? "판매중단" : "판매재개"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {renderMenuRows(currentSetMenus, "등록된 세트 메뉴가 없습니다.")}
+            </tbody>
+          </table>
+          <div className="pagination">
+            {Array.from({ length: setMenuTotalPage }, (_, i) => (
+              <button
+                key={i}
+                className={setListPage === i + 1 ? "active" : ""}
+                onClick={() => setSetListPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 일반 메뉴 테이블 */}
+        <div className="edit-table-box">
+          <h3 className="table-section-title">일반 메뉴</h3>
+          <table className="edit-table">
+            <thead>
+              <tr>
+                <th>사진</th>
+                <th>메뉴명</th>
+                <th>영문명</th>
+                <th>카테고리</th>
+                <th>가격</th>
+                <th>상태</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderMenuRows(currentMenus, "등록된 일반 메뉴가 없습니다.")}
             </tbody>
           </table>
           <div className="pagination">
@@ -561,11 +716,18 @@ export default function AdminMenuEdit() {
             <>
               <div className="form-group">
                 <label>카테고리</label>
-                <input
+                <select
                   name="category"
                   value={selectedItem?.category || ""}
                   onChange={handleInputChange}
-                />
+                >
+                  <option value="">카테고리 선택</option>
+                  {MENU_CATEGORIES.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group">
@@ -585,6 +747,48 @@ export default function AdminMenuEdit() {
                   onChange={handleInputChange}
                 />
               </div>
+
+              {selectedItem?.category?.trim() === "세트" && (
+                <div className="set-components-field">
+                  <span className="set-components-label">구성 메뉴</span>
+                  <div className="set-components-list">
+                    {isComponentsLoading ? (
+                      <p className="set-components-message">
+                        구성 메뉴를 불러오는 중입니다.
+                      </p>
+                    ) : regularMenuList.length === 0 ? (
+                      <p className="set-components-message">
+                        선택할 일반 메뉴가 없습니다.
+                      </p>
+                    ) : (
+                      regularMenuList.map((menu) => (
+                        <label
+                          key={menu.menu_id}
+                          className="set-component-option"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedComponentIds.includes(
+                              menu.menu_id,
+                            )}
+                            onChange={() =>
+                              handleComponentToggle(menu.menu_id)
+                            }
+                          />
+                          <span>{menu.menu_name}</span>
+                          <small>
+                            {!menu.is_visible
+                              ? "판매중단"
+                              : menu.is_available
+                                ? menu.category
+                                : "품절"}
+                          </small>
+                        </label>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
             </>
           )}
 
@@ -623,11 +827,14 @@ export default function AdminMenuEdit() {
             <label>상태</label>
             <select
               name={
-                editMode === "menu" ? "is_available" : "option_is_available"
+                editMode === "menu"
+                  ? "base_is_available"
+                  : "option_is_available"
               }
               value={
                 editMode === "menu"
-                  ? selectedItem?.is_available
+                  ? (selectedItem?.base_is_available ??
+                    selectedItem?.is_available)
                   : selectedItem?.option_is_available
               }
               onChange={handleInputChange}

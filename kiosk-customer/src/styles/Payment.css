@@ -202,6 +202,26 @@
   cursor: pointer;
 }
 
+/* ---------- 뒤로가기 버튼 (하단, 왼쪽56px, 글씨48) ---------- */
+.payment-back-button {
+  position: absolute;
+  left: 56px;
+  bottom: 56px;
+  width: 360px;
+  height: 120px;
+  border-radius: 20px;
+  border: 1px solid #c4c7c7;
+  background: #ffffff;
+  box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.payment-back-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 /* 뒤로가기 버튼 안 화살표 이미지: 버튼 왼쪽에서 42px, 세로 중앙 정렬 */
 .payment-back-icon {
   position: absolute;

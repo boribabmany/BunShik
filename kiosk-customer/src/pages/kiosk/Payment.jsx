@@ -153,6 +153,8 @@ function Payment() {
 
   // 뒤로가기 = 포기 → 결제대기 상태인 주문이 있으면 취소 처리 후 이동
   const handleBack = async () => {
+    if (isPaying) return; // 결제 처리 중엔 뒤로가기(취소) 불가
+
     if (currentOrderId) {
       const confirmed = window.confirm(
         "결제를 그만두시겠어요? 진행 중인 주문이 취소됩니다.",
@@ -212,6 +214,7 @@ function Payment() {
         type="button"
         className="payment-back-button"
         onClick={handleBack}
+        disabled={isPaying}
       >
         <img src={backIcon} alt="" className="payment-back-icon" />
         <span className="payment-back-text">

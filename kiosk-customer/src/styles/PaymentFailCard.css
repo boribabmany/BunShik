@@ -52,14 +52,19 @@
 }
 
 .fail-card-btn-outline {
-  width: 180px;
+  min-width: 180px; /* width → min-width */
   height: 90px;
+  padding: 0 20px; /* 좌우 여백 추가 (글자가 버튼 끝에 딱 붙지 않게) */
   border-radius: 20px;
   border: 1px solid #000000;
   background: #ffffff;
   font-size: 28px;
   color: #000000;
   cursor: pointer;
+  white-space: nowrap; /* 핵심: 줄바꿈 금지 */
+  display: flex; /* 버튼 폭이 늘어나도 텍스트 세로 중앙정렬 유지 */
+  align-items: center;
+  justify-content: center;
 }
 
 .fail-card-btn-filled {

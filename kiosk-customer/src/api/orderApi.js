@@ -11,20 +11,23 @@ const REQUEST_TIMEOUT = 8000; // 8초
  */
 function normalizeError(error) {
   if (error.code === "ECONNABORTED") {
-    // 설정한 timeout(8초) 초과
     return Object.assign(new Error("TIMEOUT"), { failType: "timeout" });
   }
 
   if (error.response) {
-    // 서버가 응답은 했지만 4xx/5xx (검증 실패, 서버 에러 등)
+    const status = error.response.status;
+    // 4xx: 요청 자체는 서버에 닿았지만 데이터가 유효하지 않은 경우
+    //      (메뉴/옵션 품절, 주문 상태 변경 등) → 다시 확인 필요
+    // 5xx: 서버 내부 문제
+    const failType = status >= 500 ? "system-error" : "order-error";
+
     return Object.assign(
       new Error(error.response.data?.message || "SERVER_ERROR"),
-      { failType: "server-error" },
+      { failType, statusCode: status },
     );
   }
 
   if (error.request) {
-    // 요청은 나갔지만 응답 자체가 안 옴 (서버 다운, 와이파이 끊김 등)
     return Object.assign(new Error("NETWORK_ERROR"), {
       failType: "network-error",
     });

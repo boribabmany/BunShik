@@ -36,7 +36,18 @@ export const getMenus = async () => {
 export const getSetComponents = async (menuId) => {
   const response = await api.get(`/api/admin/menus/${menuId}/components`);
 
-  return response.data.data.map(mapMenu);
+  return response.data.data.map((component) => ({
+    menu_id: component.componentMenuId ?? component.menuId,
+    menu_name: component.menuName,
+    menu_name_en: component.menuNameEn,
+    category: component.category,
+    is_available: component.isAvailable,
+    base_is_available: component.isAvailable,
+    is_visible: component.isVisible,
+    select_group: component.selectGroup,
+    group_max_select: component.groupMaxSelect,
+    extra_price: component.extraPrice,
+  }));
 };
 
 export const updateSetComponents = async (menuId, componentMenuIds) => {

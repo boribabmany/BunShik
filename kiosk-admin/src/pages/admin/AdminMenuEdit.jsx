@@ -16,7 +16,7 @@ const MENU_CATEGORIES = [
   "음료",
 ];
 
-const createMenuFormData = (menu, imageFile, componentMenuIds = []) => {
+const createMenuFormData = (menu, imageFile, componentMenuIds = [], componentSettings = {}) => {
   const formData = new FormData();
 
   formData.append("menuName", menu.menu_name);
@@ -33,6 +33,15 @@ const createMenuFormData = (menu, imageFile, componentMenuIds = []) => {
   if (menu.category?.trim() === "세트") {
     componentMenuIds.forEach((menuId) => {
       formData.append("componentMenuIds", menuId);
+    });
+    componentMenuIds.forEach((menuId, index) => {
+      const setting = componentSettings[menuId] || {};
+      formData.append(`componentSettings[${index}].componentMenuId`, menuId);
+      formData.append(`componentSettings[${index}].selectGroup`, setting.select_group || "");
+      if (setting.select_group) {
+        formData.append(`componentSettings[${index}].groupMaxSelect`, setting.group_max_select || 1);
+      }
+      formData.append(`componentSettings[${index}].extraPrice`, setting.extra_price || 0);
     });
   }
 
@@ -61,6 +70,7 @@ export default function AdminMenuEdit() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
   const [enlargedImage, setEnlargedImage] = useState(null);
   const [selectedComponentIds, setSelectedComponentIds] = useState([]);
+  const [componentSettings, setComponentSettings] = useState({});
   const [isComponentsLoading, setIsComponentsLoading] = useState(false);
   const location = useLocation();
   const [menuPage, setMenuPage] = useState(1);
@@ -87,6 +97,7 @@ export default function AdminMenuEdit() {
       setEditMode(location.state.type);
       setIsAddMode(true);
       setSelectedComponentIds([]);
+      setComponentSettings({});
 
       if (location.state.type === "menu") {
         setSelectedItem({ menu_name: "", menu_name_en: "",  category: "", price: 0, is_available: true, image_url: "", description: "", description_en: "",
@@ -116,6 +127,7 @@ export default function AdminMenuEdit() {
         selectedItem.category?.trim() !== "세트"
       ) {
         setSelectedComponentIds([]);
+        setComponentSettings({});
         return;
       }
 
@@ -128,6 +140,13 @@ export default function AdminMenuEdit() {
           setSelectedComponentIds(
             components.map((component) => component.menu_id),
           );
+          setComponentSettings(Object.fromEntries(
+            components.map((component) => [component.menu_id, {
+              select_group: component.select_group || "",
+              group_max_select: component.group_max_select || 1,
+              extra_price: component.extra_price || 0,
+            }]),
+          ));
         }
       } catch (error) {
         if (!ignore) {
@@ -204,6 +223,7 @@ export default function AdminMenuEdit() {
         selectedItem,
         imageFile,
         selectedComponentIds,
+        componentSettings,
       );
       await editMenu(selectedItem.menu_id, formData);
 
@@ -238,6 +258,7 @@ export default function AdminMenuEdit() {
         selectedItem,
         imageFile,
         selectedComponentIds,
+        componentSettings,
       );
 
       await addMenu(formData);
@@ -273,6 +294,23 @@ export default function AdminMenuEdit() {
         ? currentIds.filter((id) => id !== menuId)
         : [...currentIds, menuId],
     );
+    setComponentSettings((current) => ({
+      ...current,
+      [menuId]: current[menuId] || {
+        select_group: "",
+        group_max_select: 1,
+        extra_price: 0,
+      },
+    }));
+  };
+  const handleComponentSettingChange = (menuId, field, value) => {
+    setComponentSettings((current) => ({
+      ...current,
+      [menuId]: {
+        ...(current[menuId] || {}),
+        [field]: field === "select_group" ? value : Number(value),
+      },
+    }));
   };
   // 메뉴와 옵션 이름 수정
   const handleInputChange = (e) => {
@@ -484,16 +522,18 @@ export default function AdminMenuEdit() {
         </div>
         <div className="register-button-area">
           <button
-            className="register-btn"
+            className="register-btn set-register-btn"
             onClick={() => {
               setEditMode("menu");
               setIsAddMode(true);
               setImageFile(null);
               setImagePreviewUrl(null);
+              setSelectedComponentIds([]);
+              setComponentSettings({});
               setSelectedItem({
                 menu_name: "",
                 menu_name_en: "",
-                category: "",
+                category: "세트",
                 price: 0,
                 is_available: true,
                 image_url: "",
@@ -502,8 +542,7 @@ export default function AdminMenuEdit() {
               });
             }}
           >
-            {" "}
-            + 메뉴 등록{" "}
+            + 세트 등록
           </button>
         </div>
 
@@ -537,6 +576,33 @@ export default function AdminMenuEdit() {
               </button>
             ))}
           </div>
+        </div>
+
+        {/* 일반 메뉴 등록 버튼 */}
+        <div className="register-button-area">
+          <button
+            className="register-btn"
+            onClick={() => {
+              setEditMode("menu");
+              setIsAddMode(true);
+              setImageFile(null);
+              setImagePreviewUrl(null);
+              setSelectedComponentIds([]);
+              setComponentSettings({});
+              setSelectedItem({
+                menu_name: "",
+                menu_name_en: "",
+                category: "",
+                price: 0,
+                is_available: true,
+                image_url: "",
+                description: "",
+                description_en: "",
+              });
+            }}
+          >
+            + 메뉴 등록
+          </button>
         </div>
 
         {/* 일반 메뉴 테이블 */}
@@ -801,28 +867,52 @@ export default function AdminMenuEdit() {
                       </p>
                     ) : (
                       regularMenuList.map((menu) => (
-                        <label
+                        <div
                           key={menu.menu_id}
                           className="set-component-option"
                         >
-                          <input
-                            type="checkbox"
-                            checked={selectedComponentIds.includes(
-                              menu.menu_id,
-                            )}
-                            onChange={() =>
-                              handleComponentToggle(menu.menu_id)
-                            }
-                          />
-                          <span>{menu.menu_name}</span>
-                          <small>
-                            {!menu.is_visible
-                              ? "판매중단"
-                              : menu.is_available
-                                ? menu.category
-                                : "품절"}
-                          </small>
-                        </label>
+                          <label className="set-component-check">
+                            <input
+                              type="checkbox"
+                              checked={selectedComponentIds.includes(menu.menu_id)}
+                              onChange={() => handleComponentToggle(menu.menu_id)}
+                            />
+                            <span>{menu.menu_name}</span>
+                            <small>{menu.category}</small>
+                          </label>
+                          {selectedComponentIds.includes(menu.menu_id) && (
+                            <div className="set-component-settings">
+                              <label>
+                                <span>선택 그룹</span>
+                                <input
+                                  placeholder="비우면 고정"
+                                  value={componentSettings[menu.menu_id]?.select_group || ""}
+                                  onChange={(e) => handleComponentSettingChange(menu.menu_id, "select_group", e.target.value)}
+                                />
+                              </label>
+                              <label>
+                                <span>최대 선택 수</span>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  disabled={!componentSettings[menu.menu_id]?.select_group}
+                                  value={componentSettings[menu.menu_id]?.group_max_select || 1}
+                                  onChange={(e) => handleComponentSettingChange(menu.menu_id, "group_max_select", e.target.value)}
+                                />
+                              </label>
+                              <label>
+                                <span>추가 금액</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="100"
+                                  value={componentSettings[menu.menu_id]?.extra_price || 0}
+                                  onChange={(e) => handleComponentSettingChange(menu.menu_id, "extra_price", e.target.value)}
+                                />
+                              </label>
+                            </div>
+                          )}
+                        </div>
                       ))
                     )}
                   </div>

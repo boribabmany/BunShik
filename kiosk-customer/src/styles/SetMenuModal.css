@@ -1,5 +1,5 @@
 .set-modal-backdrop {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -69,7 +69,7 @@
 
 .set-modal-divider {
   width: 888px;
-  height: 1px;
+  height: 2px;
   background: #000000;
   margin: 0 auto;
   flex-shrink: 0;
@@ -82,6 +82,7 @@
   background: #f3f3f3;
   padding: 36px 48px;
   box-sizing: border-box;
+  width: calc(100% - 1px);
 
   scrollbar-width: none;
   -ms-overflow-style: none;

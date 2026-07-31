@@ -3,7 +3,7 @@
    피그마 기준 캔버스: 984 x 1460
 ========================================================== */
 .option-modal-backdrop {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

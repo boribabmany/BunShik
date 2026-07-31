@@ -1,23 +1,34 @@
 import { create } from "zustand";
 
-// 같은 메뉴 + 같은 옵션 조합인지 확인하는 함수
+// 같은 메뉴 + 같은 옵션 + 같은 세트구성 조합인지 확인하는 함수
 const isSameItem = (a, b) => {
   if (a.menu_id !== b.menu_id) return false;
-  if (a.options.length !== b.options.length) return false;
 
-  const aIds = a.options.map((o) => o.option_id).sort();
-  const bIds = b.options.map((o) => o.option_id).sort();
-  return aIds.every((id, i) => id === bIds[i]);
+  if (a.options.length !== b.options.length) return false;
+  const aOptionIds = a.options.map((o) => o.option_id).sort();
+  const bOptionIds = b.options.map((o) => o.option_id).sort();
+  if (!aOptionIds.every((id, i) => id === bOptionIds[i])) return false;
+
+  const aComponents = a.components || [];
+  const bComponents = b.components || [];
+  if (aComponents.length !== bComponents.length) return false;
+  const aComponentIds = aComponents.map((c) => c.component_menu_id).sort();
+  const bComponentIds = bComponents.map((c) => c.component_menu_id).sort();
+  return aComponentIds.every((id, i) => id === bComponentIds[i]);
 };
 
-// 항목 하나의 옵션 포함 합계 (기본가 + 옵션가 합) * 수량
+// 항목 하나의 합계 (기본가 + 옵션가 + 세트구성 추가금 합) * 수량
 const getItemTotal = (item) => {
   const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
-  return (item.base_price + optionTotal) * item.quantity;
+  const componentTotal = (item.components || []).reduce(
+    (sum, c) => sum + c.extra_price,
+    0,
+  );
+  return (item.base_price + optionTotal + componentTotal) * item.quantity;
 };
 
 const useCartStore = create((set, get) => ({
-  items: [], // [{ menu_id, menu_name, image_url, base_price, quantity, options: [{option_id, option_name, option_price}] }]
+  items: [], // [{ menu_id, menu_name, image_url, base_price, quantity, options: [...], components: [...] }]
 
   addItem: (newItem) =>
     set((state) => {
@@ -26,7 +37,6 @@ const useCartStore = create((set, get) => ({
       );
 
       if (existingIndex !== -1) {
-        // 같은 메뉴+옵션이 이미 있으면 수량만 증가
         const updatedItems = state.items.map((item, i) =>
           i === existingIndex
             ? { ...item, quantity: item.quantity + newItem.quantity }
@@ -35,7 +45,6 @@ const useCartStore = create((set, get) => ({
         return { items: updatedItems };
       }
 
-      // 없으면 새로 추가
       return { items: [...state.items, newItem] };
     }),
 
@@ -62,7 +71,6 @@ const useCartStore = create((set, get) => ({
 
   clearCart: () => set({ items: [] }),
 
-  // ★ 추가: 장바구니 전체 총액 계산 (Menu/Cart/Payment 공통으로 재사용)
   getTotalPrice: () => {
     const { items } = get();
     return items.reduce((sum, item) => sum + getItemTotal(item), 0);

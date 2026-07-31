@@ -85,6 +85,9 @@ function Payment() {
               menu_id: item.menu_id,
               quantity: item.quantity,
               option_ids: item.options.map((option) => option.option_id),
+              component_menu_ids: (item.components || []).map(
+                (c) => c.component_menu_id,
+              ),
             })),
             order_type: orderType === "dine-in" ? "매장" : "포장",
           }),

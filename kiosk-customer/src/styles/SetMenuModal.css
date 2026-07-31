@@ -1,0 +1,257 @@
+.set-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.set-modal {
+  position: relative;
+  width: 984px;
+  height: 1460px;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 상단 메뉴 정보 카드 (고정) */
+.set-modal-detail {
+  position: relative;
+  width: 984px;
+  height: 416px;
+  flex-shrink: 0;
+}
+.set-modal-image {
+  position: absolute;
+  left: 79px;
+  top: 66px;
+  width: 273px;
+  height: 278px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+.set-modal-name {
+  position: absolute;
+  left: 422px;
+  top: 66px;
+  font-size: 42px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+.set-modal-description {
+  position: absolute;
+  left: 422px;
+  top: 151px;
+  width: 437px;
+  font-size: 32px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.2;
+}
+.set-modal-price {
+  position: absolute;
+  left: 422px;
+  top: 301px;
+  font-size: 40px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.set-modal-divider {
+  width: 888px;
+  height: 1px;
+  background: #000000;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+/* 가운데 스크롤 영역 (메뉴담기 바와 상단 카드 사이) */
+.set-modal-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  background: #f3f3f3;
+  padding: 36px 48px;
+  box-sizing: border-box;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.set-modal-scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+.set-modal-group {
+  margin-bottom: 24px;
+}
+
+/* 그룹 사이 1px 구분선 */
+.set-modal-group-divider {
+  width: 100%;
+  height: 1px;
+  background: #000000;
+  margin: 32px 0;
+}
+
+.set-modal-group-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.set-modal-group-label {
+  font-size: 44px;
+  color: #000000;
+}
+.set-modal-group-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 40px;
+  background: #d9d9d9;
+  font-size: 20px;
+  color: #000000;
+  border-radius: 4px;
+}
+
+.set-modal-group-list {
+  display: flex;
+  gap: 20px;
+}
+
+.set-option-card {
+  position: relative;
+  width: 210px;
+  height: 320px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.set-option-image-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 197px;
+}
+.set-option-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+}
+.set-option-soldout-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px 20px 0 0;
+}
+.set-option-soldout-overlay span {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+}
+.set-option-name {
+  position: absolute;
+  top: 210px;
+  left: 10px;
+  font-size: 32px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+.set-option-price {
+  position: absolute;
+  top: 262px;
+  left: 20px;
+  font-size: 24px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+.set-option-toggle-btn {
+  position: absolute;
+  top: 258px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #000000;
+  color: #ffffff;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.set-option-toggle-btn.is-selected {
+  background: var(--color-primary);
+}
+.set-option-toggle-btn:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+
+/* 하단 메뉴담기 바 (고정) */
+.set-modal-footer {
+  width: 984px;
+  height: 218px;
+  background: var(--color-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.set-modal-submit-button {
+  width: 888px;
+  height: 124px;
+  background: #ffffff;
+  border: none;
+  border-radius: 70px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.set-modal-submit-button:disabled {
+  background: #d9d9d9;
+  cursor: not-allowed;
+}
+.set-modal-submit-label {
+  font-size: 60px;
+  color: #000000;
+}
+.set-modal-submit-price {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 208px;
+  height: 74px;
+  background: #d9d9d9;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: #000000;
+}

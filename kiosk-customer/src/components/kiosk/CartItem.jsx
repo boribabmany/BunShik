@@ -10,6 +10,7 @@ import { fitFontSizeByDOM } from "../../utils/fitFontSize";
 function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
   const t = translations[language].cart;
   const hasOptions = item.options.length > 0;
+  const hasComponents = (item.components || []).length > 0;
   const itemName = getLocalizedName(
     language,
     item.menu_name,
@@ -43,7 +44,12 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
   }, [itemName, language, fontsReady]);
 
   const optionTotal = item.options.reduce((sum, o) => sum + o.option_price, 0);
-  const itemTotal = (item.base_price + optionTotal) * item.quantity;
+  const componentTotal = (item.components || []).reduce(
+    (sum, c) => sum + c.extra_price,
+    0,
+  );
+  const itemTotal =
+    (item.base_price + optionTotal + componentTotal) * item.quantity;
 
   return (
     <div className="cart-item">
@@ -104,6 +110,27 @@ function CartItem({ item, onIncrease, onDecrease, onRemove, language }) {
               )}
             </span>
             <span>+{formatPrice(language, option.option_price)}</span>
+          </div>
+        ))}
+
+      {hasComponents &&
+        item.components.map((component) => (
+          <div
+            key={component.component_menu_id}
+            className="cart-item-option-row"
+          >
+            <span>
+              {getLocalizedName(
+                language,
+                component.component_menu_name,
+                component.component_menu_name_en,
+              )}
+            </span>
+            <span>
+              {component.extra_price > 0
+                ? `+${formatPrice(language, component.extra_price)}`
+                : formatPrice(language, 0)}
+            </span>
           </div>
         ))}
     </div>

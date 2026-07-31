@@ -19,5 +19,9 @@ export const getMenus = async () => {
       ...option,
       option_image: getImageUrl(option.option_image),
     })),
+    set_components: (menu.set_components ?? []).map((component) => ({
+      ...component,
+      component_image_url: getImageUrl(component.component_image_url),
+    })),
   }));
 };

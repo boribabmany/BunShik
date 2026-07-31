@@ -7,6 +7,7 @@ import { translations } from "../../i18n/translations";
 import CategoryTabs from "../../components/kiosk/CategoryTabs";
 import MenuCard from "../../components/kiosk/MenuCard";
 import OptionModal from "../../components/kiosk/OptionModal";
+import SetMenuModal from "../../components/kiosk/SetMenuModal";
 import CartBar from "../../components/kiosk/CartBar";
 import logo from "../../images/bunshiklogo.png";
 import "../../styles/common.css";
@@ -17,6 +18,7 @@ function Menu() {
   const [menus, setMenus] = useState([]);
   const [category, setCategory] = useState("전체");
   const [selectedMenu, setSelectedMenu] = useState(null);
+  const [isSetMenu, setIsSetMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -50,8 +52,12 @@ function Menu() {
       : menus.filter((menu) => menu.category === category);
 
   const handleMenuClick = (menu) => {
-    if (menu.options && menu.options.length > 0) {
+    if (menu.set_components && menu.set_components.length > 0) {
       setSelectedMenu(menu);
+      setIsSetMenu(true);
+    } else if (menu.options && menu.options.length > 0) {
+      setSelectedMenu(menu);
+      setIsSetMenu(false);
     } else {
       addItem({
         menu_id: menu.menu_id,
@@ -63,6 +69,11 @@ function Menu() {
         options: [],
       });
     }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedMenu(null);
+    setIsSetMenu(false);
   };
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -121,10 +132,19 @@ function Menu() {
         language={language}
       />
 
-      {selectedMenu && (
+      {selectedMenu && isSetMenu && (
+        <SetMenuModal
+          menu={selectedMenu}
+          onClose={handleCloseModal}
+          onAdd={addItem}
+          language={language}
+        />
+      )}
+
+      {selectedMenu && !isSetMenu && (
         <OptionModal
           menu={selectedMenu}
-          onClose={() => setSelectedMenu(null)}
+          onClose={handleCloseModal}
           onAdd={addItem}
           language={language}
         />

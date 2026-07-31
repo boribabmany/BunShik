@@ -182,6 +182,16 @@
   color: #fff;
 }
 
+.menu-edit-btn:disabled,
+.menu-edit-btn:disabled:hover,
+.option-edit-btn:disabled,
+.option-edit-btn:disabled:hover {
+  border-color: #d5dad3;
+  background: #ecefeb;
+  color: #9aa19b;
+  cursor: not-allowed;
+}
+
 /* 메뉴, 옵션 리스트 크기 */
 /* 관리자 메뉴 전체 페이지*/
 .admin-menu-page {

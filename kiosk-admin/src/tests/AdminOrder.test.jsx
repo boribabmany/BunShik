@@ -38,6 +38,16 @@ const detail = {
           option_price: 1000,
         },
       ],
+      components: [
+        {
+          component_menu_id: 201,
+          component_menu_name: "떡볶이",
+        },
+        {
+          component_menu_id: 202,
+          component_menu_name: "순대",
+        },
+      ],
     },
   ],
 };
@@ -74,6 +84,9 @@ describe("관리자 주문 관리", () => {
     expect(getOrderDetail).toHaveBeenCalledWith(1);
     expect(await screen.findByText("참치김밥")).toBeTruthy();
     expect(screen.getByText(/치즈 추가/)).toBeTruthy();
+    expect(screen.getByText("세트 구성")).toBeTruthy();
+    expect(screen.getByText("떡볶이")).toBeTruthy();
+    expect(screen.getByText("순대")).toBeTruthy();
     expect(screen.getByText("총 결제금액")).toBeTruthy();
   });
 

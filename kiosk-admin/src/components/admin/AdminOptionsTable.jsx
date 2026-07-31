@@ -69,6 +69,12 @@ export default function AdminOptionsTable({ onImageClick }) {
                 <td>
                   <button
                     className="option-edit-btn"
+                    disabled={!option.is_visible}
+                    title={
+                      option.is_visible
+                        ? "옵션 수정"
+                        : "판매재개 후 수정할 수 있습니다."
+                    }
                     onClick={() =>
                       navigate("/adminmenuedit", {
                         state: { type: "option", item: option },

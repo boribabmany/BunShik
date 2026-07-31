@@ -54,6 +54,10 @@ export const getOrderDetail = async (orderId) => {
         option_name: option.optionName,
         option_price: option.optionPrice,
       })),
+      components: (item.components ?? []).map((component) => ({
+        component_menu_id: component.componentMenuId,
+        component_menu_name: component.componentMenuName,
+      })),
     })),
   };
 };

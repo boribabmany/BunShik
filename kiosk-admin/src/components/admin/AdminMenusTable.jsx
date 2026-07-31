@@ -80,6 +80,12 @@ export default function AdminMenusTable({ onImageClick }) {
                 <td>
                   <button
                     className="menu-edit-btn"
+                    disabled={!menu.is_visible}
+                    title={
+                      menu.is_visible
+                        ? "메뉴 수정"
+                        : "판매재개 후 수정할 수 있습니다."
+                    }
                     onClick={() =>
                       navigate("/adminmenuedit", {
                         state: { type: "menu", item: menu },

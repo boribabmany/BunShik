@@ -121,6 +121,14 @@
   background: #eaf4de;
 }
 
+.edit-table button:disabled,
+.edit-table button:disabled:hover {
+  border-color: #d8dcd6;
+  background: #ecefeb;
+  color: #a0a6a0;
+  cursor: not-allowed;
+}
+
 .status-badge {
   display: inline-flex;
   align-items: center;

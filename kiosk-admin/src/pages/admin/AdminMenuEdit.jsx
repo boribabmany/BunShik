@@ -238,6 +238,11 @@ export default function AdminMenuEdit() {
   //오른쪽 구역
   //수정 버튼을 눌렀을 때 어떤 항목을 수정할지 상태를 바꾸는 역할
   const handleEditClick = (type, item) => {
+    if (!item.is_visible) {
+      alert("판매중단된 항목은 판매재개 후 수정할 수 있습니다.");
+      return;
+    }
+
     setEditMode(type);
     setSelectedItem(item);
     setImageFile(null);
@@ -429,7 +434,15 @@ export default function AdminMenuEdit() {
           </span>
         </td>
         <td>
-          <button onClick={() => handleEditClick("menu", menu)}>수정</button>
+          <button
+            disabled={!menu.is_visible}
+            title={
+              menu.is_visible ? "메뉴 수정" : "판매재개 후 수정할 수 있습니다."
+            }
+            onClick={() => handleEditClick("menu", menu)}
+          >
+            수정
+          </button>
           <button
             className={`visibility-toggle-btn ${
               menu.is_visible ? "stop-btn" : "resume-btn"
@@ -624,7 +637,15 @@ export default function AdminMenuEdit() {
                     </span>
                   </td>
                   <td>
-                    <button onClick={() => handleEditClick("option", option)}>
+                    <button
+                      disabled={!option.is_visible}
+                      title={
+                        option.is_visible
+                          ? "옵션 수정"
+                          : "판매재개 후 수정할 수 있습니다."
+                      }
+                      onClick={() => handleEditClick("option", option)}
+                    >
                       수정
                     </button>
                     <button

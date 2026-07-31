@@ -285,6 +285,21 @@ export default function AdminOrder() {
                                       </span>
                                     </div>
 
+                                    {item.components.length > 0 && (
+                                      <div className="order-detail-components">
+                                        <strong>세트 구성</strong>
+                                        {item.components.map((component) => (
+                                          <span
+                                            key={
+                                              component.component_menu_id
+                                            }
+                                          >
+                                            {component.component_menu_name}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
+
                                     {item.options.length > 0 && (
                                       <div className="order-detail-options">
                                         {item.options.map((option) => (

@@ -94,22 +94,22 @@
 
 /* 토스페이 이미지만 살짝 축소 */
 .payment-method-toss-img {
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 100%;
   margin: 5% auto;
 }
 
 /* 네이버페이 이미지만 살짝 축소 */
 .payment-method-naver-img {
-  width: 75%;
-  height: 75%;
+  width: 90%;
+  height: 90%;
   margin: 5% auto;
 }
 
 /* 카카오페이 이미지만 살짝 축소 */
 .payment-method-kakao-img {
-  width: 50%;
-  height: 50%;
+  width: 55%;
+  height: 55%;
   margin: 10% auto; /* 줄어든 만큼 버튼 안에서 중앙 정렬 */
 }
 

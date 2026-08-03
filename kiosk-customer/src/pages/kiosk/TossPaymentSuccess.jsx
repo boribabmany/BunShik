@@ -12,6 +12,7 @@ function TossPaymentSuccess() {
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
   const setPendingOrderId = useOrderStore((state) => state.setPendingOrderId);
   const [error, setError] = useState("");
+  const paymentMethodLabel = searchParams.get("paymentMethod") || "토스페이";
 
   useEffect(() => {
     const kioskOrderId = Number(searchParams.get("kioskOrderId"));
@@ -26,6 +27,7 @@ function TossPaymentSuccess() {
       payment_key: paymentKey,
       toss_order_id: tossOrderId,
       amount,
+      payment_method: paymentMethodLabel,
     })
       .then(() => {
         setOrderNumber(orderNumber ?? String(kioskOrderId));

@@ -22,8 +22,13 @@ import "../../styles/common.css";
 import "../../styles/Payment.css";
 import "../../styles/PaymentMethodModal.css";
 
-const QR_METHODS = ["naverpay", "kakaopay"];
+const QR_METHODS = ["naverpay"]; // 네이버페이만 데모 QR 유지
 const TOSS_CLIENT_KEY = process.env.REACT_APP_TOSS_CLIENT_KEY;
+
+const EASY_PAY_LABELS = {
+  tosspay: "토스페이",
+  kakaopay: "카카오페이",
+};
 
 function Payment() {
   const navigate = useNavigate();
@@ -89,6 +94,7 @@ function Payment() {
     };
   };
 
+  // 카드결제: 기존 시뮬레이션 API 그대로
   const runPayment = async (method) => {
     setIsPaying(true);
     setFailType(null);
@@ -102,9 +108,6 @@ function Payment() {
         break;
       case "naverpay":
         paymentMethod = "네이버페이";
-        break;
-      case "kakaopay":
-        paymentMethod = "카카오페이";
         break;
       default:
         paymentMethod = "카드";
@@ -136,11 +139,12 @@ function Payment() {
     }
   };
 
-  const runTossPayment = async () => {
+  // 토스페이/카카오페이: 키오스크에서 바로 토스 결제창 호출 (easyPay 값만 다름)
+  const runEasyPayment = async (method) => {
     setIsPaying(true);
     setFailType(null);
     setFailReason(null);
-    setLastMethod("tosspay");
+    setLastMethod(method);
 
     try {
       const { orderId, orderNumber } = await ensureOrderCreated();
@@ -157,12 +161,13 @@ function Payment() {
           `${window.location.origin}/payment/toss/success` +
           `?kioskOrderId=${orderId}` +
           `&orderNumber=${encodeURIComponent(orderNumber ?? String(orderId))}` +
-          `&totalPrice=${totalPrice}`,
+          `&totalPrice=${totalPrice}` +
+          `&paymentMethod=${encodeURIComponent(EASY_PAY_LABELS[method])}`,
         failUrl: `${window.location.origin}/payment/toss/fail?kioskOrderId=${orderId}`,
         card: {
           useEscrow: false,
           flowMode: "DIRECT",
-          easyPay: "토스페이",
+          easyPay: EASY_PAY_LABELS[method],
         },
       });
     } catch (error) {
@@ -177,16 +182,16 @@ function Payment() {
     setLastMethod(method);
 
     if (QR_METHODS.includes(method)) {
-      setQrMethod(method);
+      setQrMethod(method); // 네이버페이 데모 QR
       return;
     }
 
-    if (method === "tosspay") {
-      runTossPayment();
+    if (method === "tosspay" || method === "kakaopay") {
+      runEasyPayment(method);
       return;
     }
 
-    runPayment(method);
+    runPayment(method); // 카드
   };
 
   const handleQrComplete = () => {

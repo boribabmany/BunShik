@@ -1,15 +1,44 @@
 // adminmenu 옵션테이블
 
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useOptionStore from "../../store/optionStore";
+import { filterOptions } from "../../utils/catalogFilters";
 
 export default function AdminOptionsTable({ onImageClick }) {
   const navigate = useNavigate();
   const optionList = useOptionStore((state) => state.optionList);
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("all");
+  const filteredOptions = filterOptions(optionList, { query, status });
 
   return (
     <div className="option-table-box">
-      <h2 className="table-title">옵션 리스트</h2>
+      <div className="catalog-list-header">
+        <h2 className="table-title">옵션 리스트</h2>
+        <span className="catalog-result-count">
+          {filteredOptions.length}/{optionList.length}개
+        </span>
+      </div>
+      <div className="catalog-filter-bar" aria-label="옵션 검색 및 필터">
+        <input
+          type="search"
+          value={query}
+          placeholder="옵션명 또는 번호 검색"
+          aria-label="옵션 검색"
+          onChange={(event) => setQuery(event.target.value)}
+        />
+        <select
+          value={status}
+          aria-label="옵션 판매상태 필터"
+          onChange={(event) => setStatus(event.target.value)}
+        >
+          <option value="all">전체 상태</option>
+          <option value="active">판매중</option>
+          <option value="soldout">품절</option>
+          <option value="stopped">판매중단</option>
+        </select>
+      </div>
 
       <div className="option-table-scroll">
         <table className="menu-table">
@@ -25,7 +54,13 @@ export default function AdminOptionsTable({ onImageClick }) {
           </thead>
 
           <tbody>
-            {optionList.map((option) => (
+            {filteredOptions.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="menu-empty-message">
+                  검색 조건에 맞는 옵션이 없습니다.
+                </td>
+              </tr>
+            ) : filteredOptions.map((option) => (
               <tr
                 key={option.option_id}
                 className={!option.is_visible ? "menu-stopped-row" : ""}

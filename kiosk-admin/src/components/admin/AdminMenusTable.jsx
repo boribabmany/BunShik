@@ -1,14 +1,26 @@
 // adminmenu 메뉴테이블
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useMenuStore from "../../store/menuStore";
+import { filterMenus } from "../../utils/catalogFilters";
 
 export default function AdminMenusTable({ onImageClick }) {
   const navigate = useNavigate();
   const menuList = useMenuStore((state) => state.menuList);
-  const setMenus = menuList.filter(
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
+  const [status, setStatus] = useState("all");
+  const categories = useMemo(
+    () =>
+      [...new Set(menuList.map((menu) => menu.category?.trim()).filter(Boolean))]
+        .sort((a, b) => a.localeCompare(b, "ko")),
+    [menuList],
+  );
+  const filteredMenus = filterMenus(menuList, { query, category, status });
+  const setMenus = filteredMenus.filter(
     (menu) => menu.category?.trim() === "세트",
   );
-  const regularMenus = menuList.filter(
+  const regularMenus = filteredMenus.filter(
     (menu) => menu.category?.trim() !== "세트",
   );
 
@@ -105,7 +117,43 @@ export default function AdminMenusTable({ onImageClick }) {
 
   return (
     <div className="menu-table-box">
-      <h2 className="table-title">메뉴 리스트</h2>
+      <div className="catalog-list-header">
+        <h2 className="table-title">메뉴 리스트</h2>
+        <span className="catalog-result-count">
+          {filteredMenus.length}/{menuList.length}개
+        </span>
+      </div>
+      <div className="catalog-filter-bar" aria-label="메뉴 검색 및 필터">
+        <input
+          type="search"
+          value={query}
+          placeholder="메뉴명 또는 번호 검색"
+          aria-label="메뉴 검색"
+          onChange={(event) => setQuery(event.target.value)}
+        />
+        <select
+          value={category}
+          aria-label="메뉴 카테고리 필터"
+          onChange={(event) => setCategory(event.target.value)}
+        >
+          <option value="all">전체 카테고리</option>
+          {categories.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+        <select
+          value={status}
+          aria-label="메뉴 판매상태 필터"
+          onChange={(event) => setStatus(event.target.value)}
+        >
+          <option value="all">전체 상태</option>
+          <option value="active">판매중</option>
+          <option value="soldout">품절</option>
+          <option value="stopped">판매중단</option>
+        </select>
+      </div>
       <div className="menu-table-scroll">
         {renderMenuTable("세트 메뉴", setMenus)}
         {renderMenuTable("일반 메뉴", regularMenus)}

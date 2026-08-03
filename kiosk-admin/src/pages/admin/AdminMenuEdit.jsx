@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { validateMenu, validateOption } from "../../utils/validation";
+import { createMenuFormData } from "../../utils/menuFormData";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
 import ImagePreviewModal from "../../components/admin/ImagePreviewModal";
+import MenuListSection from "../../components/admin/menu-edit/MenuListSection";
+import OptionListSection from "../../components/admin/menu-edit/OptionListSection";
 import "../../styles/AdminMenuEdit.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
@@ -15,41 +18,6 @@ const MENU_CATEGORIES = [
   "사이드",
   "음료",
 ];
-
-const createMenuFormData = (menu, imageFile, componentMenuIds = [], componentSettings = {}) => {
-  const formData = new FormData();
-
-  formData.append("menuName", menu.menu_name);
-  formData.append("menuNameEn", menu.menu_name_en);
-  formData.append("price", menu.price);
-  formData.append("category", menu.category);
-  formData.append("description", menu.description || "");
-  formData.append("descriptionEn", menu.description_en || "");
-  formData.append(
-    "isAvailable",
-    menu.base_is_available ?? menu.is_available,
-  );
-
-  if (menu.category?.trim() === "세트") {
-    componentMenuIds.forEach((menuId) => {
-      formData.append("componentMenuIds", menuId);
-    });
-    componentMenuIds.forEach((menuId, index) => {
-      const setting = componentSettings[menuId] || {};
-      formData.append(`componentSettings[${index}].componentMenuId`, menuId);
-      formData.append(`componentSettings[${index}].selectGroup`, setting.select_group || "");
-      if (setting.select_group) {
-        formData.append(`componentSettings[${index}].groupMaxSelect`, setting.group_max_select || 1);
-      }
-      formData.append(`componentSettings[${index}].extraPrice`, setting.extra_price || 0);
-    });
-  }
-
-  if (imageFile) {
-    formData.append("file", imageFile);
-  }
-  return formData;
-};
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
@@ -72,12 +40,10 @@ export default function AdminMenuEdit() {
   const [selectedComponentIds, setSelectedComponentIds] = useState([]);
   const [componentSettings, setComponentSettings] = useState({});
   const [isComponentsLoading, setIsComponentsLoading] = useState(false);
+  const regularMenuList = menuList.filter(
+    (menu) => menu.category?.trim() !== "세트",
+  );
   const location = useLocation();
-  const [menuPage, setMenuPage] = useState(1);
-  const [setListPage, setSetListPage] = useState(1);
-  const [optionPage, setOptionPage] = useState(1);
-  const MENU_PER_PAGE = 5;
-  const OPTION_PER_PAGE = 3;
   //페이지가 처음 열릴 때 메뉴와 옵션 데이터를 불러오는 역할
   useEffect(() => {
     const fetchData = async () => {
@@ -288,6 +254,37 @@ export default function AdminMenuEdit() {
     setImagePreviewUrl(null);
     setIsAddMode(false);
   };
+  const handleStartAddMenu = (category = "") => {
+    setEditMode("menu");
+    setIsAddMode(true);
+    setImageFile(null);
+    setImagePreviewUrl(null);
+    setSelectedComponentIds([]);
+    setComponentSettings({});
+    setSelectedItem({
+      menu_name: "",
+      menu_name_en: "",
+      category,
+      price: 0,
+      is_available: true,
+      image_url: "",
+      description: "",
+      description_en: "",
+    });
+  };
+  const handleStartAddOption = () => {
+    setEditMode("option");
+    setIsAddMode(true);
+    setImageFile(null);
+    setImagePreviewUrl(null);
+    setSelectedItem({
+      option_name: "",
+      option_name_en: "",
+      option_price: 0,
+      option_is_available: true,
+      option_image: "",
+    });
+  };
   const handleComponentToggle = (menuId) => {
     setSelectedComponentIds((currentIds) =>
       currentIds.includes(menuId)
@@ -399,33 +396,6 @@ export default function AdminMenuEdit() {
       alert("옵션수정 실패");
     }
   };
-  //---------------------------------------------------------------------
-  //메뉴페이지
-  const regularMenuList = menuList.filter(
-    (menu) => menu.category?.trim() !== "세트",
-  );
-  const setMenuList = menuList.filter(
-    (menu) => menu.category?.trim() === "세트",
-  );
-  const menuStart = (menuPage - 1) * MENU_PER_PAGE;
-  const currentMenus = regularMenuList.slice(
-    menuStart,
-    menuStart + MENU_PER_PAGE,
-  );
-  const menuTotalPage = Math.ceil(regularMenuList.length / MENU_PER_PAGE);
-  const setMenuStart = (setListPage - 1) * MENU_PER_PAGE;
-  const currentSetMenus = setMenuList.slice(
-    setMenuStart,
-    setMenuStart + MENU_PER_PAGE,
-  );
-  const setMenuTotalPage = Math.ceil(setMenuList.length / MENU_PER_PAGE);
-  //옵션페이지
-  const optionStart = (optionPage - 1) * OPTION_PER_PAGE;
-  const currentOptions = optionList.slice(
-    optionStart,
-    optionStart + OPTION_PER_PAGE,
-  );
-  const optionTotalPage = Math.ceil(optionList.length / OPTION_PER_PAGE);
   const selectedImageUrl =
     editMode === "menu"
       ? imagePreviewUrl || selectedItem?.image_url || bunshikLogo
@@ -438,79 +408,6 @@ export default function AdminMenuEdit() {
     if (!imageUrl) return;
     setEnlargedImage({ imageUrl, alt });
   };
-  const renderMenuRows = (menus, emptyMessage) => {
-    if (menus.length === 0) {
-      return (
-        <tr>
-          <td colSpan="7" className="empty-table-message">
-            {emptyMessage}
-          </td>
-        </tr>
-      );
-    }
-
-    return menus.map((menu) => (
-      <tr
-        key={menu.menu_id}
-        className={!menu.is_visible ? "stopped-row" : ""}
-      >
-        <td>
-          {menu.image_url ? (
-            <button
-              type="button"
-              className="image-preview-trigger"
-              aria-label={`${menu.menu_name} 사진 확대`}
-              onClick={() => handleImageClick(menu.image_url, menu.menu_name)}
-            >
-              <img src={menu.image_url} alt={menu.menu_name} />
-            </button>
-          ) : (
-            "-"
-          )}
-        </td>
-        <td>{menu.menu_name}</td>
-        <td>{menu.menu_name_en || "-"}</td>
-        <td>{menu.category}</td>
-        <td>{menu.price.toLocaleString()}원</td>
-        <td>
-          <span
-            className={`status-badge ${
-              !menu.is_visible
-                ? "status-stopped"
-                : menu.is_available
-                  ? "status-active"
-                  : "status-soldout"
-            }`}
-          >
-            {!menu.is_visible
-              ? "판매중단"
-              : menu.is_available
-                ? "판매중"
-                : "품절"}
-          </span>
-        </td>
-        <td>
-          <button
-            disabled={!menu.is_visible}
-            title={
-              menu.is_visible ? "메뉴 수정" : "판매재개 후 수정할 수 있습니다."
-            }
-            onClick={() => handleEditClick("menu", menu)}
-          >
-            수정
-          </button>
-          <button
-            className={`visibility-toggle-btn ${
-              menu.is_visible ? "stop-btn" : "resume-btn"
-            }`}
-            onClick={() => handleToggleMenu(menu)}
-          >
-            {menu.is_visible ? "판매중단" : "판매재개"}
-          </button>
-        </td>
-      </tr>
-    ));
-  };
   // -----------------------------------------------------------------------
   return (
     <div className="admin-edit-page">
@@ -520,243 +417,21 @@ export default function AdminMenuEdit() {
           <img src={bunshikLogo} alt="분식 로고" className="edit-logo" />
           <h2 className="edit-title">관리자 메뉴 수정 및 등록</h2>
         </div>
-        <div className="register-button-area">
-          <button
-            className="register-btn set-register-btn"
-            onClick={() => {
-              setEditMode("menu");
-              setIsAddMode(true);
-              setImageFile(null);
-              setImagePreviewUrl(null);
-              setSelectedComponentIds([]);
-              setComponentSettings({});
-              setSelectedItem({
-                menu_name: "",
-                menu_name_en: "",
-                category: "세트",
-                price: 0,
-                is_available: true,
-                image_url: "",
-                description: "",
-                description_en: "",
-              });
-            }}
-          >
-            + 세트 등록
-          </button>
-        </div>
-
-        {/* 세트 메뉴 테이블 */}
-        <div className="edit-table-box">
-          <h3 className="table-section-title">세트 메뉴</h3>
-          <table className="edit-table">
-            <thead>
-              <tr>
-                <th>사진</th>
-                <th>메뉴명</th>
-                <th>영문명</th>
-                <th>카테고리</th>
-                <th>가격</th>
-                <th>상태</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {renderMenuRows(currentSetMenus, "등록된 세트 메뉴가 없습니다.")}
-            </tbody>
-          </table>
-          <div className="pagination">
-            {Array.from({ length: setMenuTotalPage }, (_, i) => (
-              <button
-                key={i}
-                className={setListPage === i + 1 ? "active" : ""}
-                onClick={() => setSetListPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 일반 메뉴 등록 버튼 */}
-        <div className="register-button-area">
-          <button
-            className="register-btn"
-            onClick={() => {
-              setEditMode("menu");
-              setIsAddMode(true);
-              setImageFile(null);
-              setImagePreviewUrl(null);
-              setSelectedComponentIds([]);
-              setComponentSettings({});
-              setSelectedItem({
-                menu_name: "",
-                menu_name_en: "",
-                category: "",
-                price: 0,
-                is_available: true,
-                image_url: "",
-                description: "",
-                description_en: "",
-              });
-            }}
-          >
-            + 메뉴 등록
-          </button>
-        </div>
-
-        {/* 일반 메뉴 테이블 */}
-        <div className="edit-table-box">
-          <h3 className="table-section-title">일반 메뉴</h3>
-          <table className="edit-table">
-            <thead>
-              <tr>
-                <th>사진</th>
-                <th>메뉴명</th>
-                <th>영문명</th>
-                <th>카테고리</th>
-                <th>가격</th>
-                <th>상태</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {renderMenuRows(currentMenus, "등록된 일반 메뉴가 없습니다.")}
-            </tbody>
-          </table>
-          <div className="pagination">
-            {Array.from({ length: menuTotalPage }, (_, i) => (
-              <button
-                key={i}
-                className={menuPage === i + 1 ? "active" : ""}
-                onClick={() => setMenuPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 옵션 등록 버튼 */}
-        <div className="register-button-area">
-          <button
-            className="register-btn"
-            onClick={() => {
-              setEditMode("option");
-              setIsAddMode(true);
-              setImageFile(null);
-              setImagePreviewUrl(null);
-              setSelectedItem({
-                option_name: "",
-                option_name_en: "",
-                option_price: 0,
-                option_is_available: true,
-                option_image: "",
-              });
-            }}
-          >
-            {" "}
-            + 옵션 등록
-          </button>
-        </div>
-        {/* 옵션 테이블 */}
-        <div className="edit-table-box">
-          <table className="edit-table">
-            <thead>
-              <tr>
-                <th>사진</th>
-                <th>옵션명</th>
-                <th>영문명</th>
-                <th>추가 가격</th>
-                <th>상태</th>
-                <th>관리</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentOptions.map((option) => (
-                <tr
-                  key={option.option_id}
-                  className={!option.is_visible ? "stopped-row" : ""}
-                >
-                  <td>
-                    {option.option_image ? (
-                      <button
-                        type="button"
-                        className="image-preview-trigger"
-                        aria-label={`${option.option_name} 사진 확대`}
-                        onClick={() =>
-                          handleImageClick(
-                            option.option_image,
-                            option.option_name,
-                          )
-                        }
-                      >
-                        <img
-                          src={option.option_image}
-                          alt={option.option_name}
-                        />
-                      </button>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td>{option.option_name}</td>
-                  <td>{option.option_name_en || "-"}</td>
-                  <td>+{option.option_price.toLocaleString()}원</td>
-                  <td>
-                    <span
-                      className={`status-badge ${
-                        !option.is_visible
-                          ? "status-stopped"
-                          : option.option_is_available
-                            ? "status-active"
-                            : "status-soldout"
-                      }`}
-                    >
-                      {!option.is_visible
-                        ? "판매중단"
-                        : option.option_is_available
-                          ? "판매중"
-                          : "품절"}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      disabled={!option.is_visible}
-                      title={
-                        option.is_visible
-                          ? "옵션 수정"
-                          : "판매재개 후 수정할 수 있습니다."
-                      }
-                      onClick={() => handleEditClick("option", option)}
-                    >
-                      수정
-                    </button>
-                    <button
-                      className={`visibility-toggle-btn ${
-                        option.is_visible ? "stop-btn" : "resume-btn"
-                      }`}
-                      onClick={() => handleToggleOption(option)}
-                    >
-                      {option.is_visible ? "판매중단" : "판매재개"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="pagination">
-          {Array.from({ length: optionTotalPage }, (_, i) => (
-            <button
-              key={i}
-              className={optionPage === i + 1 ? "active" : ""}
-              onClick={() => setOptionPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
+        <MenuListSection
+          menus={menuList}
+          onAddMenu={() => handleStartAddMenu()}
+          onAddSetMenu={() => handleStartAddMenu("세트")}
+          onEdit={handleEditClick}
+          onToggleVisibility={handleToggleMenu}
+          onImageClick={handleImageClick}
+        />
+        <OptionListSection
+          options={optionList}
+          onAdd={handleStartAddOption}
+          onEdit={handleEditClick}
+          onToggleVisibility={handleToggleOption}
+          onImageClick={handleImageClick}
+        />
       </div>
       {/*오른쪽 수정 패널*/}
       <div className="edit-right">

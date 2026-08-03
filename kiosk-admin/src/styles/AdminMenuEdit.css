@@ -513,6 +513,69 @@
   letter-spacing: -0.5px;
 }
 
+.catalog-management-section + .catalog-management-section {
+  margin-top: 20px;
+}
+
+.catalog-management-section .edit-filter-group {
+  margin-bottom: 10px;
+}
+
+.edit-filter-group {
+  padding: 12px;
+  border: 1px solid #d9e3d2;
+  border-radius: 10px;
+  background: #f8fbf5;
+}
+
+.edit-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
+  color: #3f483f;
+  font-size: 14px;
+}
+
+.edit-filter-heading span {
+  color: #747d75;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.edit-filter-controls {
+  display: grid;
+  gap: 7px;
+}
+
+.menu-filter-controls {
+  grid-template-columns: minmax(150px, 1fr) 120px 105px;
+}
+
+.option-filter-controls {
+  grid-template-columns: minmax(150px, 1fr) 105px;
+}
+
+.edit-filter-controls input,
+.edit-filter-controls select {
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d3dbcf;
+  border-radius: 7px;
+  background: #fff;
+  color: #3f483f;
+  font-size: 13px;
+  outline: none;
+}
+
+.edit-filter-controls input:focus,
+.edit-filter-controls select:focus {
+  border-color: #6da12f;
+  box-shadow: 0 0 0 3px rgba(109, 161, 47, 0.12);
+}
+
 .register-button-area {
   display: flex;
   gap: 8px;

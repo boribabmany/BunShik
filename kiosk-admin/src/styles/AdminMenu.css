@@ -66,11 +66,55 @@
 
 /* ----------------------------옵션 테이블------------------------------------ */
 .table-title {
-  margin: 0 0 14px;
+  margin: 0;
   color: #343940;
   font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.3px;
+}
+
+.catalog-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.catalog-result-count {
+  color: #68717e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.catalog-filter-bar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 150px 130px;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.option-table-box .catalog-filter-bar {
+  grid-template-columns: minmax(180px, 1fr) 130px;
+}
+
+.catalog-filter-bar input,
+.catalog-filter-bar select {
+  width: 100%;
+  height: 38px;
+  padding: 0 11px;
+  border: 1px solid #d8dde3;
+  border-radius: 8px;
+  background: #fff;
+  color: #343940;
+  font-size: 13px;
+  outline: none;
+}
+
+.catalog-filter-bar input:focus,
+.catalog-filter-bar select:focus {
+  border-color: #6da12f;
+  box-shadow: 0 0 0 3px rgba(109, 161, 47, 0.12);
 }
 
 /* 테이블 */
@@ -223,7 +267,7 @@
 }
 
 .menu-table-scroll {
-  max-height: 366px;
+  max-height: 306px;
   padding-right: 4px;
   overflow-y: auto;
 }
@@ -249,7 +293,7 @@
 }
 
 .option-table-scroll {
-  max-height: 214px;
+  max-height: 154px;
   padding-right: 4px;
   overflow-y: auto;
 }

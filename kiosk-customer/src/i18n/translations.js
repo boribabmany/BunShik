@@ -32,6 +32,7 @@ export const translations = {
     },
     option: {
       toppingAdd: "토핑 추가",
+      optionSelect: "옵션선택",
       maxSelect: (n) => `최대 ${n}개 선택`,
       addToCart: "메뉴 담기",
       soldOut: "품절",
@@ -143,6 +144,7 @@ export const translations = {
     },
     option: {
       toppingAdd: "Add Toppings",
+      optionSelect: "Options",
       maxSelect: (n) => `Select up to ${n}`,
       addToCart: "Add to Cart",
       soldOut: "Sold Out",
@@ -233,4 +235,18 @@ export const getLocalizedName = (language, koName, enName) => {
 export const formatPrice = (language, amount) => {
   const formatted = amount.toLocaleString();
   return language === "en" ? `₩${formatted}` : `${formatted}원`;
+};
+
+const groupNameMap = {
+  떡볶이선택: "Tteokbokki Flavor",
+  순대선택: "Sundae Type",
+  김밥선택: "Kimbap Choice",
+  음료선택: "Drink Choice",
+};
+
+export const getGroupLabel = (language, groupName) => {
+  if (language === "en" && groupNameMap[groupName]) {
+    return groupNameMap[groupName];
+  }
+  return groupName;
 };

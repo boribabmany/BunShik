@@ -3,6 +3,7 @@ import {
   translations,
   getLocalizedName,
   formatPrice,
+  getGroupLabel,
 } from "../../i18n/translations";
 import "../../styles/SetMenuModal.css";
 
@@ -88,66 +89,108 @@ function SetMenuModal({ menu, onClose, onAdd, language }) {
         <div className="set-modal-divider" />
 
         <div className="set-modal-scroll-area">
-          {groups.map((group, idx) => (
-            <div key={group.name} className="set-modal-group">
-              {idx > 0 && <div className="set-modal-group-divider" />}
+          {groups.map((group, idx) => {
+            // 이미지가 없는 그룹(맛/구성 선택 등) → 텍스트 pill 버튼
+            // 이미지가 있는 그룹(사이드/음료 등) → 기존 카드 스타일
+            const isPillGroup = group.items.every(
+              (c) => !c.component_image_url,
+            );
 
-              <div className="set-modal-group-header">
-                <span className="set-modal-group-label">{group.name}</span>
-                <span className="set-modal-group-badge">
-                  {t.maxSelect(group.maxSelect)}
-                </span>
-              </div>
+            return (
+              <div key={group.name} className="set-modal-group">
+                {idx > 0 && <div className="set-modal-group-divider" />}
 
-              <div className="set-modal-group-list">
-                {group.items.map((component) => {
-                  const isSelected =
-                    selections[group.name]?.component_menu_id ===
-                    component.component_menu_id;
-                  const isSoldOut = !component.is_available;
-                  const componentName = getLocalizedName(
-                    language,
-                    component.component_menu_name,
-                    component.component_menu_name_en,
-                  );
+                <p className="set-modal-group-eyebrow">{t.optionSelect}</p>
 
-                  return (
-                    <div
-                      key={component.component_menu_id}
-                      className="set-option-card"
-                    >
-                      <div className="set-option-image-wrap">
-                        <img
-                          src={component.component_image_url}
-                          alt={componentName}
-                          className="set-option-image"
-                        />
-                        {isSoldOut && (
-                          <div className="set-option-soldout-overlay">
-                            <span>{t.soldOut}</span>
+                <div className="set-modal-group-header">
+                  <span className="set-modal-group-label">
+                    {getGroupLabel(language, group.name)}
+                  </span>
+                  <span className="set-modal-group-badge">
+                    {t.maxSelect(group.maxSelect)}
+                  </span>
+                </div>
+
+                {isPillGroup ? (
+                  <div className="set-modal-group-list set-modal-group-list--pill">
+                    {group.items.map((component) => {
+                      const isSelected =
+                        selections[group.name]?.component_menu_id ===
+                        component.component_menu_id;
+                      const isSoldOut = !component.is_available;
+                      const componentName = getLocalizedName(
+                        language,
+                        component.component_menu_name,
+                        component.component_menu_name_en,
+                      );
+
+                      return (
+                        <button
+                          key={component.component_menu_id}
+                          type="button"
+                          onClick={() => toggleComponent(group.name, component)}
+                          disabled={isSoldOut}
+                          className={`set-option-pill ${isSelected ? "is-selected" : ""}`}
+                        >
+                          {componentName}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="set-modal-group-list">
+                    {group.items.map((component) => {
+                      const isSelected =
+                        selections[group.name]?.component_menu_id ===
+                        component.component_menu_id;
+                      const isSoldOut = !component.is_available;
+                      const componentName = getLocalizedName(
+                        language,
+                        component.component_menu_name,
+                        component.component_menu_name_en,
+                      );
+
+                      return (
+                        <div
+                          key={component.component_menu_id}
+                          className="set-option-card"
+                        >
+                          <div className="set-option-image-wrap">
+                            <img
+                              src={component.component_image_url}
+                              alt={componentName}
+                              className="set-option-image"
+                            />
+                            {isSoldOut && (
+                              <div className="set-option-soldout-overlay">
+                                <span>{t.soldOut}</span>
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      <p className="set-option-name">{componentName}</p>
-                      <p className="set-option-price">
-                        {component.extra_price > 0
-                          ? `${formatPrice(language, component.extra_price)}`
-                          : formatPrice(language, 0)}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => toggleComponent(group.name, component)}
-                        disabled={isSoldOut}
-                        className={`set-option-toggle-btn ${isSelected ? "is-selected" : ""}`}
-                      >
-                        {isSelected ? "✓" : "+"}
-                      </button>
-                    </div>
-                  );
-                })}
+                          <p className="set-option-name">{componentName}</p>
+                          <p className="set-option-price">
+                            {component.extra_price > 0
+                              ? `${formatPrice(language, component.extra_price)}`
+                              : formatPrice(language, 0)}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              toggleComponent(group.name, component)
+                            }
+                            disabled={isSoldOut}
+                            className={`set-option-toggle-btn ${isSelected ? "is-selected" : ""}`}
+                          >
+                            {isSelected ? "✓" : "+"}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="set-modal-footer">

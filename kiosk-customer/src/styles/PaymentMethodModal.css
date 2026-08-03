@@ -64,7 +64,7 @@
 
 /* 토스페이: 버튼 전체를 이미지로 채움 (배경/텍스트가 이미 이미지 안에 포함됨) */
 .payment-method-toss {
-  background: #0064ff;
+  background: #202632;
   padding: 0;
   overflow: hidden;
 }
@@ -94,16 +94,16 @@
 
 /* 토스페이 이미지만 살짝 축소 */
 .payment-method-toss-img {
-  width: 55%;
-  height: 55%;
-  margin: 10% auto;
+  width: 90%;
+  height: 90%;
+  margin: 5% auto;
 }
 
 /* 네이버페이 이미지만 살짝 축소 */
 .payment-method-naver-img {
-  width: 60%;
-  height: 60%;
-  margin: 10% auto;
+  width: 75%;
+  height: 75%;
+  margin: 5% auto;
 }
 
 /* 카카오페이 이미지만 살짝 축소 */

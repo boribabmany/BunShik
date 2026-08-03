@@ -65,49 +65,6 @@ export default function AdminSalesDashboard() {
       </header>
 
       <main className="sales-layout">
-        <section className="sales-filter-panel" aria-label="매출 조회 조건">
-          <div className="period-selector" aria-label="조회 기간 단위">
-            {Object.entries(PERIOD_LABELS).map(([value, label]) => (
-              <button
-                type="button"
-                key={value}
-                className={period === value ? "active" : ""}
-                aria-pressed={period === value}
-                onClick={() => setPeriod(value)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          <label className="sales-date-field">
-            기준 날짜
-            <input
-              type="date"
-              required
-              value={date}
-              onChange={(event) => setDate(event.target.value)}
-            />
-          </label>
-
-          <div className="sales-export-actions">
-            <button
-              type="button"
-              disabled={!salesAnalytics || isSalesAnalyticsLoading}
-              onClick={() => downloadSalesCsv(salesAnalytics, exportMeta)}
-            >
-              CSV 다운로드
-            </button>
-            <button
-              type="button"
-              disabled={!salesAnalytics || isSalesAnalyticsLoading}
-              onClick={() => downloadSalesExcel(salesAnalytics, exportMeta)}
-            >
-              Excel 다운로드
-            </button>
-          </div>
-        </section>
-
         {salesAnalyticsError && (
           <div className="sales-error" role="alert">
             {salesAnalyticsError}
@@ -122,6 +79,49 @@ export default function AdminSalesDashboard() {
               summary={salesAnalytics?.summary}
               periodRange={periodRange}
             />
+
+            <section className="sales-filter-panel" aria-label="매출 조회 조건">
+              <div className="period-selector" aria-label="조회 기간 단위">
+                {Object.entries(PERIOD_LABELS).map(([value, label]) => (
+                  <button
+                    type="button"
+                    key={value}
+                    className={period === value ? "active" : ""}
+                    aria-pressed={period === value}
+                    onClick={() => setPeriod(value)}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              <label className="sales-date-field">
+                기준 날짜
+                <input
+                  type="date"
+                  required
+                  value={date}
+                  onChange={(event) => setDate(event.target.value)}
+                />
+              </label>
+
+              <div className="sales-export-actions">
+                <button
+                  type="button"
+                  disabled={!salesAnalytics || isSalesAnalyticsLoading}
+                  onClick={() => downloadSalesCsv(salesAnalytics, exportMeta)}
+                >
+                  CSV 다운로드
+                </button>
+                <button
+                  type="button"
+                  disabled={!salesAnalytics || isSalesAnalyticsLoading}
+                  onClick={() => downloadSalesExcel(salesAnalytics, exportMeta)}
+                >
+                  Excel 다운로드
+                </button>
+              </div>
+            </section>
 
             <SalesTrendChart
               salesHistory={salesAnalytics?.history}

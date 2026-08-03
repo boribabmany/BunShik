@@ -343,7 +343,8 @@
   font-weight: 600;
 }
 
-.set-component-settings input {
+.set-component-settings input,
+.set-component-settings select {
   width: 100%;
   min-width: 0;
   height: 32px;
@@ -366,13 +367,15 @@
   accent-color: #6da12f;
 }
 
-.set-component-settings input:disabled {
+.set-component-settings input:disabled,
+.set-component-settings select:disabled {
   background: #f1f3ef;
   color: #9aa198;
   cursor: not-allowed;
 }
 
-.set-component-settings input:focus {
+.set-component-settings input:focus,
+.set-component-settings select:focus {
   border-color: #6da12f;
   outline: none;
   box-shadow: 0 0 0 2px rgba(109, 161, 47, 0.12);

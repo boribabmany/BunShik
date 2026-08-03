@@ -90,7 +90,12 @@ describe("관리자 매출 분석", () => {
   test("현재 조회 결과를 CSV와 Excel로 전달한다", () => {
     render(<AdminSalesDashboard />);
 
-    fireEvent.click(screen.getByRole("button", { name: "CSV 다운로드" }));
+    const csvButton = screen.getByRole("button", { name: "CSV 다운로드" });
+    const filterPanel = csvButton.closest(".sales-filter-panel");
+    expect(filterPanel.nextElementSibling.classList.contains("sales-trend-chart"))
+      .toBe(true);
+
+    fireEvent.click(csvButton);
     fireEvent.click(screen.getByRole("button", { name: "Excel 다운로드" }));
 
     expect(downloadSalesCsv).toHaveBeenCalledWith(

@@ -99,7 +99,7 @@ export default function AdminMenuEdit() {
           setComponentSettings(Object.fromEntries(
             components.map((component) => [component.menu_id, {
               select_group: component.select_group || "",
-              group_max_select: component.group_max_select || 1,
+              group_max_select: 1,
               extra_price: component.extra_price || 0,
             }]),
           ));
@@ -297,6 +297,7 @@ export default function AdminMenuEdit() {
       [menuId]: {
         ...(current[menuId] || {}),
         [field]: field === "select_group" ? value : Number(value),
+        group_max_select: 1,
       },
     }));
   };

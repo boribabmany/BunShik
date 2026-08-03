@@ -19,12 +19,18 @@ describe("관리자 메뉴 편집 폼", () => {
         }}
         menus={[
           { menu_id: 1, menu_name: "떡볶이", category: "떡볶이" },
+          { menu_id: 3, menu_name: "순한맛", category: "떡볶이맛" },
           { menu_id: 2, menu_name: "다른 세트", category: "세트" },
         ]}
         isComponentsLoading={false}
-        selectedComponentIds={[1]}
+        selectedComponentIds={[1, 3]}
         componentSettings={{
           1: {
+            select_group: "떡볶이선택",
+            group_max_select: 1,
+            extra_price: 0,
+          },
+          3: {
             select_group: "떡볶이선택",
             group_max_select: 1,
             extra_price: 0,
@@ -38,13 +44,13 @@ describe("관리자 메뉴 편집 폼", () => {
     );
 
     expect(screen.getByDisplayValue("떡순튀세트")).toBeTruthy();
-    expect(screen.getByRole("checkbox")).toBeTruthy();
+    expect(screen.getAllByRole("checkbox")).toHaveLength(2);
     expect(screen.queryByText("다른 세트")).toBeNull();
 
-    fireEvent.click(screen.getByRole("checkbox"));
+    fireEvent.click(screen.getAllByRole("checkbox")[0]);
     expect(onComponentToggle).toHaveBeenCalledWith(1);
 
-    fireEvent.change(screen.getByDisplayValue("떡볶이선택"), {
+    fireEvent.change(screen.getAllByDisplayValue("떡볶이선택")[0], {
       target: { value: "맛선택" },
     });
     expect(onComponentSettingChange).toHaveBeenCalledWith(
@@ -52,6 +58,13 @@ describe("관리자 메뉴 편집 폼", () => {
       "select_group",
       "맛선택",
     );
+
+    const maxSelect = screen.getAllByText("최대 선택 수")[0]
+      .closest("label")
+      .querySelector("select");
+    expect(Array.from(maxSelect.options).map((option) => option.textContent))
+      .toEqual(["1개"]);
+    expect(maxSelect.disabled).toBe(true);
   });
 
   test("옵션 입력 변경을 상위 편집 화면으로 전달한다", () => {

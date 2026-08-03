@@ -53,19 +53,9 @@ export default function SetComponentsField({
                     </label>
                     <label>
                       <span>최대 선택 수</span>
-                      <input
-                        type="number"
-                        min="1"
-                        disabled={!componentSetting.select_group}
-                        value={componentSetting.group_max_select || 1}
-                        onChange={(event) =>
-                          onSettingChange(
-                            menu.menu_id,
-                            "group_max_select",
-                            event.target.value,
-                          )
-                        }
-                      />
+                      <select disabled value="1">
+                        <option value="1">1개</option>
+                      </select>
                     </label>
                     <label>
                       <span>추가 금액</span>

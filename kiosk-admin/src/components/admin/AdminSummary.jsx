@@ -1,17 +1,22 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useMenuStore from "../../store/menuStore";
-import useAdminOrderStore from "../../store/adminOrderStore";
 import useOptionStore from "../../store/optionStore";
+import useSalesStore from "../../store/salesStore";
 import UpdateHistory from "./UpdateHistory";
-import { getKoreaDateString } from "../../utils/date";
 
 export default function AdminSummary({ onMoveOrder }) {
   const navigate = useNavigate();
 
   const menuList = useMenuStore((state) => state.menuList);
   const optionList = useOptionStore((state) => state.optionList);
-  const { orders, todaySales } = useAdminOrderStore();
+  const salesSummary = useSalesStore((state) => state.salesSummary);
+  const loadSalesSummary = useSalesStore((state) => state.loadSalesSummary);
+
+  useEffect(() => {
+    loadSalesSummary();
+  }, [loadSalesSummary]);
 
   /* ==========================================
       실시간 데이터 통계 계산
@@ -23,12 +28,9 @@ export default function AdminSummary({ onMoveOrder }) {
   // 총 옵션 수
   const totalOptions = optionList.length;
 
-  // 오늘 주문 수
-  const todayDate = getKoreaDateString();
-
-  const todayOrdersCount = orders
-    ? orders.filter((o) => o.created_at?.startsWith(todayDate)).length
-    : 0;
+  // 매출 대시보드와 동일한 완료 주문 기준 요약
+  const todayOrdersCount = salesSummary?.todayOrders ?? 0;
+  const todaySales = salesSummary?.todaySales ?? 0;
 
   return (
     <div className="admin-summary">

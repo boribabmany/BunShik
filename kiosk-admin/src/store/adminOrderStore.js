@@ -28,6 +28,8 @@ const useAdminOrderStore = create((set, get) => ({
         orders: data,
         todaySales,
       });
+
+      return data;
     } catch (error) {
       console.error("주문 불러오기 실패:", error);
       throw error;

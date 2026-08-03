@@ -10,13 +10,21 @@ export default function AdminMenusTable({ onImageClick }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
-  const categories = useMemo(
-    () =>
-      [...new Set(menuList.map((menu) => menu.category?.trim()).filter(Boolean))]
-        .sort((a, b) => a.localeCompare(b, "ko")),
+  const salesMenus = useMemo(
+    () => menuList.filter((menu) => menu.menu_type !== "COMPONENT"),
     [menuList],
   );
-  const filteredMenus = filterMenus(menuList, { query, category, status });
+  const categories = useMemo(
+    () =>
+      [
+        ...new Set(
+          salesMenus.map((menu) => menu.category?.trim()).filter(Boolean),
+        ),
+      ]
+        .sort((a, b) => a.localeCompare(b, "ko")),
+    [salesMenus],
+  );
+  const filteredMenus = filterMenus(salesMenus, { query, category, status });
   const setMenus = filteredMenus.filter(
     (menu) => menu.category?.trim() === "세트",
   );
@@ -120,7 +128,7 @@ export default function AdminMenusTable({ onImageClick }) {
       <div className="catalog-list-header">
         <h2 className="table-title">메뉴 리스트</h2>
         <span className="catalog-result-count">
-          {filteredMenus.length}/{menuList.length}개
+          {filteredMenus.length}/{salesMenus.length}개
         </span>
       </div>
       <div className="catalog-filter-bar" aria-label="메뉴 검색 및 필터">

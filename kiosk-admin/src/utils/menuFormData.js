@@ -8,6 +8,7 @@ export const createMenuFormData = (
 
   formData.append("menuName", menu.menu_name);
   formData.append("menuNameEn", menu.menu_name_en);
+  formData.append("menuType", menu.menu_type || "NORMAL");
   formData.append("price", menu.price);
   formData.append("category", menu.category);
   formData.append("description", menu.description || "");

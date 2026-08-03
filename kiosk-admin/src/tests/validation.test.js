@@ -79,6 +79,19 @@ describe("메뉴 검증", () => {
       }),
     ).toBe("메뉴 사진을 등록하세요.");
   });
+
+  test("구성 전용 메뉴는 영문명·가격·사진 검증을 생략한다", () => {
+    expect(
+      validateMenu({
+        menu_name: "순한맛",
+        menu_name_en: "",
+        menu_type: "COMPONENT",
+        category: "떡볶이맛",
+        price: 0,
+        image_url: "",
+      }),
+    ).toBe(null);
+  });
 });
 
 describe("옵션 검증", () => {

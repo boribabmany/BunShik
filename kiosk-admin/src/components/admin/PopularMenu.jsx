@@ -7,21 +7,22 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import useSalesStore from "../../store/salesStore";
 
-export default function PopularMenu() {
-  const popularMenus = useSalesStore((state) => state.popularMenus);
-  const chartData = popularMenus.map((menu) => ({
-    name: menu.menuName,
-    orderCount: Number(menu.orderCount ?? 0),
-  }));
+export default function PopularMenu({ popularMenus = [], periodRange }) {
+  const chartData = popularMenus
+    .slice(0, 10)
+    .map((menu) => ({
+      name: menu.menuName,
+      quantity: Number(menu.quantity ?? menu.orderCount ?? 0),
+      totalSales: Number(menu.totalSales ?? 0),
+    }));
 
   return (
     <div className="popular-menu">
       <div className="chart-card-header">
         <div>
-          <h2>인기 메뉴 TOP 5</h2>
-          <p>최근 한 달 주문 수 기준</p>
+          <h2>메뉴별 통계</h2>
+          <p>{periodRange} · 매출 상위 10개</p>
         </div>
       </div>
 
@@ -51,10 +52,16 @@ export default function PopularMenu() {
               />
               <Tooltip
                 cursor={{ fill: "#f7f9fb" }}
-                formatter={(value) => [`${Number(value).toLocaleString()}개`, "주문 수"]}
+                formatter={(value, _, item) => [
+                  `${Number(value).toLocaleString()}개 · ₩${Number(
+                    item.payload.totalSales,
+                  ).toLocaleString()}`,
+                  "판매 실적",
+                ]}
               />
               <Bar
-                dataKey="orderCount"
+                dataKey="quantity"
+                name="판매 수량"
                 fill="#66885f"
                 radius={[0, 7, 7, 0]}
                 barSize={24}

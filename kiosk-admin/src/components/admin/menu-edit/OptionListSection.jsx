@@ -13,7 +13,11 @@ export default function OptionListSection({
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [page, setPage] = useState(1);
-  const filteredOptions = filterOptions(options, { query, status });
+  const filteredOptions = filterOptions(options, {
+    query,
+    status,
+    includeId: false,
+  });
   const totalPages = Math.ceil(filteredOptions.length / OPTIONS_PER_PAGE);
   const currentOptions = filteredOptions.slice(
     (page - 1) * OPTIONS_PER_PAGE,
@@ -35,7 +39,7 @@ export default function OptionListSection({
           <input
             type="search"
             value={query}
-            placeholder="옵션명 또는 번호 검색"
+            placeholder="옵션명 검색"
             aria-label="메뉴관리 옵션 검색"
             onChange={(event) => setQuery(event.target.value)}
           />

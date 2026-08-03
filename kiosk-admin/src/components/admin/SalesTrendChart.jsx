@@ -1,13 +1,11 @@
 import { Area, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis,} from "recharts";
-import useSalesStore from "../../store/salesStore";
 
 const formatShortDate = (date) => {
   const [, month, day] = String(date).split("-");
   return month && day ? `${month}.${day}` : date;
 };
 
-export default function SalesTrendChart() {
-  const salesHistory = useSalesStore((state) => state.salesHistory);
+export default function SalesTrendChart({ salesHistory = [], periodRange }) {
   const chartData = [...salesHistory].reverse().map((item) => ({
     date: formatShortDate(item.salesDate),
     fullDate: item.salesDate,
@@ -19,8 +17,8 @@ export default function SalesTrendChart() {
     <div className="sales-trend-chart">
       <div className="chart-card-header">
         <div>
-          <h2>최근 30일 매출 추이</h2>
-          <p>일별 매출액과 주문 수 변화</p>
+          <h2>매출 추이</h2>
+          <p>{periodRange} · 일별 매출액과 주문 수</p>
         </div>
         <div className="chart-legend" aria-label="차트 범례">
           <span className="legend-sales">매출</span>

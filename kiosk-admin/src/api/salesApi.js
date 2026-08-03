@@ -17,3 +17,11 @@ export const getSalesHistory = async () => {
   const response = await api.get("/api/admin/sales/history");
   return response.data.data;
 };
+
+// 선택 기간 매출 분석
+export const getSalesAnalytics = async ({ period, date }) => {
+  const response = await api.get("/api/admin/sales/analytics", {
+    params: { period, date },
+  });
+  return response.data.data;
+};

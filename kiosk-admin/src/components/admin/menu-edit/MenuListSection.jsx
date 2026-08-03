@@ -7,6 +7,7 @@ export default function MenuListSection({
   menus,
   onAddMenu,
   onAddSetMenu,
+  onAddComponentMenu,
   onEdit,
   onToggleVisibility,
   onImageClick,
@@ -16,18 +17,29 @@ export default function MenuListSection({
   const [status, setStatus] = useState("all");
   const [menuPage, setMenuPage] = useState(1);
   const [setListPage, setSetListPage] = useState(1);
+  const [componentPage, setComponentPage] = useState(1);
   const categories = useMemo(
     () =>
       [...new Set(menus.map((menu) => menu.category?.trim()).filter(Boolean))]
         .sort((a, b) => a.localeCompare(b, "ko")),
     [menus],
   );
-  const filteredMenus = filterMenus(menus, { query, category, status });
+  const filteredMenus = filterMenus(menus, {
+    query,
+    category,
+    status,
+    includeId: false,
+  });
+  const componentMenus = filteredMenus.filter(
+    (menu) => menu.menu_type === "COMPONENT",
+  );
   const regularMenus = filteredMenus.filter(
-    (menu) => menu.category?.trim() !== "세트",
+    (menu) =>
+      menu.menu_type !== "COMPONENT" && menu.category?.trim() !== "세트",
   );
   const setMenus = filteredMenus.filter(
-    (menu) => menu.category?.trim() === "세트",
+    (menu) =>
+      menu.menu_type !== "COMPONENT" && menu.category?.trim() === "세트",
   );
   const currentMenus = regularMenus.slice(
     (menuPage - 1) * MENU_PER_PAGE,
@@ -37,12 +49,20 @@ export default function MenuListSection({
     (setListPage - 1) * MENU_PER_PAGE,
     setListPage * MENU_PER_PAGE,
   );
+  const currentComponentMenus = componentMenus.slice(
+    (componentPage - 1) * MENU_PER_PAGE,
+    componentPage * MENU_PER_PAGE,
+  );
   const menuTotalPages = Math.ceil(regularMenus.length / MENU_PER_PAGE);
   const setMenuTotalPages = Math.ceil(setMenus.length / MENU_PER_PAGE);
+  const componentTotalPages = Math.ceil(
+    componentMenus.length / MENU_PER_PAGE,
+  );
 
   useEffect(() => {
     setMenuPage(1);
     setSetListPage(1);
+    setComponentPage(1);
   }, [query, category, status]);
 
   const renderRows = (items, emptyMessage) => {
@@ -144,7 +164,7 @@ export default function MenuListSection({
           <input
             type="search"
             value={query}
-            placeholder="메뉴명 또는 번호 검색"
+            placeholder="메뉴명 검색"
             aria-label="메뉴관리 메뉴 검색"
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -197,6 +217,39 @@ export default function MenuListSection({
           </tbody>
         </table>
         {renderPagination(setMenuTotalPages, setListPage, setSetListPage)}
+      </div>
+
+      <div className="register-button-area">
+        <button className="register-btn" onClick={onAddComponentMenu}>
+          + 구성품 등록
+        </button>
+      </div>
+      <div className="edit-table-box">
+        <h3 className="table-section-title">구성 전용 메뉴</h3>
+        <table className="edit-table">
+          <thead>
+            <tr>
+              <th>사진</th>
+              <th>메뉴명</th>
+              <th>영문명</th>
+              <th>카테고리</th>
+              <th>가격</th>
+              <th>상태</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            {renderRows(
+              currentComponentMenus,
+              "등록된 구성 전용 메뉴가 없습니다.",
+            )}
+          </tbody>
+        </table>
+        {renderPagination(
+          componentTotalPages,
+          componentPage,
+          setComponentPage,
+        )}
       </div>
 
       <div className="register-button-area">

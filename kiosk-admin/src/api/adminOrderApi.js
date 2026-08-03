@@ -27,6 +27,7 @@ export const getOrders = async () => {
     order_number: order.orderNumber,
     created_at: formatDateTime(order.createdAt),
     order_type: order.orderType,
+    payment_method: order.paymentMethod || "미확인",
     order_status: order.orderStatus,
     total_price: order.totalPrice,
   }));
@@ -42,6 +43,7 @@ export const getOrderDetail = async (orderId) => {
     order_number: order.orderNumber,
     created_at: formatDateTime(order.createdAt),
     order_type: order.orderType,
+    payment_method: order.paymentMethod || "미확인",
     order_status: order.orderStatus,
     total_price: order.totalPrice,
     items: (order.items ?? []).map((item) => ({

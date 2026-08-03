@@ -64,6 +64,95 @@
   color: #68717e;
 }
 
+.sales-filter-panel {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 18px 20px;
+  border: 1px solid #e3e6ea;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
+}
+
+.period-selector {
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #cfd5dc;
+  border-radius: 8px;
+}
+
+.period-selector button {
+  width: 58px;
+  height: 40px;
+  border: 0;
+  border-right: 1px solid #cfd5dc;
+  background: #fff;
+  color: #68717e;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.period-selector button:last-child {
+  border-right: 0;
+}
+
+.period-selector button.active {
+  background: #66885f;
+  color: #fff;
+}
+
+.sales-date-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #68717e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sales-date-field input {
+  height: 40px;
+  padding: 0 11px;
+  border: 1px solid #cfd5dc;
+  border-radius: 8px;
+  color: #343940;
+}
+
+.sales-export-actions {
+  display: flex;
+  gap: 9px;
+  margin-left: auto;
+}
+
+.sales-export-actions button {
+  height: 40px;
+  padding: 0 15px;
+  border: 1px solid #66885f;
+  border-radius: 8px;
+  background: #fff;
+  color: #526f4c;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sales-export-actions button:hover:not(:disabled) {
+  background: #edf6e8;
+}
+
+.sales-export-actions button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.sales-error {
+  padding: 14px 18px;
+  border: 1px solid #efb7b7;
+  border-radius: 9px;
+  background: #fff1f1;
+  color: #a83d3d;
+}
+
 /* =========================
    SalesSummary
 ========================= */
@@ -139,20 +228,74 @@
    Charts
 ========================= */
 
-.sales-chart-grid {
+.sales-chart-grid,
+.sales-breakdown-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
   gap: 20px;
 }
 
 .sales-trend-chart,
-.popular-menu {
+.popular-menu,
+.payment-method-stats {
   background: #ffffff;
   border: 1px solid #e3e6ea;
   border-radius: 12px;
   padding: 25px 30px;
   box-shadow: 0 4px 16px rgba(50, 57, 66, 0.05);
   min-width: 0;
+}
+
+.sales-breakdown-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.payment-stat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 310px;
+}
+
+.payment-stat-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px 12px;
+}
+
+.payment-stat-heading {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  color: #68717e;
+  font-size: 14px;
+}
+
+.payment-stat-heading strong {
+  color: #343940;
+  font-size: 15px;
+}
+
+.payment-share-track {
+  overflow: hidden;
+  height: 10px;
+  border-radius: 999px;
+  background: #e8ece5;
+}
+
+.payment-share-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #66885f;
+}
+
+.payment-stat-item small {
+  min-width: 42px;
+  color: #68717e;
+  text-align: right;
 }
 
 .chart-card-header {
@@ -236,8 +379,19 @@
 
 .sales-history h2 {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin: 0;
   color: #343940;
+}
+
+.sales-section-period {
+  margin: 7px 0 20px;
+  color: #7b8490;
+  font-size: 14px;
+}
+
+.sales-table-empty {
+  height: 100px;
+  color: #7b8490;
 }
 
 .sales-history-table {
@@ -302,6 +456,10 @@
   .sales-chart-grid {
     grid-template-columns: 1fr;
   }
+
+  .sales-breakdown-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 700px) {
@@ -311,6 +469,20 @@
 
   .sales-header {
     align-items: flex-start;
+  }
+
+  .sales-filter-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .sales-export-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sales-export-actions button {
+    flex: 1;
   }
 
   .sales-header h1 {
@@ -323,6 +495,7 @@
 
   .sales-trend-chart,
   .popular-menu,
+  .payment-method-stats,
   .sales-history {
     padding: 20px 16px;
   }

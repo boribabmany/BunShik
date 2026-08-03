@@ -1,9 +1,6 @@
-import { useState } from "react";
-import useSalesStore from "../../store/salesStore";
+import { useEffect, useState } from "react";
 
-export default function SalesHistoryTable() {
-  const salesHistory = useSalesStore((state) => state.salesHistory);
-
+export default function SalesHistoryTable({ salesHistory = [], periodRange }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -16,9 +13,14 @@ export default function SalesHistoryTable() {
 
   const totalPages = Math.ceil(salesHistory.length / itemsPerPage);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [salesHistory]);
+
   return (
     <div className="sales-history">
-      <h2>최근 30일 매출 현황</h2>
+      <h2>매출 현황</h2>
+      <p className="sales-section-period">{periodRange}</p>
 
       <table className="sales-history-table">
         <thead>
@@ -30,7 +32,13 @@ export default function SalesHistoryTable() {
         </thead>
 
         <tbody>
-          {currentSales.map((item) => (
+          {currentSales.length === 0 ? (
+            <tr>
+              <td colSpan="3" className="sales-table-empty">
+                매출 데이터가 없습니다.
+              </td>
+            </tr>
+          ) : currentSales.map((item) => (
             <tr key={item.salesDate}>
               <td>{item.salesDate}</td>
 
@@ -42,7 +50,7 @@ export default function SalesHistoryTable() {
         </tbody>
       </table>
 
-      <div className="pagination">
+      {totalPages > 1 && <div className="pagination">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
@@ -66,7 +74,7 @@ export default function SalesHistoryTable() {
         >
           다음
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

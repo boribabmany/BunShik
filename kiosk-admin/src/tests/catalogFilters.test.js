@@ -51,6 +51,13 @@ describe("catalogFilters", () => {
     expect(filterMenus(menus, { query: "stopped" })).toEqual([menus[2]]);
   });
 
+  test("ID 검색을 끄면 메뉴와 옵션 번호를 검색하지 않는다", () => {
+    expect(filterMenus(menus, { query: "1", includeId: false })).toEqual([]);
+    expect(filterOptions(options, { query: "10", includeId: false })).toEqual(
+      [],
+    );
+  });
+
   test("메뉴 카테고리와 판매상태를 함께 필터링한다", () => {
     expect(
       filterMenus(menus, { category: "김밥", status: "active" }),

@@ -33,6 +33,16 @@ describe("관리자 메뉴·옵션 검색 필터", () => {
             is_visible: true,
             is_available: false,
           },
+          {
+            menu_id: 21,
+            menu_name: "순한맛",
+            menu_name_en: "Mild",
+            menu_type: "COMPONENT",
+            category: "떡볶이맛",
+            price: 0,
+            is_visible: true,
+            is_available: true,
+          },
         ],
       }),
     );
@@ -62,6 +72,10 @@ describe("관리자 메뉴·옵션 검색 필터", () => {
 
   test("대시보드 메뉴를 검색하고 판매상태로 필터링한다", () => {
     render(<AdminMenusTable />);
+
+    expect(screen.queryByText("순한맛")).toBeNull();
+    expect(screen.queryByRole("option", { name: "떡볶이맛" })).toBeNull();
+    expect(screen.getByText("2/2개")).toBeTruthy();
 
     fireEvent.change(screen.getByLabelText("메뉴 검색"), {
       target: { value: "Ramen" },

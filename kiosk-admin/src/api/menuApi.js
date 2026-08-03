@@ -15,6 +15,7 @@ const mapMenu = (menu) => ({
   menu_id: menu.menuId,
   menu_name: menu.menuName,
   menu_name_en: menu.menuNameEn,
+  menu_type: menu.menuType ?? "NORMAL",
   category: menu.category,
   price: menu.price,
   image_url: getImageUrl(menu.imageUrl),

@@ -6,6 +6,7 @@ describe("createMenuFormData", () => {
       {
         menu_name: "김밥 세트",
         menu_name_en: "Kimbap set",
+        menu_type: "NORMAL",
         price: 6500,
         category: "세트",
         description: "세트 설명",
@@ -22,6 +23,7 @@ describe("createMenuFormData", () => {
     );
 
     expect(formData.get("menuName")).toBe("김밥 세트");
+    expect(formData.get("menuType")).toBe("NORMAL");
     expect(formData.get("isAvailable")).toBe("true");
     expect(formData.getAll("componentMenuIds")).toEqual(["1", "2"]);
     expect(formData.get("componentSettings[1].selectGroup"))

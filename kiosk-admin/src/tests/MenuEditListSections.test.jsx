@@ -5,6 +5,7 @@ import OptionListSection from "../components/admin/menu-edit/OptionListSection";
 describe("메뉴관리 목록 섹션", () => {
   test("메뉴 목록 검색과 등록·수정 콜백을 연결한다", () => {
     const onAddMenu = jest.fn();
+    const onAddComponentMenu = jest.fn();
     const onEdit = jest.fn();
     const menus = [
       {
@@ -25,6 +26,16 @@ describe("메뉴관리 목록 섹션", () => {
         is_visible: true,
         is_available: false,
       },
+      {
+        menu_id: 3,
+        menu_name: "순한맛",
+        menu_name_en: "Mild",
+        menu_type: "COMPONENT",
+        category: "떡볶이맛",
+        price: 0,
+        is_visible: true,
+        is_available: true,
+      },
     ];
 
     render(
@@ -32,6 +43,7 @@ describe("메뉴관리 목록 섹션", () => {
         menus={menus}
         onAddMenu={onAddMenu}
         onAddSetMenu={jest.fn()}
+        onAddComponentMenu={onAddComponentMenu}
         onEdit={onEdit}
         onToggleVisibility={jest.fn()}
         onImageClick={jest.fn()}
@@ -48,6 +60,17 @@ describe("메뉴관리 목록 섹션", () => {
     fireEvent.click(screen.getByRole("button", { name: "수정" }));
     expect(onAddMenu).toHaveBeenCalledTimes(1);
     expect(onEdit).toHaveBeenCalledWith("menu", menus[1]);
+
+    fireEvent.change(screen.getByLabelText("메뉴관리 메뉴 검색"), {
+      target: { value: "" },
+    });
+    expect(screen.getByText("구성 전용 메뉴")).toBeTruthy();
+    expect(screen.getByText("Mild")).toBeTruthy();
+    expect(
+      screen.getAllByRole("heading", { level: 3 }).map((heading) => heading.textContent),
+    ).toEqual(["세트 메뉴", "구성 전용 메뉴", "일반 메뉴"]);
+    fireEvent.click(screen.getByRole("button", { name: "+ 구성품 등록" }));
+    expect(onAddComponentMenu).toHaveBeenCalledTimes(1);
   });
 
   test("옵션 목록 검색과 등록·판매상태 콜백을 연결한다", () => {

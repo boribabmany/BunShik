@@ -7,17 +7,10 @@ import useOptionStore from "../../store/optionStore";
 import ImagePreviewModal from "../../components/admin/ImagePreviewModal";
 import MenuListSection from "../../components/admin/menu-edit/MenuListSection";
 import OptionListSection from "../../components/admin/menu-edit/OptionListSection";
+import MenuEditorForm from "../../components/admin/menu-edit/MenuEditorForm";
+import OptionEditorForm from "../../components/admin/menu-edit/OptionEditorForm";
 import "../../styles/AdminMenuEdit.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
-
-const MENU_CATEGORIES = [
-  "세트",
-  "떡볶이",
-  "라면",
-  "김밥",
-  "사이드",
-  "음료",
-];
 
 export default function AdminMenuEdit() {
   const navigate = useNavigate();
@@ -40,9 +33,6 @@ export default function AdminMenuEdit() {
   const [selectedComponentIds, setSelectedComponentIds] = useState([]);
   const [componentSettings, setComponentSettings] = useState({});
   const [isComponentsLoading, setIsComponentsLoading] = useState(false);
-  const regularMenuList = menuList.filter(
-    (menu) => menu.category?.trim() !== "세트",
-  );
   const location = useLocation();
   //페이지가 처음 열릴 때 메뉴와 옵션 데이터를 불러오는 역할
   useEffect(() => {
@@ -66,7 +56,7 @@ export default function AdminMenuEdit() {
       setComponentSettings({});
 
       if (location.state.type === "menu") {
-        setSelectedItem({ menu_name: "", menu_name_en: "",  category: "", price: 0, is_available: true, image_url: "", description: "", description_en: "",
+        setSelectedItem({ menu_name: "", menu_name_en: "", menu_type: location.state.menuType || "NORMAL", category: "", price: 0, is_available: true, image_url: "", description: "", description_en: "",
         });
       } else {
         setSelectedItem({ option_name: "", option_name_en: "", option_price: 0, option_is_available: true, option_image: "",
@@ -254,7 +244,7 @@ export default function AdminMenuEdit() {
     setImagePreviewUrl(null);
     setIsAddMode(false);
   };
-  const handleStartAddMenu = (category = "") => {
+  const handleStartAddMenu = (category = "", menuType = "NORMAL") => {
     setEditMode("menu");
     setIsAddMode(true);
     setImageFile(null);
@@ -264,6 +254,7 @@ export default function AdminMenuEdit() {
     setSelectedItem({
       menu_name: "",
       menu_name_en: "",
+      menu_type: menuType,
       category,
       price: 0,
       is_available: true,
@@ -314,6 +305,12 @@ export default function AdminMenuEdit() {
     const { name, value } = e.target;
     setSelectedItem((prev) => ({
       ...prev,
+      ...(name === "category" && value === "세트"
+        ? { menu_type: "NORMAL" }
+        : {}),
+      ...(name === "menu_type" && value === "COMPONENT"
+        ? { price: 0 }
+        : {}),
       [name]:
         name === "price" || name === "option_price"
           ? value === ""
@@ -421,6 +418,7 @@ export default function AdminMenuEdit() {
           menus={menuList}
           onAddMenu={() => handleStartAddMenu()}
           onAddSetMenu={() => handleStartAddMenu("세트")}
+          onAddComponentMenu={() => handleStartAddMenu("", "COMPONENT")}
           onEdit={handleEditClick}
           onToggleVisibility={handleToggleMenu}
           onImageClick={handleImageClick}
@@ -466,187 +464,25 @@ export default function AdminMenuEdit() {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>{editMode === "menu" ? "메뉴명" : "옵션명"}</label>
-            <input
-              name={editMode === "menu" ? "menu_name" : "option_name"}
-              value={
-                editMode === "menu"
-                  ? selectedItem?.menu_name || ""
-                  : selectedItem?.option_name || ""
-              }
+          {editMode === "menu" ? (
+            <MenuEditorForm
+              item={selectedItem}
+              menus={menuList}
+              isComponentsLoading={isComponentsLoading}
+              selectedComponentIds={selectedComponentIds}
+              componentSettings={componentSettings}
               onChange={handleInputChange}
+              onImageChange={handleImageChange}
+              onComponentToggle={handleComponentToggle}
+              onComponentSettingChange={handleComponentSettingChange}
             />
-          </div>
-
-          <div className="form-group">
-            <label>영문명</label>
-            <input
-              name={editMode === "menu" ? "menu_name_en" : "option_name_en"}
-              value={
-                editMode === "menu"
-                  ? selectedItem?.menu_name_en || ""
-                  : selectedItem?.option_name_en || ""
-              }
+          ) : (
+            <OptionEditorForm
+              item={selectedItem}
               onChange={handleInputChange}
+              onImageChange={handleImageChange}
             />
-          </div>
-
-          {editMode === "menu" && (
-            <>
-              <div className="form-group">
-                <label>카테고리</label>
-                <select
-                  name="category"
-                  value={selectedItem?.category || ""}
-                  onChange={handleInputChange}
-                >
-                  <option value="">카테고리 선택</option>
-                  {MENU_CATEGORIES.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>설명</label>
-                <input
-                  name="description"
-                  value={selectedItem?.description || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>영문 설명</label>
-                <input
-                  name="description_en"
-                  value={selectedItem?.description_en || ""}
-                  onChange={handleInputChange}
-                />
-              </div>
-
-              {selectedItem?.category?.trim() === "세트" && (
-                <div className="set-components-field">
-                  <span className="set-components-label">구성 메뉴</span>
-                  <div className="set-components-list">
-                    {isComponentsLoading ? (
-                      <p className="set-components-message">
-                        구성 메뉴를 불러오는 중입니다.
-                      </p>
-                    ) : regularMenuList.length === 0 ? (
-                      <p className="set-components-message">
-                        선택할 일반 메뉴가 없습니다.
-                      </p>
-                    ) : (
-                      regularMenuList.map((menu) => (
-                        <div
-                          key={menu.menu_id}
-                          className="set-component-option"
-                        >
-                          <label className="set-component-check">
-                            <input
-                              type="checkbox"
-                              checked={selectedComponentIds.includes(menu.menu_id)}
-                              onChange={() => handleComponentToggle(menu.menu_id)}
-                            />
-                            <span>{menu.menu_name}</span>
-                            <small>{menu.category}</small>
-                          </label>
-                          {selectedComponentIds.includes(menu.menu_id) && (
-                            <div className="set-component-settings">
-                              <label>
-                                <span>선택 그룹</span>
-                                <input
-                                  placeholder="비우면 고정"
-                                  value={componentSettings[menu.menu_id]?.select_group || ""}
-                                  onChange={(e) => handleComponentSettingChange(menu.menu_id, "select_group", e.target.value)}
-                                />
-                              </label>
-                              <label>
-                                <span>최대 선택 수</span>
-                                <input
-                                  type="number"
-                                  min="1"
-                                  disabled={!componentSettings[menu.menu_id]?.select_group}
-                                  value={componentSettings[menu.menu_id]?.group_max_select || 1}
-                                  onChange={(e) => handleComponentSettingChange(menu.menu_id, "group_max_select", e.target.value)}
-                                />
-                              </label>
-                              <label>
-                                <span>추가 금액</span>
-                                <input
-                                  type="number"
-                                  min="0"
-                                  step="100"
-                                  value={componentSettings[menu.menu_id]?.extra_price || 0}
-                                  onChange={(e) => handleComponentSettingChange(menu.menu_id, "extra_price", e.target.value)}
-                                />
-                              </label>
-                            </div>
-                          )}
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-            </>
           )}
-
-          <div className="form-group">
-            <label>{editMode === "menu" ? "가격" : "추가 가격"}</label>
-            <input
-              type="number"
-              step="100"
-              min="0"
-              name={editMode === "menu" ? "price" : "option_price"}
-              value={
-                editMode === "menu"
-                  ? (selectedItem?.price ?? "")
-                  : (selectedItem?.option_price ?? "")
-              }
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label>사진</label>
-
-            <label className="image-upload">
-              <span>사진 선택 (버튼클릭)</span>
-
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                hidden
-              />
-            </label>
-          </div>
-
-          <div className="form-group">
-            <label>상태</label>
-            <select
-              name={
-                editMode === "menu"
-                  ? "base_is_available"
-                  : "option_is_available"
-              }
-              value={
-                editMode === "menu"
-                  ? (selectedItem?.base_is_available ??
-                    selectedItem?.is_available)
-                  : selectedItem?.option_is_available
-              }
-              onChange={handleInputChange}
-            >
-              <option value={true}>판매중</option>
-              <option value={false}>품절</option>
-            </select>
-          </div>
         </div>
         <div className="edit-bottom">
           <button

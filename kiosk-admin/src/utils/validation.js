@@ -8,12 +8,16 @@ export function validateMenu(menu, imageFile = null) {
     return "메뉴명을 입력하세요.";
   }
 
-  if (!menu.menu_name_en?.trim()) {
-    return "메뉴 영문명을 입력하세요.";
-  }
-
   if (!menu.category?.trim()) {
     return "카테고리를 입력하세요.";
+  }
+
+  if (menu.menu_type === "COMPONENT") {
+    return null;
+  }
+
+  if (!menu.menu_name_en?.trim()) {
+    return "메뉴 영문명을 입력하세요.";
   }
 
   if (menu.price < 1000) {

@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import useAdminOrderStore from "../../store/adminOrderStore";
 import { getOrderDetail } from "../../api/adminOrderApi";
 import { getKoreaDateString } from "../../utils/date";
+import { playNewOrderSound } from "../../utils/newOrderSound";
 import "../../styles/AdminOrder.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
@@ -24,10 +25,77 @@ export default function AdminOrder() {
   const [orderDetails, setOrderDetails] = useState({});
   const [detailLoadingId, setDetailLoadingId] = useState(null);
   const [detailErrorId, setDetailErrorId] = useState(null);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const knownOrderIdsRef = useRef(new Set());
+  const isFirstOrderLoadRef = useRef(true);
+  const isPollingRef = useRef(false);
+  const soundEnabledRef = useRef(false);
 
   useEffect(() => {
-    loadOrders();
+    let isActive = true;
+
+    const refreshOrders = async () => {
+      if (isPollingRef.current) return;
+
+      isPollingRef.current = true;
+
+      try {
+        const latestOrders = await loadOrders();
+
+        if (!isActive || !Array.isArray(latestOrders)) return;
+
+        const latestOrderIds = new Set(
+          latestOrders.map((order) => order.order_id),
+        );
+
+        if (!isFirstOrderLoadRef.current) {
+          const hasNewOrder = latestOrders.some(
+            (order) =>
+              order.order_status === "접수" &&
+              !knownOrderIdsRef.current.has(order.order_id),
+          );
+
+          if (hasNewOrder && soundEnabledRef.current) {
+            playNewOrderSound().catch((error) => {
+              console.warn("신규 주문 알림음 재생 실패:", error);
+            });
+          }
+        }
+
+        knownOrderIdsRef.current = latestOrderIds;
+        isFirstOrderLoadRef.current = false;
+      } catch (error) {
+        console.error("주문 자동 갱신 실패:", error);
+      } finally {
+        isPollingRef.current = false;
+      }
+    };
+
+    refreshOrders();
+    const intervalId = setInterval(refreshOrders, 5000);
+
+    return () => {
+      isActive = false;
+      clearInterval(intervalId);
+    };
   }, [loadOrders]);
+
+  const handleSoundToggle = async () => {
+    if (soundEnabledRef.current) {
+      soundEnabledRef.current = false;
+      setIsSoundEnabled(false);
+      return;
+    }
+
+    try {
+      await playNewOrderSound();
+      soundEnabledRef.current = true;
+      setIsSoundEnabled(true);
+    } catch (error) {
+      console.error("알림음 활성화 실패:", error);
+      alert("브라우저에서 알림음을 켜지 못했습니다.");
+    }
+  };
 
   const handleOrderRowClick = async (orderId) => {
     if (expandedOrderId === orderId) {
@@ -133,6 +201,18 @@ export default function AdminOrder() {
             <h3>상태: 완료는 취소불가</h3>
           </div>
         </div>
+
+        <div className="order-live-controls">
+          <span className="auto-refresh-status">5초마다 자동 갱신</span>
+          <button
+            type="button"
+            className={`sound-toggle ${isSoundEnabled ? "enabled" : ""}`}
+            aria-pressed={isSoundEnabled}
+            onClick={handleSoundToggle}
+          >
+            {isSoundEnabled ? "알림음 끄기" : "알림음 켜기"}
+          </button>
+        </div>
       </header>
 
       <section className="search-area">
@@ -180,6 +260,7 @@ export default function AdminOrder() {
               <th>주문번호</th>
               <th>주문시간</th>
               <th>주문유형</th>
+              <th>결제방법</th>
               <th>상태</th>
               <th>주문금액</th>
               <th>관리</th>
@@ -210,6 +291,7 @@ export default function AdminOrder() {
                   <td>{order.order_number}</td>
                   <td>{order.created_at}</td>
                   <td>{order.order_type}</td>
+                  <td>{order.payment_method}</td>
                   <td>{order.order_status}</td>
                   <td>{order.total_price.toLocaleString()}원</td>
 
@@ -244,7 +326,7 @@ export default function AdminOrder() {
                 </tr>
                 {isExpanded && (
                   <tr className="order-detail-row">
-                    <td colSpan="6">
+                    <td colSpan="7">
                       <div className="order-detail-panel">
                         {detailLoadingId === order.order_id && (
                           <p className="order-detail-message">
@@ -263,7 +345,7 @@ export default function AdminOrder() {
                             <div className="order-detail-heading">
                               <strong>주문 상세</strong>
                               <span>
-                                {detail.order_number} · {detail.order_type}
+                                {detail.order_number} · {detail.order_type} · 결제: {detail.payment_method}
                               </span>
                             </div>
 

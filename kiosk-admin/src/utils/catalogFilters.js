@@ -23,24 +23,37 @@ const matchesStatus = (item, availabilityField, status) => {
 
 export const filterMenus = (
   menus,
-  { query = "", category = "all", status = "all" } = {},
+  {
+    query = "",
+    category = "all",
+    status = "all",
+    includeId = true,
+  } = {},
 ) =>
   menus.filter(
     (menu) =>
-      matchesQuery(menu, ["menu_id", "menu_name", "menu_name_en"], query) &&
+      matchesQuery(
+        menu,
+        includeId
+          ? ["menu_id", "menu_name", "menu_name_en"]
+          : ["menu_name", "menu_name_en"],
+        query,
+      ) &&
       (category === "all" || menu.category?.trim() === category) &&
       matchesStatus(menu, "is_available", status),
   );
 
 export const filterOptions = (
   options,
-  { query = "", status = "all" } = {},
+  { query = "", status = "all", includeId = true } = {},
 ) =>
   options.filter(
     (option) =>
       matchesQuery(
         option,
-        ["option_id", "option_name", "option_name_en"],
+        includeId
+          ? ["option_id", "option_name", "option_name_en"]
+          : ["option_name", "option_name_en"],
         query,
       ) && matchesStatus(option, "option_is_available", status),
   );

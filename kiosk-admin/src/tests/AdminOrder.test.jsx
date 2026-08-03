@@ -1,8 +1,15 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import AdminOrder from "../pages/admin/AdminOrder";
 import useAdminOrderStore from "../store/adminOrderStore";
 import { getOrderDetail } from "../api/adminOrderApi";
 import { getKoreaDateString } from "../utils/date";
+import { playNewOrderSound } from "../utils/newOrderSound";
 
 jest.mock("react-router-dom", () => ({
   useNavigate: () => jest.fn(),
@@ -10,6 +17,9 @@ jest.mock("react-router-dom", () => ({
 jest.mock("../store/adminOrderStore");
 jest.mock("../api/adminOrderApi", () => ({
   getOrderDetail: jest.fn(),
+}));
+jest.mock("../utils/newOrderSound", () => ({
+  playNewOrderSound: jest.fn(),
 }));
 
 const today = getKoreaDateString();
@@ -19,6 +29,7 @@ const order = {
   order_number: "A-001",
   created_at: `${today} 12:30`,
   order_type: "매장",
+  payment_method: "카드",
   order_status: "접수",
   total_price: 6500,
 };
@@ -59,6 +70,8 @@ describe("관리자 주문 관리", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    loadOrders.mockResolvedValue([order]);
+    playNewOrderSound.mockResolvedValue(undefined);
     useAdminOrderStore.mockReturnValue({
       orders: [order],
       loadOrders,
@@ -70,6 +83,7 @@ describe("관리자 주문 관리", () => {
   });
 
   afterEach(() => {
+    jest.useRealTimers();
     jest.restoreAllMocks();
   });
 
@@ -78,6 +92,9 @@ describe("관리자 주문 관리", () => {
   test("주문 행을 누르면 상세 메뉴와 옵션을 펼쳐 표시한다", async () => {
     getOrderDetail.mockResolvedValue(detail);
     renderPage();
+
+    expect(screen.getByText("결제방법")).toBeTruthy();
+    expect(screen.getByText("카드")).toBeTruthy();
 
     fireEvent.click(screen.getByText("A-001"));
 
@@ -88,6 +105,7 @@ describe("관리자 주문 관리", () => {
     expect(screen.getByText("떡볶이")).toBeTruthy();
     expect(screen.getByText("순대")).toBeTruthy();
     expect(screen.getByText("총 결제금액")).toBeTruthy();
+    expect(screen.getByText(/결제: 카드/)).toBeTruthy();
   });
 
   test("상태 변경 실패 시 백엔드 오류 메시지를 표시한다", async () => {
@@ -129,5 +147,42 @@ describe("관리자 주문 관리", () => {
         "완료된 주문은 취소할 수 없습니다.",
       );
     });
+  });
+
+  test("10초마다 갱신하고 신규 접수 주문이 생기면 알림음을 재생한다", async () => {
+    jest.useFakeTimers();
+    const newOrder = {
+      ...order,
+      order_id: 2,
+      order_number: "A-002",
+    };
+    loadOrders
+      .mockResolvedValueOnce([order])
+      .mockResolvedValueOnce([newOrder, order]);
+
+    renderPage();
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(loadOrders).toHaveBeenCalledTimes(1);
+    expect(playNewOrderSound).not.toHaveBeenCalled();
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "알림음 켜기" }));
+      await Promise.resolve();
+    });
+
+    expect(playNewOrderSound).toHaveBeenCalledTimes(1);
+    playNewOrderSound.mockClear();
+
+    await act(async () => {
+      jest.advanceTimersByTime(10000);
+      await Promise.resolve();
+    });
+
+    expect(loadOrders).toHaveBeenCalledTimes(2);
+    expect(playNewOrderSound).toHaveBeenCalledTimes(1);
   });
 });

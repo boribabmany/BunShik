@@ -6,6 +6,8 @@ import Cart from "./pages/kiosk/Cart";
 import Payment from "./pages/kiosk/Payment";
 import OrderComplete from "./pages/kiosk/OrderComplete";
 import IdleResetHandler from "./components/kiosk/IdleResetHandler";
+import TossPaymentSuccess from "./pages/kiosk/TossPaymentSuccess";
+import TossPaymentFail from "./pages/kiosk/TossPaymentFail";
 
 function App() {
   const [kioskScale, setKioskScale] = useState(1);
@@ -43,6 +45,11 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/payment" element={<Payment />} />
             <Route path="/complete" element={<OrderComplete />} />
+            <Route
+              path="/payment/toss/success"
+              element={<TossPaymentSuccess />}
+            />
+            <Route path="/payment/toss/fail" element={<TossPaymentFail />} />
           </Routes>
         </div>
       </div>

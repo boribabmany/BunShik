@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { ANONYMOUS, loadTossPayments } from "@tosspayments/tosspayments-sdk";
 import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
@@ -22,6 +23,7 @@ import "../../styles/Payment.css";
 import "../../styles/PaymentMethodModal.css";
 
 const QR_METHODS = ["naverpay", "kakaopay"];
+const TOSS_CLIENT_KEY = process.env.REACT_APP_TOSS_CLIENT_KEY;
 
 function Payment() {
   const navigate = useNavigate();
@@ -33,6 +35,8 @@ function Payment() {
   const orderType = useOrderStore((state) => state.orderType);
   const setOrderNumber = useOrderStore((state) => state.setOrderNumber);
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
+  const pendingOrderId = useOrderStore((state) => state.pendingOrderId);
+  const setPendingOrderId = useOrderStore((state) => state.setPendingOrderId);
 
   const language = useLanguageStore((state) => state.language);
   const t = translations[language].payment;
@@ -43,7 +47,7 @@ function Payment() {
   const [isMethodModalOpen, setIsMethodModalOpen] = useState(false);
   const [lastMethod, setLastMethod] = useState("card");
   const [qrMethod, setQrMethod] = useState(null);
-  const [currentOrderId, setCurrentOrderId] = useState(null); // 생성된 주문 id 추적
+  const [currentOrderNumber, setCurrentOrderNumber] = useState(null);
 
   const isCartEmpty = items.length === 0;
   const totalPrice = getTotalPrice();
@@ -51,6 +55,39 @@ function Payment() {
   const handleGoToMenu = useCallback(() => {
     navigate("/menu", { replace: true });
   }, [navigate]);
+
+  const ensureOrderCreated = async () => {
+    if (pendingOrderId) {
+      return { orderId: pendingOrderId, orderNumber: currentOrderNumber };
+    }
+
+    const orderResult = await withRetry(() =>
+      createOrder({
+        items: items.map((item) => ({
+          menu_id: item.menu_id,
+          quantity: item.quantity,
+          option_ids: item.options.map((option) => option.option_id),
+          component_menu_ids: (item.components || []).map(
+            (c) => c.component_menu_id,
+          ),
+        })),
+        order_type: orderType === "dine-in" ? "매장" : "포장",
+      }),
+    );
+
+    if (orderResult.status !== "대기") {
+      throw Object.assign(new Error(orderResult.message ?? "주문 생성 실패"), {
+        failType: "order-error",
+      });
+    }
+
+    setPendingOrderId(orderResult.order_id);
+    setCurrentOrderNumber(orderResult.order_number);
+    return {
+      orderId: orderResult.order_id,
+      orderNumber: orderResult.order_number,
+    };
+  };
 
   const runPayment = async (method) => {
     setIsPaying(true);
@@ -74,46 +111,16 @@ function Payment() {
     }
 
     try {
-      // 이미 생성된 주문(결제대기)이 있으면 재사용, 없으면 새로 생성
-      let orderId = currentOrderId;
-      let orderNumber;
-
-      if (!orderId) {
-        const orderResult = await withRetry(() =>
-          createOrder({
-            items: items.map((item) => ({
-              menu_id: item.menu_id,
-              quantity: item.quantity,
-              option_ids: item.options.map((option) => option.option_id),
-              component_menu_ids: (item.components || []).map(
-                (c) => c.component_menu_id,
-              ),
-            })),
-            order_type: orderType === "dine-in" ? "매장" : "포장",
-          }),
-        );
-
-        if (orderResult.status !== "대기") {
-          setFailType("order-error");
-          setFailReason(orderResult.message ?? null);
-          return;
-        }
-
-        orderId = orderResult.order_id;
-        orderNumber = orderResult.order_number;
-        setCurrentOrderId(orderId); // 재시도/취소를 위해 기억해둠
-      }
+      const { orderId, orderNumber } = await ensureOrderCreated();
 
       const paymentResult = await withRetry(() =>
-        submitPayment({
-          order_id: orderId,
-          payment_method: paymentMethod,
-        }),
+        submitPayment({ order_id: orderId, payment_method: paymentMethod }),
       );
 
       if (paymentResult.status === "성공") {
         setOrderNumber(orderNumber ?? String(orderId));
         setTotalPrice(totalPrice);
+        setPendingOrderId(null);
         clearCart();
         navigate("/complete");
       } else {
@@ -122,18 +129,60 @@ function Payment() {
       }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
-      setFailReason(null);
+      setFailReason(error.message ?? null);
       setFailType(error.failType ?? "system-error");
     } finally {
       setIsPaying(false);
     }
   };
 
+  const runTossPayment = async () => {
+    setIsPaying(true);
+    setFailType(null);
+    setFailReason(null);
+    setLastMethod("tosspay");
+
+    try {
+      const { orderId, orderNumber } = await ensureOrderCreated();
+
+      const tossPayments = await loadTossPayments(TOSS_CLIENT_KEY);
+      const payment = tossPayments.payment({ customerKey: ANONYMOUS });
+
+      await payment.requestPayment({
+        method: "CARD",
+        amount: { currency: "KRW", value: totalPrice },
+        orderId: `bunshik-${orderId}-${Date.now()}`,
+        orderName: "분식집 주문",
+        successUrl:
+          `${window.location.origin}/payment/toss/success` +
+          `?kioskOrderId=${orderId}` +
+          `&orderNumber=${encodeURIComponent(orderNumber ?? String(orderId))}` +
+          `&totalPrice=${totalPrice}`,
+        failUrl: `${window.location.origin}/payment/toss/fail?kioskOrderId=${orderId}`,
+        card: {
+          useEscrow: false,
+          flowMode: "DIRECT",
+          easyPay: "토스페이",
+        },
+      });
+    } catch (error) {
+      setIsPaying(false);
+      setFailType("system-error");
+      setFailReason(error.message || "결제창을 열지 못했습니다.");
+    }
+  };
+
   const handlePay = (method) => {
     setIsMethodModalOpen(false);
+    setLastMethod(method);
 
     if (QR_METHODS.includes(method)) {
       setQrMethod(method);
+      return;
+    }
+
+    if (method === "tosspay") {
+      runTossPayment();
       return;
     }
 
@@ -154,22 +203,21 @@ function Payment() {
     setFailType(null);
   };
 
-  // 뒤로가기 = 포기 → 결제대기 상태인 주문이 있으면 취소 처리 후 이동
   const handleBack = async () => {
-    if (isPaying) return; // 결제 처리 중엔 뒤로가기(취소) 불가
+    if (isPaying) return;
 
-    if (currentOrderId) {
+    if (pendingOrderId) {
       const confirmed = window.confirm(
         "결제를 그만두시겠어요? 진행 중인 주문이 취소됩니다.",
       );
       if (!confirmed) return;
 
       try {
-        await cancelOrder(currentOrderId);
+        await cancelOrder(pendingOrderId);
       } catch (error) {
         console.error("주문 취소 실패:", error);
-        // 취소 실패해도 화면 이동은 막지 않음 (사용자 경험상 뒤로가기는 항상 가능해야 함)
       }
+      setPendingOrderId(null);
     }
 
     navigate(-1);

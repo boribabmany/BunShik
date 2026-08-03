@@ -3,6 +3,7 @@ import axios from "axios";
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const ORDER_URL = `${API_BASE_URL}/api/orders`;
 const PAYMENT_URL = `${API_BASE_URL}/api/payments`;
+const TOSS_URL = `${API_BASE_URL}/api/toss`;
 
 const REQUEST_TIMEOUT = 8000; // 8초
 
@@ -114,5 +115,25 @@ export const cancelOrder = async (orderId) => {
   } catch (error) {
     console.error("주문 취소 실패:", error);
     throw normalizeError(error);
+  }
+};
+
+export const confirmTossPayment = async (request) => {
+  try {
+    const response = await axios.post(`${TOSS_URL}/confirm`, request, {
+      timeout: REQUEST_TIMEOUT,
+    });
+    return response.data.data;
+  } catch (error) {
+    console.error("토스 결제 승인 실패:", error);
+    throw normalizeError(error);
+  }
+};
+
+export const failTossPayment = async (request) => {
+  try {
+    await axios.post(`${TOSS_URL}/fail`, request, { timeout: REQUEST_TIMEOUT });
+  } catch (error) {
+    console.error("토스 결제 실패 기록 실패:", error);
   }
 };

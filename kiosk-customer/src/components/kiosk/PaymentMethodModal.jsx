@@ -1,4 +1,5 @@
 import cardIcon from "../../images/card.png";
+import tossPayIcon from "../../images/tosspay.png"; // 신규 아이콘 파일 필요
 import naverPayIcon from "../../images/naverpay.png";
 import kakaoPayIcon from "../../images/payment_icon_yellow_medium.png";
 import { translations } from "../../i18n/translations";
@@ -14,6 +15,18 @@ function PaymentMethodModal({ onSelect, onClose, language }) {
         onClick={(e) => e.stopPropagation()}
       >
         <p className="payment-method-title">{t.title}</p>
+
+        <button
+          type="button"
+          className="payment-method-btn payment-method-toss"
+          onClick={() => onSelect("tosspay")}
+        >
+          <img
+            src={tossPayIcon}
+            alt={t.toss}
+            className="payment-method-full-img payment-method-toss-img"
+          />
+        </button>
 
         <button
           type="button"

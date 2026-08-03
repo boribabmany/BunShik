@@ -59,6 +59,7 @@ export const translations = {
     paymentMethod: {
       title: "결제 수단을 선택해주세요",
       naver: "네이버페이",
+      toss: "토스페이",
       kakao: "카카오페이",
       card: "카드 결제",
       cancel: "취소",
@@ -171,6 +172,7 @@ export const translations = {
     paymentMethod: {
       title: "Select a payment method",
       naver: "Naver Pay",
+      toss: "Toss Pay",
       kakao: "Kakao Pay",
       card: "Card Payment",
       cancel: "Cancel",

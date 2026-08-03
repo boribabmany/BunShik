@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // 전체 조회 (실제 백엔드 연동)
 export const getOptions = async () => {

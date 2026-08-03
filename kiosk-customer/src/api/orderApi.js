@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const ORDER_URL = "http://localhost:8080/api/orders";
-const PAYMENT_URL = "http://localhost:8080/api/payments";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const ORDER_URL = `${API_BASE_URL}/api/orders`;
+const PAYMENT_URL = `${API_BASE_URL}/api/payments`;
 
 const REQUEST_TIMEOUT = 8000; // 8초
 

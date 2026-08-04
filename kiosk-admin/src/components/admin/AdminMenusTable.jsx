@@ -135,7 +135,7 @@ export default function AdminMenusTable({ onImageClick }) {
         <input
           type="search"
           value={query}
-          placeholder="메뉴명 또는 번호 검색"
+          placeholder="메뉴명 검색"
           aria-label="메뉴 검색"
           onChange={(event) => setQuery(event.target.value)}
         />

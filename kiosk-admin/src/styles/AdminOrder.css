@@ -273,6 +273,16 @@
   color: #fff;
 }
 
+.order-action button:disabled,
+.order-action button:disabled:hover {
+  border: 1px solid #c7cbce;
+  background: #dfe2e4;
+  color: #777d81;
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 1;
+}
+
 /* =========================
    더보기
 ========================= */

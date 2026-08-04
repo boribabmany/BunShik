@@ -24,7 +24,7 @@ export default function AdminOptionsTable({ onImageClick }) {
         <input
           type="search"
           value={query}
-          placeholder="옵션명 또는 번호 검색"
+          placeholder="옵션명 검색"
           aria-label="옵션 검색"
           onChange={(event) => setQuery(event.target.value)}
         />

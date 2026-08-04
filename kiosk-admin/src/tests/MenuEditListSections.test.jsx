@@ -73,6 +73,45 @@ describe("메뉴관리 목록 섹션", () => {
     expect(onAddComponentMenu).toHaveBeenCalledTimes(1);
   });
 
+  test("세트와 구성품 메뉴는 페이지당 3개만 표시한다", () => {
+    const setMenus = Array.from({ length: 4 }, (_, index) => ({
+      menu_id: index + 1,
+      menu_name: `세트 ${index + 1}`,
+      menu_name_en: `Set ${index + 1}`,
+      category: "세트",
+      price: 10000,
+      is_visible: true,
+      is_available: true,
+    }));
+    const componentMenus = Array.from({ length: 4 }, (_, index) => ({
+      menu_id: index + 10,
+      menu_name: `구성품 ${index + 1}`,
+      menu_name_en: `Component ${index + 1}`,
+      menu_type: "COMPONENT",
+      category: "구성품",
+      price: 0,
+      is_visible: true,
+      is_available: true,
+    }));
+
+    render(
+      <MenuListSection
+        menus={[...setMenus, ...componentMenus]}
+        onAddMenu={jest.fn()}
+        onAddSetMenu={jest.fn()}
+        onAddComponentMenu={jest.fn()}
+        onEdit={jest.fn()}
+        onToggleVisibility={jest.fn()}
+        onImageClick={jest.fn()}
+      />,
+    );
+
+    expect(screen.getByText("세트 3")).toBeTruthy();
+    expect(screen.queryByText("세트 4")).toBeNull();
+    expect(screen.getByText("구성품 3")).toBeTruthy();
+    expect(screen.queryByText("구성품 4")).toBeNull();
+  });
+
   test("옵션 목록 검색과 등록·판매상태 콜백을 연결한다", () => {
     const onAdd = jest.fn();
     const onToggleVisibility = jest.fn();

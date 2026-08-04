@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { filterMenus } from "../../../utils/catalogFilters";
 
 const MENU_PER_PAGE = 5;
+const FEATURED_MENU_PER_PAGE = 3;
 
 export default function MenuListSection({
   menus,
@@ -46,17 +47,19 @@ export default function MenuListSection({
     menuPage * MENU_PER_PAGE,
   );
   const currentSetMenus = setMenus.slice(
-    (setListPage - 1) * MENU_PER_PAGE,
-    setListPage * MENU_PER_PAGE,
+    (setListPage - 1) * FEATURED_MENU_PER_PAGE,
+    setListPage * FEATURED_MENU_PER_PAGE,
   );
   const currentComponentMenus = componentMenus.slice(
-    (componentPage - 1) * MENU_PER_PAGE,
-    componentPage * MENU_PER_PAGE,
+    (componentPage - 1) * FEATURED_MENU_PER_PAGE,
+    componentPage * FEATURED_MENU_PER_PAGE,
   );
   const menuTotalPages = Math.ceil(regularMenus.length / MENU_PER_PAGE);
-  const setMenuTotalPages = Math.ceil(setMenus.length / MENU_PER_PAGE);
+  const setMenuTotalPages = Math.ceil(
+    setMenus.length / FEATURED_MENU_PER_PAGE,
+  );
   const componentTotalPages = Math.ceil(
-    componentMenus.length / MENU_PER_PAGE,
+    componentMenus.length / FEATURED_MENU_PER_PAGE,
   );
 
   useEffect(() => {
@@ -193,63 +196,72 @@ export default function MenuListSection({
         </div>
       </div>
 
-      <div className="register-button-area">
-        <button className="register-btn set-register-btn" onClick={onAddSetMenu}>
-          + 세트 등록
-        </button>
-      </div>
-      <div className="edit-table-box">
-        <h3 className="table-section-title">세트 메뉴</h3>
-        <table className="edit-table">
-          <thead>
-            <tr>
-              <th>사진</th>
-              <th>메뉴명</th>
-              <th>영문명</th>
-              <th>카테고리</th>
-              <th>가격</th>
-              <th>상태</th>
-              <th>관리</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows(currentSetMenus, "등록된 세트 메뉴가 없습니다.")}
-          </tbody>
-        </table>
-        {renderPagination(setMenuTotalPages, setListPage, setSetListPage)}
-      </div>
+      <div className="featured-menu-grid">
+        <div className="featured-menu-column">
+          <div className="register-button-area">
+            <button
+              className="register-btn set-register-btn"
+              onClick={onAddSetMenu}
+            >
+              + 세트 등록
+            </button>
+          </div>
+          <div className="edit-table-box">
+            <h3 className="table-section-title">세트 메뉴</h3>
+            <table className="edit-table">
+              <thead>
+                <tr>
+                  <th>사진</th>
+                  <th>메뉴명</th>
+                  <th>영문명</th>
+                  <th>카테고리</th>
+                  <th>가격</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody>
+                {renderRows(currentSetMenus, "등록된 세트 메뉴가 없습니다.")}
+              </tbody>
+            </table>
+            {renderPagination(setMenuTotalPages, setListPage, setSetListPage)}
+          </div>
+        </div>
 
-      <div className="register-button-area">
-        <button className="register-btn" onClick={onAddComponentMenu}>
-          + 구성품 등록
-        </button>
-      </div>
-      <div className="edit-table-box">
-        <h3 className="table-section-title">구성 전용 메뉴</h3>
-        <table className="edit-table">
-          <thead>
-            <tr>
-              <th>사진</th>
-              <th>메뉴명</th>
-              <th>영문명</th>
-              <th>카테고리</th>
-              <th>가격</th>
-              <th>상태</th>
-              <th>관리</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderRows(
-              currentComponentMenus,
-              "등록된 구성 전용 메뉴가 없습니다.",
+        <div className="featured-menu-column">
+          <div className="register-button-area">
+            <button className="register-btn" onClick={onAddComponentMenu}>
+              + 구성품 등록
+            </button>
+          </div>
+          <div className="edit-table-box">
+            <h3 className="table-section-title">구성 전용 메뉴</h3>
+            <table className="edit-table">
+              <thead>
+                <tr>
+                  <th>사진</th>
+                  <th>메뉴명</th>
+                  <th>영문명</th>
+                  <th>카테고리</th>
+                  <th>가격</th>
+                  <th>상태</th>
+                  <th>관리</th>
+                </tr>
+              </thead>
+              <tbody>
+                {renderRows(
+                  currentComponentMenus,
+                  "등록된 구성 전용 메뉴가 없습니다.",
+                )}
+              </tbody>
+            </table>
+            {renderPagination(
+              componentTotalPages,
+              componentPage,
+              setComponentPage,
             )}
-          </tbody>
-        </table>
-        {renderPagination(
-          componentTotalPages,
-          componentPage,
-          setComponentPage,
-        )}
+          </div>
+        </div>
       </div>
 
       <div className="register-button-area">

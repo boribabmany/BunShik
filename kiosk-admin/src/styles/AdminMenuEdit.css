@@ -524,6 +524,30 @@
   margin-bottom: 10px;
 }
 
+.featured-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.featured-menu-column {
+  min-width: 0;
+}
+
+.featured-menu-column .edit-table-box {
+  overflow-x: auto;
+}
+
+.featured-menu-column .edit-table {
+  min-width: 620px;
+}
+
+@media (max-width: 900px) {
+  .featured-menu-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .edit-filter-group {
   padding: 12px;
   border: 1px solid #d9e3d2;

@@ -5,13 +5,7 @@ const MENU_PER_PAGE = 5;
 const FEATURED_MENU_PER_PAGE = 3;
 
 export default function MenuListSection({
-  menus,
-  onAddMenu,
-  onAddSetMenu,
-  onAddComponentMenu,
-  onEdit,
-  onToggleVisibility,
-  onImageClick,
+  menus, onAddMenu, onAddSetMenu, onAddComponentMenu, onEdit, onToggleVisibility, onImageClick,
 }) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
@@ -26,10 +20,7 @@ export default function MenuListSection({
     [menus],
   );
   const filteredMenus = filterMenus(menus, {
-    query,
-    category,
-    status,
-    includeId: false,
+    query, category, status, includeId: false,
   });
   const componentMenus = filteredMenus.filter(
     (menu) => menu.menu_type === "COMPONENT",

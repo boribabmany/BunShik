@@ -52,10 +52,15 @@ function Menu() {
       : menus.filter((menu) => menu.category === category);
 
   const handleMenuClick = (menu) => {
-    if (menu.set_components && menu.set_components.length > 0) {
+    const hasGroups = menu.set_components && menu.set_components.length > 0;
+    const hasToppings = menu.options && menu.options.length > 0;
+
+    if (hasGroups && !hasToppings) {
+      // 순수 세트 메뉴 (예: 김밥음료세트) — 그룹만 있음
       setSelectedMenu(menu);
       setIsSetMenu(true);
-    } else if (menu.options && menu.options.length > 0) {
+    } else if (hasGroups || hasToppings) {
+      // 단품 + 맛 선택 (예: 떡볶이), 또는 토핑만 있는 단품 (예: 라면)
       setSelectedMenu(menu);
       setIsSetMenu(false);
     } else {

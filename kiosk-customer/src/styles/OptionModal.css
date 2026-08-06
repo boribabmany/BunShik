@@ -18,16 +18,20 @@
 .option-modal {
   position: relative;
   width: 984px;
-  min-height: 1460px;
+  height: 1460px;
   background: #ffffff;
   border-radius: 24px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
+/* ---------- 상단 메뉴 정보 (고정) ---------- */
 .option-modal-detail {
   position: relative;
   width: 984px;
   height: 416px;
+  flex-shrink: 0;
 }
 
 .option-modal-image {
@@ -72,28 +76,204 @@
 }
 
 .option-modal-divider {
-  position: absolute;
-  top: 414px;
-  left: 48px;
   width: 888px;
   height: 2px;
   background: #000000;
+  margin: 0 auto;
+  flex-shrink: 0;
 }
 
-.option-modal-body {
-  position: relative;
-  width: 984px;
-  height: 835px;
+/* ---------- 회색 스크롤 영역 (맛 선택 + 토핑, 구분선 바로 아래부터 시작) ---------- */
+.option-modal-scroll-area {
+  flex: 1;
+  min-height: 0; /* flex 자식 스크롤 필수 설정 */
+  overflow-y: auto;
   background: #f3f3f3;
+  box-sizing: border-box;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.option-modal-scroll-area::-webkit-scrollbar {
+  display: none;
 }
 
-.option-modal-topping-header {
-  position: absolute;
-  top: 36px;
-  left: 48px;
+/* ---------- 맛/구성 선택 그룹 ---------- */
+.option-modal-group {
+  padding: 32px 48px 0;
+}
+
+.option-modal-group-divider {
+  width: 888px;
+  height: 1px;
+  background: #000000;
+  margin: 32px auto;
+}
+
+.option-modal-group-eyebrow {
+  font-size: 24px;
+  color: #8c8c8c;
+  margin: 0 0 12px;
+}
+
+.option-modal-group-header {
   display: flex;
   align-items: center;
   gap: 20px;
+  margin-bottom: 20px;
+}
+
+.option-modal-group-label {
+  font-size: 44px;
+  color: #000000;
+}
+
+.option-modal-group-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 40px;
+  background: #d9d9d9;
+  font-size: 20px;
+  color: #000000;
+  border-radius: 4px;
+}
+
+.option-modal-group-list {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 8px;
+}
+
+.option-modal-group-list--pill {
+  gap: 16px;
+}
+
+.option-group-pill {
+  width: 210px;
+  height: 68px;
+  border-radius: 20px;
+  border: none;
+  background: #ffffff;
+  color: #000000;
+  font-size: 32px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-group-pill.is-selected {
+  background: #eaf3de;
+}
+
+.option-group-pill:disabled {
+  color: #b4b2a9;
+  cursor: not-allowed;
+}
+
+.option-group-card {
+  position: relative;
+  width: 210px;
+  height: 320px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.option-group-image-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 197px;
+}
+
+.option-group-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 20px 0 0;
+}
+
+.option-group-soldout-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px 20px 0 0;
+}
+
+.option-group-soldout-overlay span {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.option-group-name {
+  position: absolute;
+  top: 210px;
+  left: 10px;
+  font-size: 32px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.option-group-price {
+  position: absolute;
+  top: 262px;
+  left: 20px;
+  font-size: 24px;
+  font-weight: 500;
+  color: #000000;
+  margin: 0;
+}
+
+.option-group-toggle-btn {
+  position: absolute;
+  top: 258px;
+  right: 10px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #000000;
+  color: #ffffff;
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.option-group-toggle-btn.is-selected {
+  background: var(--color-primary);
+}
+
+.option-group-toggle-btn:disabled {
+  background: #b4b2a9;
+  cursor: not-allowed;
+}
+
+/* ---------- 토핑 추가 섹션 (스크롤 영역 안, 기존 option-modal-body 대체) ---------- */
+.option-modal-topping-section {
+  padding: 36px 48px;
+}
+
+.option-modal-topping-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
 .option-modal-topping-label {
@@ -114,9 +294,6 @@
 }
 
 .option-modal-list {
-  position: absolute;
-  top: 133px;
-  left: 52px;
   display: flex;
   gap: 20px;
 }
@@ -222,6 +399,7 @@
   background: var(--color-primary);
 }
 
+/* ---------- 하단 담기 버튼 (고정) ---------- */
 .option-modal-footer {
   position: relative;
   width: 984px;
@@ -230,6 +408,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .option-modal-submit-button {
@@ -243,6 +422,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.option-modal-submit-button:disabled {
+  background: #d9d9d9;
+  cursor: not-allowed;
 }
 
 .option-modal-submit-label {

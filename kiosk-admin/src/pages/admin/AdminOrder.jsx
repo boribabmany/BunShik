@@ -26,6 +26,8 @@ export default function AdminOrder() {
   const [detailLoadingId, setDetailLoadingId] = useState(null);
   const [detailErrorId, setDetailErrorId] = useState(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const [unreadOrderIds, setUnreadOrderIds] = useState(() => new Set());
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
   const knownOrderIdsRef = useRef(new Set());
   const isFirstOrderLoadRef = useRef(true);
   const isPollingRef = useRef(false);
@@ -49,11 +51,21 @@ export default function AdminOrder() {
         );
 
         if (!isFirstOrderLoadRef.current) {
-          const hasNewOrder = latestOrders.some(
+          const newOrders = latestOrders.filter(
             (order) =>
               order.order_status === "접수" &&
               !knownOrderIdsRef.current.has(order.order_id),
           );
+
+          const hasNewOrder = newOrders.length > 0;
+
+          if (hasNewOrder) {
+            setUnreadOrderIds((previousIds) => {
+              const nextIds = new Set(previousIds);
+              newOrders.forEach((order) => nextIds.add(order.order_id));
+              return nextIds;
+            });
+          }
 
           if (hasNewOrder && soundEnabledRef.current) {
             playNewOrderSound().catch((error) => {
@@ -80,6 +92,28 @@ export default function AdminOrder() {
     };
   }, [loadOrders]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => setCurrentTime(Date.now()), 60000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const markOrderAsRead = (orderId) => {
+    setUnreadOrderIds((previousIds) => {
+      if (!previousIds.has(orderId)) return previousIds;
+
+      const nextIds = new Set(previousIds);
+      nextIds.delete(orderId);
+      return nextIds;
+    });
+  };
+
+  const isDelayedOrder = (order) => {
+    if (order.order_status !== "접수") return false;
+
+    const createdAt = new Date(order.created_at.replace(" ", "T")).getTime();
+    return Number.isFinite(createdAt) && currentTime - createdAt >= 10 * 60 * 1000;
+  };
+
   const handleSoundToggle = async () => {
     if (soundEnabledRef.current) {
       soundEnabledRef.current = false;
@@ -98,6 +132,8 @@ export default function AdminOrder() {
   };
 
   const handleOrderRowClick = async (orderId) => {
+    markOrderAsRead(orderId);
+
     if (expandedOrderId === orderId) {
       setExpandedOrderId(null);
       return;
@@ -135,6 +171,8 @@ export default function AdminOrder() {
     })
     .sort((a, b) => b.order_id - a.order_id);
 
+  const delayedOrderCount = filteredOrders.filter(isDelayedOrder).length;
+
   // 상태 변경: 접수 → 조리중 → 완료
   const handleStatusChange = async (orderId, currentStatus) => {
     let nextStatus;
@@ -149,6 +187,7 @@ export default function AdminOrder() {
 
     try {
       await changeOrderStatus(orderId, nextStatus);
+      markOrderAsRead(orderId);
     } catch (error) {
       alert(
         error.response?.data?.message ||
@@ -203,6 +242,12 @@ export default function AdminOrder() {
         </div>
 
         <div className="order-live-controls">
+          <span
+            className={`new-order-count ${unreadOrderIds.size > 0 ? "active" : ""}`}
+            aria-live="polite"
+          >
+            신규 {unreadOrderIds.size}건
+          </span>
           <span className="auto-refresh-status">5초마다 자동 갱신</span>
           <button
             type="button"
@@ -214,6 +259,13 @@ export default function AdminOrder() {
           </button>
         </div>
       </header>
+
+      {delayedOrderCount > 0 && (
+        <div className="delayed-order-alert" role="status">
+          <strong>처리 지연 {delayedOrderCount}건</strong>
+          <span>접수 후 10분이 지난 주문을 확인해 주세요.</span>
+        </div>
+      )}
 
       <section className="search-area">
         <input
@@ -273,11 +325,13 @@ export default function AdminOrder() {
                 order.order_status === "완료" || order.order_status === "취소";
               const isExpanded = expandedOrderId === order.order_id;
               const detail = orderDetails[order.order_id];
+              const isUnread = unreadOrderIds.has(order.order_id);
+              const isDelayed = isDelayedOrder(order);
 
               return (
                 <Fragment key={order.order_id}>
                 <tr
-                  className={`order-row ${isExpanded ? "expanded" : ""}`}
+                  className={`order-row ${isExpanded ? "expanded" : ""} ${isUnread ? "unread" : ""} ${isDelayed ? "delayed" : ""}`}
                   onClick={() => handleOrderRowClick(order.order_id)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
@@ -288,7 +342,13 @@ export default function AdminOrder() {
                   tabIndex={0}
                   aria-expanded={isExpanded}
                 >
-                  <td>{order.order_number}</td>
+                  <td>
+                    <div className="order-number-cell">
+                      <span>{order.order_number}</span>
+                      {isUnread && <span className="new-order-badge">신규</span>}
+                      {isDelayed && <span className="delayed-order-badge">지연</span>}
+                    </div>
+                  </td>
                   <td>{order.created_at}</td>
                   <td>{order.order_type}</td>
                   <td>{order.payment_method}</td>

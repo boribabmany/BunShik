@@ -184,5 +184,67 @@ describe("관리자 주문 관리", () => {
 
     expect(loadOrders).toHaveBeenCalledTimes(2);
     expect(playNewOrderSound).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("신규 1건")).toBeTruthy();
+  });
+
+  test("신규 주문을 열면 확인 처리하여 신규 건수를 줄인다", async () => {
+    jest.useFakeTimers();
+    loadOrders.mockResolvedValueOnce([]).mockResolvedValueOnce([order]);
+    getOrderDetail.mockResolvedValue(detail);
+
+    renderPage();
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      jest.advanceTimersByTime(5000);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByText("신규 1건")).toBeTruthy();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText("A-001"));
+      await Promise.resolve();
+    });
+
+    expect(screen.getByText("신규 0건")).toBeTruthy();
+  });
+
+  test("접수 후 10분이 지난 주문을 처리 지연으로 표시한다", () => {
+    const delayedOrder = {
+      ...order,
+      created_at: `${today} 00:00`,
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [delayedOrder],
+      loadOrders,
+      changeOrderStatus,
+      cancelOrder,
+    });
+
+    renderPage();
+
+    expect(screen.getByText("처리 지연 1건")).toBeTruthy();
+    expect(screen.getByText("지연")).toBeTruthy();
+  });
+
+  test("현재 조회 날짜 밖의 지연 주문은 경고 건수에서 제외한다", () => {
+    const oldOrder = {
+      ...order,
+      created_at: "2000-01-01 00:00",
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [oldOrder, { ...order, order_status: "완료" }],
+      loadOrders,
+      changeOrderStatus,
+      cancelOrder,
+    });
+
+    renderPage();
+
+    expect(screen.queryByText(/처리 지연/)).toBeNull();
   });
 });

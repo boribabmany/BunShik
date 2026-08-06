@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import useCartStore from "../../store/useCartStore";
 import useOrderStore from "../../store/useOrderStore";
@@ -12,9 +12,13 @@ function TossPaymentSuccess() {
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
   const setPendingOrderId = useOrderStore((state) => state.setPendingOrderId);
   const [error, setError] = useState("");
+  const hasConfirmed = useRef(false);
   const paymentMethodLabel = searchParams.get("paymentMethod") || "토스페이";
 
   useEffect(() => {
+    if (hasConfirmed.current) return;
+    hasConfirmed.current = true;
+
     const kioskOrderId = Number(searchParams.get("kioskOrderId"));
     const orderNumber = searchParams.get("orderNumber");
     const totalPrice = Number(searchParams.get("totalPrice"));

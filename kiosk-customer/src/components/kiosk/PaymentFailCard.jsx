@@ -9,6 +9,7 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
   const isTimeout = type === "timeout";
   const isNetworkError = type === "network-error";
   const isOrderError = type === "order-error";
+  const isUserCancel = type === "user-cancel"; // ← 추가
 
   const title = isCardError
     ? t.cardErrorTitle
@@ -20,7 +21,9 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
           ? t.networkErrorTitle
           : isOrderError
             ? t.orderErrorTitle
-            : t.systemErrorTitle;
+            : isUserCancel
+              ? t.userCancelTitle // ← 추가
+              : t.systemErrorTitle;
 
   const message = isCardError
     ? t.cardErrorMessage
@@ -32,7 +35,9 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
           ? t.networkErrorMessage
           : isOrderError
             ? t.orderErrorMessage
-            : t.systemErrorMessage;
+            : isUserCancel
+              ? t.userCancelMessage // ← 추가
+              : t.systemErrorMessage;
 
   // 재시도해도 의미 없는 유형(카드 인식 불가, 주문 데이터 오류)은 버튼 1개만
   const singleButton = isCardError || isOrderError;
@@ -48,6 +53,7 @@ function PaymentFailCard({ type, failReason, onRetry, onBack, language }) {
         {(isTimeout ||
           isNetworkError ||
           isOrderError ||
+          isUserCancel ||
           (!isCardError && !isDeclined)) && (
           <div className="fail-card-icon fail-card-icon-error">!</div>
         )}

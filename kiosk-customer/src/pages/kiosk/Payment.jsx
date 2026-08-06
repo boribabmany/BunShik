@@ -172,6 +172,14 @@ function Payment() {
       });
     } catch (error) {
       setIsPaying(false);
+
+      // 손님이 결제창을 직접 닫거나 취소한 경우 — 시스템 오류가 아니라 정상적인 취소
+      if (error?.code === "USER_CANCEL") {
+        setFailType("user-cancel");
+        setFailReason(null);
+        return;
+      }
+
       setFailType("system-error");
       setFailReason(error.message || "결제창을 열지 못했습니다.");
     }

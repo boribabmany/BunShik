@@ -71,6 +71,7 @@ export const translations = {
       networkErrorTitle: "네트워크 연결 오류",
       orderErrorTitle: "주문 확인 필요",
       systemErrorTitle: "일시적인 오류",
+      userCancelTitle: "결제 취소",
       cardErrorMessage:
         "IC 카드를 인식할 수 없습니다. 카드를 다시 삽입해 주세요. 계속 인식되지 않으면 카드를 긁어(MS) 결제하거나 다른 결제수단을 이용해 주세요.",
       declinedMessage: (reason) =>
@@ -184,6 +185,7 @@ export const translations = {
       networkErrorTitle: "Network Connection Error",
       orderErrorTitle: "Order Needs Review",
       systemErrorTitle: "Temporary Error",
+      userCancelTitle: "Payment Canceled",
       cardErrorMessage:
         "Unable to read the IC card. Please reinsert your card. If the problem continues, try swiping (MS) or use another payment method.",
       declinedMessage: (reason) =>

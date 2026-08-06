@@ -7,6 +7,8 @@ import { playNewOrderSound } from "../../utils/newOrderSound";
 import "../../styles/AdminOrder.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
 
+const SOUND_SETTING_KEY = "adminOrderSoundEnabled";
+
 export default function AdminOrder() {
   const navigate = useNavigate();
 
@@ -25,13 +27,15 @@ export default function AdminOrder() {
   const [orderDetails, setOrderDetails] = useState({});
   const [detailLoadingId, setDetailLoadingId] = useState(null);
   const [detailErrorId, setDetailErrorId] = useState(null);
-  const [isSoundEnabled, setIsSoundEnabled] = useState(false);
+  const [isSoundEnabled, setIsSoundEnabled] = useState(
+    () => sessionStorage.getItem(SOUND_SETTING_KEY) === "true",
+  );
   const [unreadOrderIds, setUnreadOrderIds] = useState(() => new Set());
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const knownOrderIdsRef = useRef(new Set());
   const isFirstOrderLoadRef = useRef(true);
   const isPollingRef = useRef(false);
-  const soundEnabledRef = useRef(false);
+  const soundEnabledRef = useRef(isSoundEnabled);
 
   useEffect(() => {
     let isActive = true;
@@ -49,6 +53,11 @@ export default function AdminOrder() {
         const latestOrderIds = new Set(
           latestOrders.map((order) => order.order_id),
         );
+        const activeReceivedOrderIds = new Set(
+          latestOrders
+            .filter((order) => order.order_status === "접수")
+            .map((order) => order.order_id),
+        );
 
         if (!isFirstOrderLoadRef.current) {
           const newOrders = latestOrders.filter(
@@ -59,13 +68,15 @@ export default function AdminOrder() {
 
           const hasNewOrder = newOrders.length > 0;
 
-          if (hasNewOrder) {
-            setUnreadOrderIds((previousIds) => {
-              const nextIds = new Set(previousIds);
-              newOrders.forEach((order) => nextIds.add(order.order_id));
-              return nextIds;
-            });
-          }
+          setUnreadOrderIds((previousIds) => {
+            const nextIds = new Set(
+              [...previousIds].filter((orderId) =>
+                activeReceivedOrderIds.has(orderId),
+              ),
+            );
+            newOrders.forEach((order) => nextIds.add(order.order_id));
+            return nextIds;
+          });
 
           if (hasNewOrder && soundEnabledRef.current) {
             playNewOrderSound().catch((error) => {
@@ -118,6 +129,7 @@ export default function AdminOrder() {
     if (soundEnabledRef.current) {
       soundEnabledRef.current = false;
       setIsSoundEnabled(false);
+      sessionStorage.removeItem(SOUND_SETTING_KEY);
       return;
     }
 
@@ -125,6 +137,7 @@ export default function AdminOrder() {
       await playNewOrderSound();
       soundEnabledRef.current = true;
       setIsSoundEnabled(true);
+      sessionStorage.setItem(SOUND_SETTING_KEY, "true");
     } catch (error) {
       console.error("알림음 활성화 실패:", error);
       alert("브라우저에서 알림음을 켜지 못했습니다.");

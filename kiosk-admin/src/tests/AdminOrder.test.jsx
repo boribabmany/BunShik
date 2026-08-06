@@ -70,6 +70,7 @@ describe("관리자 주문 관리", () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    sessionStorage.clear();
     loadOrders.mockResolvedValue([order]);
     playNewOrderSound.mockResolvedValue(undefined);
     useAdminOrderStore.mockReturnValue({
@@ -211,6 +212,45 @@ describe("관리자 주문 관리", () => {
     });
 
     expect(screen.getByText("신규 0건")).toBeTruthy();
+  });
+
+  test("신규 주문 상태가 변경되면 다음 갱신에서 신규 배지를 제거한다", async () => {
+    jest.useFakeTimers();
+    loadOrders
+      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([order])
+      .mockResolvedValueOnce([{ ...order, order_status: "조리중" }]);
+
+    renderPage();
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    await act(async () => {
+      jest.advanceTimersByTime(5000);
+      await Promise.resolve();
+    });
+    expect(screen.getByText("신규 1건")).toBeTruthy();
+
+    await act(async () => {
+      jest.advanceTimersByTime(5000);
+      await Promise.resolve();
+    });
+    expect(screen.getByText("신규 0건")).toBeTruthy();
+  });
+
+  test("알림음 설정을 관리자 브라우저 세션에 저장한다", async () => {
+    renderPage();
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "알림음 켜기" }));
+      await Promise.resolve();
+    });
+
+    expect(sessionStorage.getItem("adminOrderSoundEnabled")).toBe("true");
+
+    fireEvent.click(screen.getByRole("button", { name: "알림음 끄기" }));
+    expect(sessionStorage.getItem("adminOrderSoundEnabled")).toBeNull();
   });
 
   test("접수 후 10분이 지난 주문을 처리 지연으로 표시한다", () => {

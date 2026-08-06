@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import NewOrderToast from "./NewOrderToast";
 
 export default function ProtectedRoute() {
   const isLoggedIn = sessionStorage.getItem("isAdminLoggedIn") === "true";
@@ -9,5 +10,10 @@ export default function ProtectedRoute() {
     return <Navigate to="/adminlogin" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <NewOrderToast />
+      <Outlet />
+    </>
+  );
 }

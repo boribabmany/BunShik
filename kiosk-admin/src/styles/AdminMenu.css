@@ -59,8 +59,8 @@
 /*오른쪽(메뉴/옵션 리스트)*/
 .right-panel {
   flex: 1;
-  height: calc(100% - 40px);
-  margin-top: 40px;
+  height: calc(100% - 46px);
+  margin-top: 46px;
   min-width: 0;
 }
 
@@ -262,7 +262,7 @@
 }
 
 .option-table-box {
-  max-height: 294px;
+  max-height: 310px;
   overflow: hidden;
 }
 
@@ -293,7 +293,7 @@
 }
 
 .option-table-scroll {
-  max-height: 154px;
+  max-height: 170px;
   padding-right: 4px;
   overflow-y: auto;
 }

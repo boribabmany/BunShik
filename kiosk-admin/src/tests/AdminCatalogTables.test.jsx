@@ -80,8 +80,8 @@ describe("관리자 메뉴·옵션 검색 필터", () => {
     fireEvent.change(screen.getByLabelText("메뉴 검색"), {
       target: { value: "Ramen" },
     });
-    expect(screen.getByRole("cell", { name: "2" })).toBeTruthy();
-    expect(screen.queryByRole("cell", { name: "1" })).toBeNull();
+    expect(screen.getByRole("row", { name: /라면 라면/ })).toBeTruthy();
+    expect(screen.queryByText("참치김밥")).toBeNull();
 
     fireEvent.change(screen.getByLabelText("메뉴 검색"), {
       target: { value: "" },
@@ -89,8 +89,8 @@ describe("관리자 메뉴·옵션 검색 필터", () => {
     fireEvent.change(screen.getByLabelText("메뉴 판매상태 필터"), {
       target: { value: "soldout" },
     });
-    expect(screen.getByRole("cell", { name: "2" })).toBeTruthy();
-    expect(screen.queryByRole("cell", { name: "1" })).toBeNull();
+    expect(screen.getByRole("row", { name: /라면 라면/ })).toBeTruthy();
+    expect(screen.queryByText("참치김밥")).toBeNull();
   });
 
   test("대시보드 옵션을 검색하고 판매상태로 필터링한다", () => {

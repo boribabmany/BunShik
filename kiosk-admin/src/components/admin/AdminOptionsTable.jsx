@@ -44,7 +44,6 @@ export default function AdminOptionsTable({ onImageClick }) {
         <table className="menu-table">
           <thead>
             <tr>
-              <th className="number-col">옵션번호</th>
               <th>사진</th>
               <th>옵션명</th>
               <th>추가금액</th>
@@ -56,7 +55,7 @@ export default function AdminOptionsTable({ onImageClick }) {
           <tbody>
             {filteredOptions.length === 0 ? (
               <tr>
-                <td colSpan="6" className="menu-empty-message">
+                <td colSpan="5" className="menu-empty-message">
                   검색 조건에 맞는 옵션이 없습니다.
                 </td>
               </tr>
@@ -65,7 +64,6 @@ export default function AdminOptionsTable({ onImageClick }) {
                 key={option.option_id}
                 className={!option.is_visible ? "menu-stopped-row" : ""}
               >
-                <td className="number-col">{option.option_id}</td>
                 <td>
                   {option.option_image ? (
                     <button

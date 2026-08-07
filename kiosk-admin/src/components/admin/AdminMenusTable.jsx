@@ -38,7 +38,6 @@ export default function AdminMenusTable({ onImageClick }) {
       <table className="menu-table">
         <thead>
           <tr>
-            <th className="number-col">메뉴번호</th>
             <th>사진</th>
             <th>메뉴명</th>
             <th>카테고리</th>
@@ -50,7 +49,7 @@ export default function AdminMenusTable({ onImageClick }) {
         <tbody>
           {menus.length === 0 ? (
             <tr>
-              <td colSpan="7" className="menu-empty-message">
+              <td colSpan="6" className="menu-empty-message">
                 등록된 {title}가 없습니다.
               </td>
             </tr>
@@ -60,7 +59,6 @@ export default function AdminMenusTable({ onImageClick }) {
                 key={menu.menu_id}
                 className={!menu.is_visible ? "menu-stopped-row" : ""}
               >
-                <td className="number-col">{menu.menu_id}</td>
                 <td>
                   {menu.image_url ? (
                     <button

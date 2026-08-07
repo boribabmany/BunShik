@@ -5,6 +5,7 @@ import {
   formatPrice,
   getGroupLabel,
 } from "../../i18n/translations";
+import DragScrollRow from "./DragScrollRow";
 import "../../styles/SetMenuModal.css";
 
 function SetMenuModal({ menu, onClose, onAdd, language }) {
@@ -112,7 +113,7 @@ function SetMenuModal({ menu, onClose, onAdd, language }) {
                 </div>
 
                 {isPillGroup ? (
-                  <div className="set-modal-group-list set-modal-group-list--pill">
+                  <DragScrollRow className="set-modal-group-list set-modal-group-list--pill">
                     {group.items.map((component) => {
                       const isSelected =
                         selections[group.name]?.component_menu_id ===
@@ -136,9 +137,9 @@ function SetMenuModal({ menu, onClose, onAdd, language }) {
                         </button>
                       );
                     })}
-                  </div>
+                  </DragScrollRow>
                 ) : (
-                  <div className="set-modal-group-list">
+                  <DragScrollRow className="set-modal-group-list">
                     {group.items.map((component) => {
                       const isSelected =
                         selections[group.name]?.component_menu_id ===
@@ -186,7 +187,7 @@ function SetMenuModal({ menu, onClose, onAdd, language }) {
                         </div>
                       );
                     })}
-                  </div>
+                  </DragScrollRow>
                 )}
               </div>
             );

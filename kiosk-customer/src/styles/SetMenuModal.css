@@ -128,12 +128,20 @@
 .set-modal-group-list {
   display: flex;
   gap: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+.set-modal-group-list::-webkit-scrollbar {
+  display: none;
 }
 
 .set-option-card {
   position: relative;
   width: 210px;
   height: 320px;
+  flex-shrink: 0;
   background: #ffffff;
   border: 1px solid #000000;
   border-radius: 20px;
@@ -178,6 +186,9 @@
   font-weight: 500;
   color: #000000;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .set-option-price {
@@ -274,6 +285,7 @@
 .set-option-pill {
   width: 210px;
   height: 68px;
+  flex-shrink: 0;
   border-radius: 20px;
   border: none;
   background: #ffffff;

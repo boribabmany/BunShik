@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>박유진 분식집 키오스크 작업일지</title>
+<style>
+  :root {
+    --bg: #F1E9E5;
+    --surface: #FBF6F3;
+    --surface-raised: #FFFFFF;
+    --ink: #241C1A;
+    --ink-soft: #6E5F58;
+    --ink-faint: #9C8B83;
+    --line: #DFD2CB;
+    --line-strong: #C9B8AF;
+    --accent: #AE3018;
+    --accent-soft: #EDDAD3;
+    --accent-ink: #7A2110;
+
+    --tag-feat-fg: #2E6B4C;   --tag-feat-bg: #E1EEE5;
+    --tag-fix-fg:  #93591A;   --tag-fix-bg:  #F2E5CE;
+    --tag-style-fg:#6C4A7B;   --tag-style-bg:#EBE1EF;
+    --tag-chore-fg:#495A68;   --tag-chore-bg:#E2E7EA;
+    --tag-test-fg: #4C6B2E;   --tag-test-bg: #E3EBD8;
+    --tag-docs-fg: #2E5C77;   --tag-docs-bg: #DFE9EE;
+
+    --shadow: 0 1px 2px rgba(36,28,26,0.06);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1B1512;
+      --surface: #231915;
+      --surface-raised: #2A1E19;
+      --ink: #F1E6DF;
+      --ink-soft: #C2AEA4;
+      --ink-faint: #8C7A70;
+      --line: #3B2C25;
+      --line-strong: #4E3B32;
+      --accent: #E2683E;
+      --accent-soft: #402319;
+      --accent-ink: #F3A283;
+
+      --tag-feat-fg: #8FD1AC;  --tag-feat-bg: #24352A;
+      --tag-fix-fg:  #E3B269;  --tag-fix-bg:  #3A2E1A;
+      --tag-style-fg:#CBA6DA;  --tag-style-bg:#332639;
+      --tag-chore-fg:#A9BAC7;  --tag-chore-bg:#26313A;
+      --tag-test-fg: #B0D189;  --tag-test-bg: #2A3320;
+      --tag-docs-fg: #8FC2DE;  --tag-docs-bg: #1F303A;
+
+      --shadow: 0 1px 3px rgba(0,0,0,0.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #1B1512;
+    --surface: #231915;
+    --surface-raised: #2A1E19;
+    --ink: #F1E6DF;
+    --ink-soft: #C2AEA4;
+    --ink-faint: #8C7A70;
+    --line: #3B2C25;
+    --line-strong: #4E3B32;
+    --accent: #E2683E;
+    --accent-soft: #402319;
+    --accent-ink: #F3A283;
+
+    --tag-feat-fg: #8FD1AC;  --tag-feat-bg: #24352A;
+    --tag-fix-fg:  #E3B269;  --tag-fix-bg:  #3A2E1A;
+    --tag-style-fg:#CBA6DA;  --tag-style-bg:#332639;
+    --tag-chore-fg:#A9BAC7;  --tag-chore-bg:#26313A;
+    --tag-test-fg: #B0D189;  --tag-test-bg: #2A3320;
+    --tag-docs-fg: #8FC2DE;  --tag-docs-bg: #1F303A;
+
+    --shadow: 0 1px 3px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  .mono {
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    margin-bottom: 44px;
+  }
+
+  .eyebrow {
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin: 0 0 26px;
+  }
+
+  .stats {
+    display: flex;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .stat {
+    flex: 1;
+    background: var(--surface-raised);
+    padding: 14px 16px;
+  }
+
+  .stat-value {
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin-top: 20px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  /* ---------- Phases ---------- */
+  .phase {
+    margin-top: 52px;
+  }
+
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .phase-index {
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .phase-title {
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .phase-range {
+    margin-left: auto;
+    font-family: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+  }
+
+  .phase-desc {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    margin: 0 0 24px;
+    max-width: 62ch;
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline {
+    position: relative;
+    padding-left: 108px;
+  }
+
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 90px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--line-strong);
+  }
+
+  .day {
+    position: relative;
+    margin-bottom: 22px;
+  }
+
+  .day:last-child { margin-bottom: 0; }
+
+  .day-date {
+    position: absolute;
+    left: -108px;
+    top: 1px;
+    width: 82px;
+    text-align: right;
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    line-height: 1.3;
+  }
+
+  .day-date .d {
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+
+  .day-node {
+    position: absolute;
+    left: -22px;
+    top: 4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .entry {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14.5px;
+  }
+
+  .entry-time {
+    flex: none;
+    width: 40px;
+    color: var(--ink-faint);
+    font-size: 11.5px;
+  }
+
+  .tag {
+    flex: none;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    line-height: 1.5;
+  }
+
+  .tag-feat  { color: var(--tag-feat-fg);  background: var(--tag-feat-bg); }
+  .tag-fix   { color: var(--tag-fix-fg);   background: var(--tag-fix-bg); }
+  .tag-style { color: var(--tag-style-fg); background: var(--tag-style-bg); }
+  .tag-chore { color: var(--tag-chore-fg); background: var(--tag-chore-bg); }
+  .tag-test  { color: var(--tag-test-fg);  background: var(--tag-test-bg); }
+  .tag-docs  { color: var(--tag-docs-fg);  background: var(--tag-docs-bg); }
+
+  .entry-text {
+    color: var(--ink);
+  }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 620px) {
+    .timeline { padding-left: 74px; }
+    .timeline::before { left: 58px; }
+    .day-date { left: -74px; width: 50px; font-size: 11px; }
+    .day-node { left: -20px; }
+    .stats { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <p class="eyebrow">Development Log · BUNSHIK KIOSK</p>
+    <h1>박유진 분식집 키오스크 작업일지</h1>
+    <p class="subtitle">담당자: 박유진 · 커밋 기록(parkbori99@gmail.com)을 바탕으로 정리한 2026년 7~8월 작업 기록</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value mono">83</div>
+        <div class="stat-label">총 커밋</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value mono">07.13 – 08.07</div>
+        <div class="stat-label">작업 기간 (26일)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value mono">15</div>
+        <div class="stat-label">활동일</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value mono">07.13</div>
+        <div class="stat-label">최다 커밋일 (15건)</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="dot" style="background:var(--tag-feat-fg)"></span>기능 26</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-chore-fg)"></span>구조/설정 20</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-fix-fg)"></span>수정 17</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-style-fg)"></span>디자인 17</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-docs-fg)"></span>문서 2</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-test-fg)"></span>테스트 1</span>
+    </div>
+  </header>
+
+  <!-- ===================== PHASE 01 ===================== -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-index">PHASE 01</span>
+      <h2 class="phase-title">뼈대 세우기</h2>
+      <span class="phase-range mono">07.13 – 07.16</span>
+    </div>
+    <p class="phase-desc">프로젝트를 초기화하고 홈 · 메뉴 · 장바구니 · 결제 · 주문완료 5개 화면의 기본 플로우와 디자인을 나흘 만에 세운 구간.</p>
+
+    <div class="timeline">
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.13</span><br>MON</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">11:27</span><span class="tag tag-chore">구조</span><span class="entry-text">Initial commit</span></div>
+          <div class="entry"><span class="entry-time mono">11:46</span><span class="tag tag-chore">구조</span><span class="entry-text">Create React App으로 프로젝트 초기화</span></div>
+          <div class="entry"><span class="entry-time mono">11:49</span><span class="tag tag-chore">구조</span><span class="entry-text">원격 저장소 병합</span></div>
+          <div class="entry"><span class="entry-time mono">12:04</span><span class="tag tag-chore">구조</span><span class="entry-text">불필요한 파일 삭제</span></div>
+          <div class="entry"><span class="entry-time mono">15:11</span><span class="tag tag-docs">문서</span><span class="entry-text">README.md 추가</span></div>
+          <div class="entry"><span class="entry-time mono">15:36</span><span class="tag tag-chore">구조</span><span class="entry-text">초기 폴더 구조 작업</span></div>
+          <div class="entry"><span class="entry-time mono">15:46</span><span class="tag tag-chore">구조</span><span class="entry-text">store 폴더 추가</span></div>
+          <div class="entry"><span class="entry-time mono">16:30</span><span class="tag tag-feat">기능</span><span class="entry-text">홈 화면 구현</span></div>
+          <div class="entry"><span class="entry-time mono">16:47</span><span class="tag tag-feat">기능</span><span class="entry-text">메뉴 선택 화면 및 옵션 팝업 구현</span></div>
+          <div class="entry"><span class="entry-time mono">16:59</span><span class="tag tag-fix">수정</span><span class="entry-text">장바구니 동일 메뉴+옵션 담을 시 수량 합산 처리</span></div>
+          <div class="entry"><span class="entry-time mono">17:15</span><span class="tag tag-chore">구조</span><span class="entry-text">파일 추가</span></div>
+          <div class="entry"><span class="entry-time mono">17:26</span><span class="tag tag-feat">기능</span><span class="entry-text">결제 화면 및 결제 실패/거절 팝업 구현</span></div>
+          <div class="entry"><span class="entry-time mono">17:57</span><span class="tag tag-feat">기능</span><span class="entry-text">주문 완료 화면 및 상태 관리 추가</span></div>
+          <div class="entry"><span class="entry-time mono">17:59</span><span class="tag tag-chore">구조</span><span class="entry-text">임시 프로젝트 파일 정리</span></div>
+          <div class="entry"><span class="entry-time mono">18:17</span><span class="tag tag-feat">기능</span><span class="entry-text">장바구니 컴포넌트 추가</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.14</span><br>TUE</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">13:56</span><span class="tag tag-fix">수정</span><span class="entry-text">장바구니 비어있을 때 주문 확인 버튼 비활성화</span></div>
+          <div class="entry"><span class="entry-time mono">14:20</span><span class="tag tag-fix">수정</span><span class="entry-text">결제 API 예외 처리 및 타임아웃 로직 추가</span></div>
+          <div class="entry"><span class="entry-time mono">14:47</span><span class="tag tag-chore">구조</span><span class="entry-text">menuApi.js 등록/수정/삭제 로직 통합</span></div>
+          <div class="entry"><span class="entry-time mono">18:17</span><span class="tag tag-style">디자인</span><span class="entry-text">홈 화면 디자인 구성 착수</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.15</span><br>WED</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">10:10</span><span class="tag tag-style">디자인</span><span class="entry-text">홈 화면 CSS 수정</span></div>
+          <div class="entry"><span class="entry-time mono">10:16</span><span class="tag tag-fix">수정</span><span class="entry-text">장바구니 컴포넌트 옵션 추가 시 표시되도록 수정</span></div>
+          <div class="entry"><span class="entry-time mono">10:22</span><span class="tag tag-chore">구조</span><span class="entry-text">결제화면 컴포넌트 분리</span></div>
+          <div class="entry"><span class="entry-time mono">11:01</span><span class="tag tag-fix">수정</span><span class="entry-text">메뉴 품절 시 담기 버튼 비활성화 (로직만)</span></div>
+          <div class="entry"><span class="entry-time mono">11:05</span><span class="tag tag-feat">기능</span><span class="entry-text">메뉴 조회 실패 및 빈 메뉴 안내 화면 추가</span></div>
+          <div class="entry"><span class="entry-time mono">11:17</span><span class="tag tag-fix">수정</span><span class="entry-text">장바구니가 비어있으면 결제 화면 진입 차단</span></div>
+          <div class="entry"><span class="entry-time mono">11:49</span><span class="tag tag-feat">기능</span><span class="entry-text">주문목록 비어있을 때 안내 팝업 추가</span></div>
+          <div class="entry"><span class="entry-time mono">14:17</span><span class="tag tag-style">디자인</span><span class="entry-text">SCR_002 메뉴선택/옵션팝업 디자인 구현</span></div>
+          <div class="entry"><span class="entry-time mono">15:45</span><span class="tag tag-style">디자인</span><span class="entry-text">SCR_003 장바구니 스크롤 기능 및 디자인 적용</span></div>
+          <div class="entry"><span class="entry-time mono">17:09</span><span class="tag tag-style">디자인</span><span class="entry-text">SCR_004 결제화면 디자인, 결제거절/재시도/빈 목록 팝업 구현</span></div>
+          <div class="entry"><span class="entry-time mono">18:08</span><span class="tag tag-style">디자인</span><span class="entry-text">SCR_005 주문완료화면 디자인 적용</span></div>
+          <div class="entry"><span class="entry-time mono">18:19</span><span class="tag tag-fix">수정</span><span class="entry-text">주문번호 출력 버튼 개선 (영수증 출력 후 홈으로 이동)</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.16</span><br>THU</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">10:26</span><span class="tag tag-feat">기능</span><span class="entry-text">메뉴 카테고리에 사이드 메뉴(순대, 오뎅) 추가</span></div>
+          <div class="entry"><span class="entry-time mono">10:45</span><span class="tag tag-chore">구조</span><span class="entry-text">orderItem을 paymentItem으로 통합</span></div>
+          <div class="entry"><span class="entry-time mono">10:51</span><span class="tag tag-fix">수정</span><span class="entry-text">총액 계산 로직 중복 제거 (getTotalPrice 함수화)</span></div>
+          <div class="entry"><span class="entry-time mono">11:02</span><span class="tag tag-feat">기능</span><span class="entry-text">90초 미사용 시 화면 자동 초기화 기능 추가</span></div>
+          <div class="entry"><span class="entry-time mono">11:10</span><span class="tag tag-fix">수정</span><span class="entry-text">네트워크 오류/타임아웃 안내 문구 개선, 결제거절 사유 노출</span></div>
+          <div class="entry"><span class="entry-time mono">11:41</span><span class="tag tag-style">디자인</span><span class="entry-text">메뉴 카테고리 슬라이드 화살표 UI 추가</span></div>
+          <div class="entry"><span class="entry-time mono">13:46</span><span class="tag tag-style">디자인</span><span class="entry-text">메뉴 카테고리 슬라이드 화살표 보완</span></div>
+          <div class="entry"><span class="entry-time mono">14:06</span><span class="tag tag-feat">기능</span><span class="entry-text">자동 초기화 전 안내 팝업 추가</span></div>
+          <div class="entry"><span class="entry-time mono">14:43</span><span class="tag tag-chore">구조</span><span class="entry-text">CSS 파일 분리</span></div>
+          <div class="entry"><span class="entry-time mono">15:40</span><span class="tag tag-chore">구조</span><span class="entry-text">백엔드 완성 대비 정리 목록 작성</span></div>
+          <div class="entry"><span class="entry-time mono">17:09</span><span class="tag tag-fix">수정</span><span class="entry-text">장바구니 뱃지가 종류 수가 아닌 실제 담긴 수량을 표시하도록 수정</span></div>
+          <div class="entry"><span class="entry-time mono">17:42</span><span class="tag tag-feat">기능</span><span class="entry-text">메뉴화면에서 장바구니 카드 클릭 시 장바구니로 이동</span></div>
+          <div class="entry"><span class="entry-time mono">18:15</span><span class="tag tag-style">디자인</span><span class="entry-text">결제하기 버튼 텍스트 변경</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== PHASE 02 ===================== -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-index">PHASE 02</span>
+      <h2 class="phase-title">구조 정리와 연동</h2>
+      <span class="phase-range mono">07.20 – 07.24</span>
+    </div>
+    <p class="phase-desc">고객용 / 관리자용 키오스크 폴더를 분리하고, 다국어·반응형 대응을 마친 뒤 백엔드 API와 실제로 연결한 구간.</p>
+
+    <div class="timeline">
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.20</span><br>MON</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">12:20</span><span class="tag tag-style">디자인</span><span class="entry-text">장바구니/결제내역 구분선 및 카드 여백 조정</span></div>
+          <div class="entry"><span class="entry-time mono">14:40</span><span class="tag tag-feat">기능</span><span class="entry-text">결제 수단 선택 팝업 추가 (네이버페이/카카오페이/카드결제)</span></div>
+          <div class="entry"><span class="entry-time mono">17:27</span><span class="tag tag-fix">수정</span><span class="entry-text">영수증·주문번호 출력 버튼 개선</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.21</span><br>TUE</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">10:27</span><span class="tag tag-chore">구조</span><span class="entry-text">kiosk-customer 폴더로 이동</span></div>
+          <div class="entry"><span class="entry-time mono">10:40</span><span class="tag tag-chore">구조</span><span class="entry-text">kiosk-customer / kiosk-admin 폴더 분리 병합</span></div>
+          <div class="entry"><span class="entry-time mono">10:43</span><span class="tag tag-chore">구조</span><span class="entry-text">feature/minjun 브랜치 병합 완료</span></div>
+          <div class="entry"><span class="entry-time mono">11:22</span><span class="tag tag-chore">구조</span><span class="entry-text">README.md, .gitignore를 루트로 이동</span></div>
+          <div class="entry"><span class="entry-time mono">11:31</span><span class="tag tag-docs">문서</span><span class="entry-text">README 통합 정리</span></div>
+          <div class="entry"><span class="entry-time mono">14:12</span><span class="tag tag-chore">구조</span><span class="entry-text">node_modules 추적 제거, gitignore 경로 수정</span></div>
+          <div class="entry"><span class="entry-time mono">15:18</span><span class="tag tag-fix">수정</span><span class="entry-text">결제 실패 화면 아이콘 수정</span></div>
+          <div class="entry"><span class="entry-time mono">15:22</span><span class="tag tag-fix">수정</span><span class="entry-text">타이틀명 수정</span></div>
+          <div class="entry"><span class="entry-time mono">17:08</span><span class="tag tag-feat">기능</span><span class="entry-text">한국어/영어 다국어 지원 추가</span></div>
+          <div class="entry"><span class="entry-time mono">17:36</span><span class="tag tag-feat">기능</span><span class="entry-text">화면 크기별 자동 스케일 적용, 장바구니 텍스트 넘침 수정</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.23</span><br>THU</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">15:25</span><span class="tag tag-feat">기능</span><span class="entry-text">메뉴/장바구니/결제 화면 백엔드 API 연동</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.24</span><br>FRI</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">10:51</span><span class="tag tag-feat">기능</span><span class="entry-text">결제 아키텍처 분리에 따른 프론트 연동</span></div>
+          <div class="entry"><span class="entry-time mono">11:33</span><span class="tag tag-feat">기능</span><span class="entry-text">분리된 결제 API에 맞춰 프론트 재연동</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== PHASE 03 ===================== -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-index">PHASE 03</span>
+      <h2 class="phase-title">결제 안정성과 세트메뉴</h2>
+      <span class="phase-range mono">07.28 – 07.31</span>
+    </div>
+    <p class="phase-desc">결제 오류 유형별 처리와 자동 재시도, 품절 연동, 그룹 선택형 세트 메뉴 구성 로직을 다진 구간.</p>
+
+    <div class="timeline">
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.28</span><br>TUE</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">11:41</span><span class="tag tag-feat">기능</span><span class="entry-text">주문 상태에 '결제대기' 추가, 결제 오류 유형별 처리 및 자동 재시도</span></div>
+          <div class="entry"><span class="entry-time mono">11:54</span><span class="tag tag-chore">구조</span><span class="entry-text">main 브랜치 병합</span></div>
+          <div class="entry"><span class="entry-time mono">11:57</span><span class="tag tag-fix">수정</span><span class="entry-text">미결제 주문 관리자 노출 방지, 오류 재시도 보완</span></div>
+          <div class="entry"><span class="entry-time mono">14:35</span><span class="tag tag-fix">수정</span><span class="entry-text">이미지 업로드 menuApi 수정</span></div>
+          <div class="entry"><span class="entry-time mono">15:56</span><span class="tag tag-style">디자인</span><span class="entry-text">장바구니 화면 메뉴명 잘림 수정</span></div>
+          <div class="entry"><span class="entry-time mono">16:13</span><span class="tag tag-style">디자인</span><span class="entry-text">떡볶이 카드 CSS 재수정</span></div>
+          <div class="entry"><span class="entry-time mono">18:21</span><span class="tag tag-style">디자인</span><span class="entry-text">영문 메뉴명 장바구니 넘침 수정</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.29</span><br>WED</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">11:17</span><span class="tag tag-style">디자인</span><span class="entry-text">장바구니 폰트 크기 수정</span></div>
+          <div class="entry"><span class="entry-time mono">11:43</span><span class="tag tag-feat">기능</span><span class="entry-text">네이버페이/카카오페이 QR 모달 생성</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.30</span><br>THU</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">18:18</span><span class="tag tag-feat">기능</span><span class="entry-text">옵션 품절 시 카드에 품절 표시 및 선택 차단</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">07.31</span><br>FRI</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">10:56</span><span class="tag tag-fix">수정</span><span class="entry-text">결제 처리 중 뒤로가기로 인한 주문 취소 차단</span></div>
+          <div class="entry"><span class="entry-time mono">13:43</span><span class="tag tag-feat">기능</span><span class="entry-text">세트 메뉴 구성품 품절 시 세트 자동 품절 및 주문 차단</span></div>
+          <div class="entry"><span class="entry-time mono">16:52</span><span class="tag tag-feat">기능</span><span class="entry-text">그룹 선택형 세트 메뉴 팝업, 장바구니/주문 연동</span></div>
+          <div class="entry"><span class="entry-time mono">18:01</span><span class="tag tag-style">디자인</span><span class="entry-text">CSS 수정</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== PHASE 04 ===================== -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-index">PHASE 04</span>
+      <h2 class="phase-title">결제수단 확장과 마무리</h2>
+      <span class="phase-range mono">08.03 – 08.07</span>
+    </div>
+    <p class="phase-desc">토스페이를 연동하고 결제수단별 UI를 정리했으며, 자동 테스트를 추가하고 세부 UI를 다듬어 마무리한 구간.</p>
+
+    <div class="timeline">
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">08.03</span><br>MON</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">15:13</span><span class="tag tag-feat">기능</span><span class="entry-text">떡순튀세트 옵션(떡볶이맛/순대구성) 선택 기능 추가</span></div>
+          <div class="entry"><span class="entry-time mono">15:17</span><span class="tag tag-chore">구조</span><span class="entry-text">API URL 환경변수화</span></div>
+          <div class="entry"><span class="entry-time mono">17:09</span><span class="tag tag-feat">기능</span><span class="entry-text">토스페이 결제 추가 (키오스크 내 결제창 직접 호출 방식)</span></div>
+          <div class="entry"><span class="entry-time mono">17:31</span><span class="tag tag-style">디자인</span><span class="entry-text">결제수단 CSS 수정</span></div>
+          <div class="entry"><span class="entry-time mono">18:09</span><span class="tag tag-feat">기능</span><span class="entry-text">네이버페이 이미지 수정, 카카오페이도 토스 결제창 방식으로 전환</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">08.06</span><br>THU</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">10:44</span><span class="tag tag-fix">수정</span><span class="entry-text">토스/카카오 결제 취소 안내 개선, confirm API 중복 호출 방지</span></div>
+          <div class="entry"><span class="entry-time mono">14:18</span><span class="tag tag-feat">기능</span><span class="entry-text">떡볶이 단품 맛 선택 기능 구현</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">08.07</span><br>FRI</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">15:04</span><span class="tag tag-test">테스트</span><span class="entry-text">고객용 키오스크 자동 테스트 추가</span></div>
+          <div class="entry"><span class="entry-time mono">16:09</span><span class="tag tag-style">디자인</span><span class="entry-text">옵션 카드 3개 이상일 때 슬라이드 가능하도록 개선</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    git log 기준 (author: parkbori99@gmail.com) · 2026.08.10 작성
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import { API_BASE_URL } from "../config/api";
 import {
   getOptions,
   createOption,
@@ -48,7 +49,7 @@ describe("optionApi", () => {
         option_name: "치즈",
         option_name_en: "Cheese",
         option_price: 1000,
-        option_image: "http://localhost:8080/images/cheese.png",
+        option_image: `${API_BASE_URL}/images/cheese.png`,
         option_is_available: true,
         is_visible: true,
       },

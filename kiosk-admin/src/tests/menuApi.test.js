@@ -1,4 +1,5 @@
 import api from "../api/axios";
+import { API_BASE_URL } from "../config/api";
 import {
   getMenus,
   createMenu,
@@ -57,7 +58,7 @@ describe("menuApi", () => {
         menu_type: "COMPONENT",
         category: "분식",
         price: 5000,
-        image_url: "http://localhost:8080/images/tteokbokki.webp",
+        image_url: `${API_BASE_URL}/images/tteokbokki.webp`,
         is_available: false,
         base_is_available: true,
         is_visible: true,

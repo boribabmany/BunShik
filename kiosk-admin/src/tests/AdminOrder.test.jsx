@@ -141,7 +141,7 @@ describe("관리자 주문 관리", () => {
     fireEvent.click(screen.getByRole("button", { name: "취소" }));
 
     expect(window.confirm).toHaveBeenCalledWith(
-      "주문을 취소하시겠습니까?",
+      "주문을 취소하시겠습니까?\n결제 완료 건은 자동으로 전액 환불됩니다.",
     );
     await waitFor(() => {
       expect(window.alert).toHaveBeenCalledWith(

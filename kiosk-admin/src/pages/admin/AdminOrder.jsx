@@ -211,7 +211,11 @@ export default function AdminOrder() {
 
   // 주문 취소
   const handleCancel = async (orderId) => {
-    if (!window.confirm("주문을 취소하시겠습니까?")) {
+    if (
+      !window.confirm(
+        "주문을 취소하시겠습니까?\n결제 완료 건은 자동으로 전액 환불됩니다.",
+      )
+    ) {
       return;
     }
 
@@ -220,7 +224,7 @@ export default function AdminOrder() {
     } catch (error) {
       alert(
         error.response?.data?.message ||
-          "주문을 취소하지 못했습니다.",
+          "주문 취소 또는 결제 환불에 실패했습니다.",
       );
     }
   };

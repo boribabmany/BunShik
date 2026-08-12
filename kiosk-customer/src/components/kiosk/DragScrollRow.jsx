@@ -1,7 +1,7 @@
 import { useRef } from "react";
 
 // 마우스 드래그로 좌우 슬라이드 가능한 컨테이너 (터치는 브라우저 기본 스크롤로 동작)
-function DragScrollRow({ className, children }) {
+function DragScrollRow({ className, children, ...rest }) {
   const scrollRef = useRef(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -43,6 +43,7 @@ function DragScrollRow({ className, children }) {
       onMouseUp={stopDragging}
       onMouseLeave={stopDragging}
       onClickCapture={handleClickCapture}
+      {...rest}
     >
       {children}
     </div>

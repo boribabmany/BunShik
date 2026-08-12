@@ -118,16 +118,24 @@ export const cancelOrder = async (orderId) => {
   }
 };
 
+/**
+ * 토스 결제 승인(confirm)
+ * 손님은 이미 결제창에서 결제를 마친 뒤 호출되는 단계라, timeout/network-error로
+ * 실패하면 즉시 포기하지 않고 withRetry로 자동 재시도한다. (재시도해도 안전 —
+ * 실제 승인 여부는 토스/서버 쪽 결제키 기준으로 판단되므로 중복 승인 위험 없음)
+ */
 export const confirmTossPayment = async (request) => {
-  try {
-    const response = await axios.post(`${TOSS_URL}/confirm`, request, {
-      timeout: REQUEST_TIMEOUT,
-    });
-    return response.data.data;
-  } catch (error) {
-    console.error("토스 결제 승인 실패:", error);
-    throw normalizeError(error);
-  }
+  return withRetry(async () => {
+    try {
+      const response = await axios.post(`${TOSS_URL}/confirm`, request, {
+        timeout: REQUEST_TIMEOUT,
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error("토스 결제 승인 실패:", error);
+      throw normalizeError(error);
+    }
+  });
 };
 
 export const failTossPayment = async (request) => {

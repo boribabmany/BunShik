@@ -334,15 +334,15 @@
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-value mono">83</div>
+        <div class="stat-value mono">89</div>
         <div class="stat-label">총 커밋</div>
       </div>
       <div class="stat">
-        <div class="stat-value mono">07.13 – 08.07</div>
-        <div class="stat-label">작업 기간 (26일)</div>
+        <div class="stat-value mono">07.13 – 08.12</div>
+        <div class="stat-label">작업 기간 (31일)</div>
       </div>
       <div class="stat">
-        <div class="stat-value mono">15</div>
+        <div class="stat-value mono">17</div>
         <div class="stat-label">활동일</div>
       </div>
       <div class="stat">
@@ -353,11 +353,11 @@
 
     <div class="legend">
       <span class="legend-item"><span class="dot" style="background:var(--tag-feat-fg)"></span>기능 26</span>
-      <span class="legend-item"><span class="dot" style="background:var(--tag-chore-fg)"></span>구조/설정 20</span>
-      <span class="legend-item"><span class="dot" style="background:var(--tag-fix-fg)"></span>수정 17</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-chore-fg)"></span>구조/설정 22</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-fix-fg)"></span>수정 18</span>
       <span class="legend-item"><span class="dot" style="background:var(--tag-style-fg)"></span>디자인 17</span>
-      <span class="legend-item"><span class="dot" style="background:var(--tag-docs-fg)"></span>문서 2</span>
-      <span class="legend-item"><span class="dot" style="background:var(--tag-test-fg)"></span>테스트 1</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-docs-fg)"></span>문서 3</span>
+      <span class="legend-item"><span class="dot" style="background:var(--tag-test-fg)"></span>테스트 3</span>
     </div>
   </header>
 
@@ -605,8 +605,42 @@
     </div>
   </section>
 
+  <!-- ===================== PHASE 05 ===================== -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-index">PHASE 05</span>
+      <h2 class="phase-title">품질 안정화</h2>
+      <span class="phase-range mono">08.10 – 08.12</span>
+    </div>
+    <p class="phase-desc">수동 테스트 체크리스트와 저장소 정리를 마치고, 결제 재시도 안전성 개선과 신규 UI 컴포넌트 자동 테스트를 추가로 보완한 구간.</p>
+
+    <div class="timeline">
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">08.10</span><br>MON</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">14:30</span><span class="tag tag-docs">문서</span><span class="entry-text">박유진 작업일지 추가</span></div>
+          <div class="entry"><span class="entry-time mono">15:48</span><span class="tag tag-chore">구조</span><span class="entry-text">잘못 커밋된 kiosk-customer/build 산출물 제거</span></div>
+          <div class="entry"><span class="entry-time mono">18:00</span><span class="tag tag-test">테스트</span><span class="entry-text">옵션카드 슬라이드 기능 수동 테스트 체크리스트 작성 및 결과 기록</span></div>
+        </div>
+      </div>
+
+      <div class="day">
+        <div class="day-node"></div>
+        <div class="day-date"><span class="d">08.12</span><br>WED</div>
+        <div class="entries">
+          <div class="entry"><span class="entry-time mono">11:11</span><span class="tag tag-fix">수정</span><span class="entry-text">결제 승인 확인(confirm) 재시도 시 이미 완료된 결제를 안전하게 처리하도록 수정</span></div>
+          <div class="entry"><span class="entry-time mono">11:25</span><span class="tag tag-chore">구조</span><span class="entry-text">저장소 줄바꿈 규칙 통일 (.gitattributes)</span></div>
+          <div class="entry"><span class="entry-time mono">11:53</span><span class="tag tag-test">테스트</span><span class="entry-text">옵션카드 슬라이드(DragScrollRow) 컴포넌트 자동 테스트 추가</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <footer>
-    git log 기준 (author: parkbori99@gmail.com) · 2026.08.10 작성
+    git log 기준 (author: parkbori99@gmail.com) · 2026.08.12 작성
   </footer>
 
 </div>

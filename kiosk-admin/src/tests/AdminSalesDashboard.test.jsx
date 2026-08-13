@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 매출 대시보드 (/adminsales)
+ * 테스트 내용: 기간·결제수단별 통계 표시와 CSV·Excel 내보내기 연결을 검증한다.
+ */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AdminSalesDashboard from "../pages/admin/AdminSalesDashboard";
 import useSalesStore from "../store/salesStore";

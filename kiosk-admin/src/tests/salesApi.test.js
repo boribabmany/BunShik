@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 매출 대시보드 (/adminsales)
+ * 테스트 내용: 선택한 기간과 기준 날짜가 매출 분석 API에 전달되는지 검증한다.
+ */
 import api from "../api/axios";
 import { getSalesAnalytics } from "../api/salesApi";
 

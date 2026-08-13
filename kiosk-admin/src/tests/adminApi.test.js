@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 로그인 페이지 (/adminlogin)
+ * 테스트 내용: 로그인 API의 요청 데이터와 성공·실패 응답 처리를 검증한다.
+ */
 import api from "../api/axios";
 import { login } from "../api/adminApi";
 

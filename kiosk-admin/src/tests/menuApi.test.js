@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메인·메뉴 편집 페이지 (/adminmenu, /adminmenuedit)
+ * 테스트 내용: 메뉴 조회·등록·수정·판매 상태 및 세트 구성 API 처리를 검증한다.
+ */
 import api from "../api/axios";
 import { API_BASE_URL } from "../config/api";
 import {

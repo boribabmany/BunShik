@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 주문 관리 페이지 (/adminorder)
+ * 테스트 내용: 주문 목록·상세 API 응답에 결제수단 정보가 포함되는지 검증한다.
+ */
 import api from "../api/axios";
 import { getOrderDetail, getOrders } from "../api/adminOrderApi";
 

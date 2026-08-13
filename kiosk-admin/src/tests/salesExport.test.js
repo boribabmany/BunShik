@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 매출 대시보드 (/adminsales)
+ * 테스트 내용: 한글 호환 CSV와 통계 시트가 포함된 Excel 파일 데이터 생성을 검증한다.
+ */
 import { buildSalesCsv, buildSalesExcel } from "../utils/salesExport";
 
 const analytics = {

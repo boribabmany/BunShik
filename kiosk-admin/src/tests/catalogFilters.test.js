@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메인·메뉴 편집 페이지 (/adminmenu, /adminmenuedit)
+ * 테스트 내용: 메뉴·옵션의 이름, 번호, 카테고리 및 판매 상태 필터 함수를 검증한다.
+ */
 import { filterMenus, filterOptions } from "../utils/catalogFilters";
 
 const menus = [

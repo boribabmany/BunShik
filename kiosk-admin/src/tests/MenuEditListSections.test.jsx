@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메뉴 편집 페이지 (/adminmenuedit)
+ * 테스트 내용: 메뉴·옵션 목록의 검색, 페이지 표시 및 등록·수정 콜백 연결을 검증한다.
+ */
 import { fireEvent, render, screen } from "@testing-library/react";
 import MenuListSection from "../components/admin/menu-edit/MenuListSection";
 import OptionListSection from "../components/admin/menu-edit/OptionListSection";

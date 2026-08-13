@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 로그인 페이지 (/adminlogin)
+ * 테스트 내용: 로그인 성공 시 토큰 저장과 화면 이동, 실패 시 오류 표시를 검증한다.
+ */
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import AdminLogin from "../pages/admin/AdminLogin";
 import { login } from "../api/adminApi";

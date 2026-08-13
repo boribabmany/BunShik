@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메뉴 편집 페이지 (/adminmenuedit)
+ * 테스트 내용: 메뉴·옵션 편집 폼과 세트 구성 전용 입력 항목의 표시·변경을 검증한다.
+ */
 import { fireEvent, render, screen } from "@testing-library/react";
 import MenuEditorForm from "../components/admin/menu-edit/MenuEditorForm";
 import OptionEditorForm from "../components/admin/menu-edit/OptionEditorForm";

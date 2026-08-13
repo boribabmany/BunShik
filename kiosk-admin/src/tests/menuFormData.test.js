@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메뉴 편집 페이지 (/adminmenuedit)
+ * 테스트 내용: 메뉴와 세트 구성 데이터를 multipart FormData로 변환하는 함수를 검증한다.
+ */
 import { createMenuFormData } from "../utils/menuFormData";
 
 describe("createMenuFormData", () => {

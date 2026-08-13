@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메뉴 편집 페이지 (/adminmenuedit)
+ * 테스트 내용: 메뉴·옵션 이름, 가격, 이미지 및 구성 전용 메뉴의 입력값 검증 규칙을 확인한다.
+ */
 import { validateMenu, validateOption } from "../utils/validation";
 
 describe("메뉴 검증", () => {

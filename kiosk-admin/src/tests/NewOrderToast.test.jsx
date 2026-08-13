@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 로그인 후 모든 관리자 화면 (주문 관리 화면 제외)
+ * 테스트 내용: 신규 주문 토스트 표시, 주문 화면 이동 및 알림음 재생을 검증한다.
+ */
 import { fireEvent, render, screen } from "@testing-library/react";
 import NewOrderToast from "../components/admin/NewOrderToast";
 import useAdminOrderStore from "../store/adminOrderStore";

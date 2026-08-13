@@ -1,3 +1,7 @@
+/**
+ * 적용 화면: 관리자 메인 페이지 (/adminmenu)
+ * 테스트 내용: 메뉴·옵션 표의 검색, 카테고리 및 판매 상태 필터 동작을 검증한다.
+ */
 import { fireEvent, render, screen } from "@testing-library/react";
 import AdminMenusTable from "../components/admin/AdminMenusTable";
 import AdminOptionsTable from "../components/admin/AdminOptionsTable";

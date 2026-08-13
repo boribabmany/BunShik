@@ -11,7 +11,7 @@ const { defineConfig, devices } = require("@playwright/test");
  *     (백엔드는 자동 기동하지 않음 — 직접 먼저 켜두어야 함)
  */
 module.exports = defineConfig({
-  testDir: "./e2e",
+  testDir: "./e2e/tests",
   timeout: 30_000,
   expect: { timeout: 8_000 },
   fullyParallel: false,

@@ -72,6 +72,23 @@ export const updateOrderStatus = async (orderId, orderStatus) => {
   return response.data.data;
 };
 
+export const updateBulkOrderStatus = async (orderIds, orderStatus) => {
+  const response = await api.patch("/api/admin/orders/bulk/status", {
+    orderIds,
+    orderStatus,
+  });
+
+  return response.data.data;
+};
+
+export const cancelBulkOrders = async (orderIds) => {
+  const response = await api.patch("/api/admin/orders/bulk/cancel", {
+    orderIds,
+  });
+
+  return response.data.data;
+};
+
 // 주문 취소
 export const cancelOrder = async (orderId) => {
   const response = await api.patch(`/api/admin/orders/${orderId}/cancel`);

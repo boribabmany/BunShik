@@ -70,6 +70,8 @@ const detail = {
 describe("관리자 주문 관리", () => {
   const loadOrders = jest.fn();
   const changeOrderStatus = jest.fn();
+  const changeBulkOrderStatus = jest.fn();
+  const cancelBulkOrders = jest.fn();
   const cancelOrder = jest.fn();
 
   beforeEach(() => {
@@ -81,6 +83,8 @@ describe("관리자 주문 관리", () => {
       orders: [order],
       loadOrders,
       changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
       cancelOrder,
     });
     jest.spyOn(window, "alert").mockImplementation(() => {});
@@ -129,6 +133,69 @@ describe("관리자 주문 관리", () => {
       expect(window.alert).toHaveBeenCalledWith(
         "허용되지 않는 상태 전이입니다.",
       );
+    });
+  });
+
+  test("같은 상태의 주문 여러 건을 선택해 조리를 시작한다", async () => {
+    const secondOrder = {
+      ...order,
+      order_id: 2,
+      order_number: "A-002",
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [order, secondOrder],
+      loadOrders,
+      changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
+      cancelOrder,
+    });
+    renderPage();
+
+    fireEvent.change(screen.getAllByRole("combobox")[1], {
+      target: { value: "접수" },
+    });
+    fireEvent.click(screen.getByLabelText("현재 화면 주문 전체 선택"));
+    expect(screen.getByText("선택 2건")).toBeTruthy();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "선택 주문 조리 시작" }),
+    );
+
+    expect(window.confirm).toHaveBeenCalledWith(
+      "선택한 주문 2건을 조리 시작 처리하시겠습니까?",
+    );
+    await waitFor(() => {
+      expect(changeBulkOrderStatus).toHaveBeenCalledWith([1, 2], "조리중");
+    });
+  });
+
+  test("선택한 주문 여러 건을 한 번에 취소한다", async () => {
+    const secondOrder = {
+      ...order,
+      order_id: 2,
+      order_number: "A-002",
+      order_status: "조리중",
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [order, secondOrder],
+      loadOrders,
+      changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
+      cancelOrder,
+    });
+    renderPage();
+
+    fireEvent.click(screen.getByLabelText("A-001 주문 선택"));
+    fireEvent.click(screen.getByLabelText("A-002 주문 선택"));
+    fireEvent.click(screen.getByRole("button", { name: "선택 주문 취소" }));
+
+    expect(window.confirm).toHaveBeenCalledWith(
+      "선택한 주문 2건을 취소하시겠습니까?\n결제 완료 건은 주문별로 전액 환불됩니다.",
+    );
+    await waitFor(() => {
+      expect(cancelBulkOrders).toHaveBeenCalledWith([1, 2]);
     });
   });
 

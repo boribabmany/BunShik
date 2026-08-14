@@ -16,6 +16,8 @@ export default function AdminOrder() {
     orders,
     loadOrders,
     changeOrderStatus,
+    changeBulkOrderStatus,
+    cancelBulkOrders: storeCancelBulkOrders,
     cancelOrder: storeCancelOrder,
   } = useAdminOrderStore();
 
@@ -31,6 +33,7 @@ export default function AdminOrder() {
     () => sessionStorage.getItem(SOUND_SETTING_KEY) === "true",
   );
   const [unreadOrderIds, setUnreadOrderIds] = useState(() => new Set());
+  const [selectedOrderIds, setSelectedOrderIds] = useState(() => new Set());
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const knownOrderIdsRef = useRef(new Set());
   const isFirstOrderLoadRef = useRef(true);
@@ -185,6 +188,139 @@ export default function AdminOrder() {
     .sort((a, b) => b.order_id - a.order_id);
 
   const delayedOrderCount = filteredOrders.filter(isDelayedOrder).length;
+  const visibleOrders = filteredOrders.slice(0, visibleCount);
+  const bulkSelectableStatus = status === "접수" || status === "조리중"
+    ? status
+    : null;
+  const visibleSelectableOrders = bulkSelectableStatus
+    ? visibleOrders.filter(
+        (order) => order.order_status === bulkSelectableStatus,
+      )
+    : [];
+  const areAllVisibleSelected =
+    visibleSelectableOrders.length > 0 &&
+    visibleSelectableOrders.every((order) =>
+      selectedOrderIds.has(order.order_id),
+    );
+  const selectedOrders = orders.filter((order) =>
+    selectedOrderIds.has(order.order_id),
+  );
+  const selectedStatuses = new Set(
+    selectedOrders.map((order) => order.order_status),
+  );
+  const selectedStatus =
+    selectedStatuses.size === 1 ? selectedOrders[0]?.order_status : null;
+
+  useEffect(() => {
+    const activeOrderIds = new Set(
+      orders
+        .filter(
+          (order) =>
+            order.order_status === "접수" || order.order_status === "조리중",
+        )
+        .map((order) => order.order_id),
+    );
+
+    setSelectedOrderIds((previousIds) => {
+      const nextIds = new Set(
+        [...previousIds].filter((orderId) => activeOrderIds.has(orderId)),
+      );
+      return nextIds.size === previousIds.size ? previousIds : nextIds;
+    });
+  }, [orders]);
+
+  useEffect(() => {
+    setSelectedOrderIds(new Set());
+  }, [date, type, status]);
+
+  const handleOrderSelection = (order) => {
+    if (order.order_status !== "접수" && order.order_status !== "조리중") {
+      return;
+    }
+
+    setSelectedOrderIds((previousIds) => {
+      const nextIds = new Set(previousIds);
+
+      if (nextIds.has(order.order_id)) {
+        nextIds.delete(order.order_id);
+        return nextIds;
+      }
+
+      nextIds.add(order.order_id);
+      return nextIds;
+    });
+  };
+
+  const handleSelectAllVisible = () => {
+    if (!bulkSelectableStatus) return;
+
+    setSelectedOrderIds((previousIds) => {
+      const nextIds = new Set(previousIds);
+
+      if (areAllVisibleSelected) {
+        visibleSelectableOrders.forEach((order) =>
+          nextIds.delete(order.order_id),
+        );
+      } else {
+        visibleSelectableOrders.forEach((order) =>
+          nextIds.add(order.order_id),
+        );
+      }
+
+      return nextIds;
+    });
+  };
+
+  const handleBulkStatusChange = async () => {
+    if (selectedOrders.length === 0 || !selectedStatus) return;
+
+    const currentStatus = selectedStatus;
+    const nextStatus = currentStatus === "접수" ? "조리중" : "완료";
+    const actionLabel = currentStatus === "접수" ? "조리 시작" : "조리 완료";
+
+    if (!window.confirm(
+      `선택한 주문 ${selectedOrders.length}건을 ${actionLabel} 처리하시겠습니까?`,
+    )) {
+      return;
+    }
+
+    try {
+      await changeBulkOrderStatus(
+        selectedOrders.map((order) => order.order_id),
+        nextStatus,
+      );
+      selectedOrders.forEach((order) => markOrderAsRead(order.order_id));
+      setSelectedOrderIds(new Set());
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+          "선택한 주문의 상태를 변경하지 못했습니다.",
+      );
+    }
+  };
+
+  const handleBulkCancel = async () => {
+    if (selectedOrders.length === 0) return;
+
+    if (!window.confirm(
+      `선택한 주문 ${selectedOrders.length}건을 취소하시겠습니까?\n결제 완료 건은 주문별로 전액 환불됩니다.`,
+    )) {
+      return;
+    }
+
+    try {
+      await storeCancelBulkOrders(
+        selectedOrders.map((order) => order.order_id),
+      );
+      selectedOrders.forEach((order) => markOrderAsRead(order.order_id));
+      setSelectedOrderIds(new Set());
+    } catch (error) {
+      alert(
+        error.response?.data?.message ||
+          "선택한 주문 취소 또는 결제 환불에 실패했습니다.",
+      );
+    }
+  };
 
   // 상태 변경: 접수 → 조리중 → 완료
   const handleStatusChange = async (orderId, currentStatus) => {
@@ -322,10 +458,45 @@ export default function AdminOrder() {
 
       </section>
 
+      <section className="bulk-order-actions" aria-label="다중 주문 처리">
+        <div>
+          <strong>선택 {selectedOrderIds.size}건</strong>
+          <span>상태 변경은 같은 상태끼리, 취소는 접수·조리중을 섞어서 처리할 수 있습니다.</span>
+        </div>
+        <button
+          type="button"
+          onClick={handleBulkStatusChange}
+          disabled={selectedOrderIds.size === 0 || !selectedStatus}
+        >
+          {selectedStatus === "조리중"
+            ? "선택 주문 조리 완료"
+            : selectedStatus === "접수"
+              ? "선택 주문 조리 시작"
+              : "상태별 선택 필요"}
+        </button>
+        <button
+          type="button"
+          className="bulk-cancel-button"
+          onClick={handleBulkCancel}
+          disabled={selectedOrderIds.size === 0}
+        >
+          선택 주문 취소
+        </button>
+      </section>
+
       <div className="order-table-box">
         <table className="order-table">
           <thead>
             <tr>
+              <th className="order-select-column">
+                <input
+                  type="checkbox"
+                  aria-label="현재 화면 주문 전체 선택"
+                  checked={areAllVisibleSelected}
+                  onChange={handleSelectAllVisible}
+                  disabled={!bulkSelectableStatus || visibleSelectableOrders.length === 0}
+                />
+              </th>
               <th>주문번호</th>
               <th>주문시간</th>
               <th>주문유형</th>
@@ -337,7 +508,7 @@ export default function AdminOrder() {
           </thead>
 
           <tbody>
-            {filteredOrders.slice(0, visibleCount).map((order) => {
+            {visibleOrders.map((order) => {
               const isFinished =
                 order.order_status === "완료" || order.order_status === "취소";
               const isExpanded = expandedOrderId === order.order_id;
@@ -359,6 +530,19 @@ export default function AdminOrder() {
                   tabIndex={0}
                   aria-expanded={isExpanded}
                 >
+                  <td className="order-select-column">
+                    <input
+                      type="checkbox"
+                      aria-label={`${order.order_number} 주문 선택`}
+                      checked={selectedOrderIds.has(order.order_id)}
+                      disabled={
+                        order.order_status !== "접수" &&
+                        order.order_status !== "조리중"
+                      }
+                      onClick={(event) => event.stopPropagation()}
+                      onChange={() => handleOrderSelection(order)}
+                    />
+                  </td>
                   <td>
                     <div className="order-number-cell">
                       <span>{order.order_number}</span>
@@ -403,7 +587,7 @@ export default function AdminOrder() {
                 </tr>
                 {isExpanded && (
                   <tr className="order-detail-row">
-                    <td colSpan="7">
+                    <td colSpan="8">
                       <div className="order-detail-panel">
                         {detailLoadingId === order.order_id && (
                           <p className="order-detail-message">

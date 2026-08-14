@@ -3,12 +3,18 @@
  * 테스트 내용: 주문 목록·상세 API 응답에 결제수단 정보가 포함되는지 검증한다.
  */
 import api from "../api/axios";
-import { getOrderDetail, getOrders } from "../api/adminOrderApi";
+import {
+  getOrderDetail,
+  getOrders,
+  updateBulkOrderStatus,
+  cancelBulkOrders,
+} from "../api/adminOrderApi";
 
 jest.mock("../api/axios", () => ({
   __esModule: true,
   default: {
     get: jest.fn(),
+    patch: jest.fn(),
   },
 }));
 
@@ -58,5 +64,27 @@ describe("adminOrderApi", () => {
     const detail = await getOrderDetail(1);
 
     expect(detail.payment_method).toBe("카카오페이");
+  });
+
+  test("선택한 주문의 상태를 한 번에 변경한다", async () => {
+    api.patch.mockResolvedValue({ data: { data: 2 } });
+
+    await expect(
+      updateBulkOrderStatus([1, 2], "조리중"),
+    ).resolves.toBe(2);
+    expect(api.patch).toHaveBeenCalledWith(
+      "/api/admin/orders/bulk/status",
+      { orderIds: [1, 2], orderStatus: "조리중" },
+    );
+  });
+
+  test("선택한 주문을 한 번에 취소한다", async () => {
+    api.patch.mockResolvedValue({ data: { data: 2 } });
+
+    await expect(cancelBulkOrders([1, 2])).resolves.toBe(2);
+    expect(api.patch).toHaveBeenCalledWith(
+      "/api/admin/orders/bulk/cancel",
+      { orderIds: [1, 2] },
+    );
   });
 });

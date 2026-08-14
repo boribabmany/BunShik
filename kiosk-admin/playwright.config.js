@@ -23,8 +23,7 @@ module.exports = defineConfig({
   ],
 
   webServer: {
-    command: "node node_modules/react-scripts/bin/react-scripts.js start",
-    cwd: __dirname,
+    command: "npm start",
     url: "http://localhost:3002",
     reuseExistingServer: true,
     timeout: 120_000,

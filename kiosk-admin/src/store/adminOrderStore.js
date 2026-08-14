@@ -2,6 +2,8 @@ import { create } from "zustand";
 import {
   getOrders,
   updateOrderStatus,
+  updateBulkOrderStatus,
+  cancelBulkOrders,
   cancelOrder,
 } from "../api/adminOrderApi";
 import { getKoreaDateString } from "../utils/date";
@@ -44,6 +46,28 @@ const useAdminOrderStore = create((set, get) => ({
       await get().loadOrders();
     } catch (error) {
       console.error("상태 변경 실패:", error);
+      throw error;
+    }
+  },
+
+  changeBulkOrderStatus: async (orderIds, orderStatus) => {
+    try {
+      await updateBulkOrderStatus(orderIds, orderStatus);
+
+      await get().loadOrders();
+    } catch (error) {
+      console.error("다중 상태 변경 실패:", error);
+      throw error;
+    }
+  },
+
+  cancelBulkOrders: async (orderIds) => {
+    try {
+      await cancelBulkOrders(orderIds);
+
+      await get().loadOrders();
+    } catch (error) {
+      console.error("다중 주문 취소 실패:", error);
       throw error;
     }
   },

@@ -2,6 +2,7 @@
 const { expect } = require("@playwright/test");
 
 class PaymentPage {
+  /** @param {import('@playwright/test').Page} page */
   constructor(page) {
     this.page = page;
   }
@@ -11,6 +12,8 @@ class PaymentPage {
    * 백엔드(PaymentService.simulatePayment)가 확률로 성공/실패를 시뮬레이션하므로
    * (성공 90% / 승인거절 6% / 카드오류 2% / 지연 2%), 재시도 가능한 실패는
    * 최대 maxAttempts까지 재시도 버튼을 눌러 flaky해지지 않게 한다.
+   *
+   * @param {number} [maxAttempts]
    */
   async payWithCard(maxAttempts = 3) {
     await expect(this.page).toHaveURL(/\/payment$/);

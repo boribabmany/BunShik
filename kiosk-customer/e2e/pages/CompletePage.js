@@ -2,6 +2,7 @@
 const { expect } = require("@playwright/test");
 
 class CompletePage {
+  /** @param {import('@playwright/test').Page} page */
   constructor(page) {
     this.page = page;
   }

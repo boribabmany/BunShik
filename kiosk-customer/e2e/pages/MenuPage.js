@@ -5,6 +5,9 @@ const { expect } = require("@playwright/test");
  * 그룹(맛/구성 선택) 후보 중 어떤 걸 고르는지는 중요하지 않으므로
  * 매번 "선택 가능한 첫 번째 항목"을 고른다. 실제 DB의 메뉴 구성이 팀마다 달라도
  * 이름을 하드코딩하지 않아 그대로 동작한다.
+ *
+ * @param {import('@playwright/test').Locator} modal
+ * @param {string} groupSelector
  */
 async function selectFirstAvailableInEachGroup(modal, groupSelector) {
   const groups = modal.locator(groupSelector);
@@ -19,21 +22,29 @@ async function selectFirstAvailableInEachGroup(modal, groupSelector) {
 }
 
 class MenuPage {
+  /** @param {import('@playwright/test').Page} page */
   constructor(page) {
     this.page = page;
   }
 
+  /** @param {string} menuName */
   card(menuName) {
     return this.page.locator(".menu-card").filter({ hasText: menuName });
   }
 
-  /** 옵션/세트 없이 담기 버튼 클릭만으로 바로 장바구니에 담기는 단품 메뉴 */
+  /**
+   * 옵션/세트 없이 담기 버튼 클릭만으로 바로 장바구니에 담기는 단품 메뉴
+   * @param {string} menuName
+   */
   async addPlainItem(menuName) {
     await expect(this.card(menuName)).toBeVisible({ timeout: 15_000 });
     await this.card(menuName).locator(".menu-card-add-btn").click();
   }
 
-  /** OptionModal(토핑/맛 선택)이 뜨는 메뉴 — 그룹은 필수 선택, 토핑은 있으면 1개만 추가 */
+  /**
+   * OptionModal(토핑/맛 선택)이 뜨는 메뉴 — 그룹은 필수 선택, 토핑은 있으면 1개만 추가
+   * @param {string} menuName
+   */
   async addItemWithOptions(menuName) {
     await expect(this.card(menuName)).toBeVisible({ timeout: 15_000 });
     await this.card(menuName).locator(".menu-card-add-btn").click();
@@ -58,7 +69,10 @@ class MenuPage {
     await modal.locator(".option-modal-submit-button").click();
   }
 
-  /** SetMenuModal(세트 구성 선택)이 뜨는 메뉴 — 그룹마다 선택 가능한 첫 번째 항목 선택 */
+  /**
+   * SetMenuModal(세트 구성 선택)이 뜨는 메뉴 — 그룹마다 선택 가능한 첫 번째 항목 선택
+   * @param {string} menuName
+   */
   async addSetMenuItem(menuName) {
     await expect(this.card(menuName)).toBeVisible({ timeout: 15_000 });
     await this.card(menuName).locator(".menu-card-add-btn").click();
@@ -70,6 +84,7 @@ class MenuPage {
     await modal.locator(".set-modal-submit-button").click();
   }
 
+  /** @param {number} count */
   async expectCartCount(count) {
     await expect(this.page.locator(".menu-cartbar-count")).toHaveText(
       `${count}개`,

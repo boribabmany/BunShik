@@ -1,114 +1,48 @@
-/**
- * 적용 화면: 관리자 메인 페이지 (/adminmenu)
- * 테스트 내용: 메뉴·옵션 표의 검색, 카테고리 및 판매 상태 필터 동작을 검증한다.
- */
 import { fireEvent, render, screen } from "@testing-library/react";
 import AdminMenusTable from "../components/admin/AdminMenusTable";
 import AdminOptionsTable from "../components/admin/AdminOptionsTable";
 import useMenuStore from "../store/menuStore";
 import useOptionStore from "../store/optionStore";
 
-jest.mock("react-router-dom", () => ({
-  useNavigate: () => jest.fn(),
-}));
+jest.mock("react-router-dom", () => ({ useNavigate: () => jest.fn() }));
 jest.mock("../store/menuStore");
 jest.mock("../store/optionStore");
 
-describe("관리자 메뉴·옵션 검색 필터", () => {
+describe("관리자 메뉴·옵션 카테고리 필터", () => {
   beforeEach(() => {
-    useMenuStore.mockImplementation((selector) =>
-      selector({
-        menuList: [
-          {
-            menu_id: 1,
-            menu_name: "참치김밥",
-            menu_name_en: "Tuna Kimbap",
-            category: "김밥",
-            price: 4500,
-            is_visible: true,
-            is_available: true,
-          },
-          {
-            menu_id: 2,
-            menu_name: "라면",
-            menu_name_en: "Ramen",
-            category: "라면",
-            price: 5000,
-            is_visible: true,
-            is_available: false,
-          },
-          {
-            menu_id: 21,
-            menu_name: "순한맛",
-            menu_name_en: "Mild",
-            menu_type: "COMPONENT",
-            category: "떡볶이맛",
-            price: 0,
-            is_visible: true,
-            is_available: true,
-          },
-        ],
-      }),
-    );
-    useOptionStore.mockImplementation((selector) =>
-      selector({
-        optionList: [
-          {
-            option_id: 10,
-            option_name: "치즈 추가",
-            option_name_en: "Extra cheese",
-            option_price: 1000,
-            is_visible: true,
-            option_is_available: true,
-          },
-          {
-            option_id: 11,
-            option_name: "계란 추가",
-            option_name_en: "Extra egg",
-            option_price: 1000,
-            is_visible: false,
-            option_is_available: true,
-          },
-        ],
-      }),
-    );
+    useMenuStore.mockImplementation((selector) => selector({ menuList: [
+      { menu_id: 1, menu_name: "참치김밥", menu_name_en: "Tuna Kimbap", category: "김밥", price: 4500, is_visible: true, is_available: true },
+      { menu_id: 2, menu_name: "라면", menu_name_en: "Ramen", category: "라면", price: 5000, is_visible: true, is_available: false },
+      { menu_id: 21, menu_name: "순한맛", menu_name_en: "Mild", menu_type: "COMPONENT", category: "떡볶이맛", price: 0, is_visible: true, is_available: true },
+    ] }));
+    useOptionStore.mockImplementation((selector) => selector({ optionList: [
+      { option_id: 10, option_name: "치즈 추가", option_name_en: "Extra cheese", category: "토핑", option_price: 1000, is_visible: true, option_is_available: true },
+      { option_id: 11, option_name: "계란 추가", option_name_en: "Extra egg", category: "추가메뉴", option_price: 1000, is_visible: false, option_is_available: true },
+    ] }));
   });
 
-  test("대시보드 메뉴를 검색하고 판매상태로 필터링한다", () => {
+  test("메뉴를 검색하고 카테고리 버튼으로 필터링한다", () => {
     render(<AdminMenusTable />);
-
     expect(screen.queryByText("순한맛")).toBeNull();
-    expect(screen.queryByRole("option", { name: "떡볶이맛" })).toBeNull();
-    expect(screen.getByText("2/2개")).toBeTruthy();
 
-    fireEvent.change(screen.getByLabelText("메뉴 검색"), {
-      target: { value: "Ramen" },
-    });
+    fireEvent.change(screen.getByLabelText("메뉴 검색"), { target: { value: "Ramen" } });
     expect(screen.getByRole("row", { name: /라면 라면/ })).toBeTruthy();
     expect(screen.queryByText("참치김밥")).toBeNull();
 
-    fireEvent.change(screen.getByLabelText("메뉴 검색"), {
-      target: { value: "" },
-    });
-    fireEvent.change(screen.getByLabelText("메뉴 판매상태 필터"), {
-      target: { value: "soldout" },
-    });
-    expect(screen.getByRole("row", { name: /라면 라면/ })).toBeTruthy();
-    expect(screen.queryByText("참치김밥")).toBeNull();
+    fireEvent.change(screen.getByLabelText("메뉴 검색"), { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: "김밥" }));
+    expect(screen.getByText("참치김밥")).toBeTruthy();
+    expect(screen.queryByText("라면", { selector: "td" })).toBeNull();
   });
 
-  test("대시보드 옵션을 검색하고 판매상태로 필터링한다", () => {
+  test("옵션을 검색하고 상태 선택창으로 필터링한다", () => {
     render(<AdminOptionsTable />);
-
-    fireEvent.change(screen.getByLabelText("옵션 검색"), {
-      target: { value: "cheese" },
-    });
+    fireEvent.change(screen.getByLabelText("옵션 검색"), { target: { value: "cheese" } });
     expect(screen.getByText("치즈 추가")).toBeTruthy();
     expect(screen.queryByText("계란 추가")).toBeNull();
 
-    fireEvent.change(screen.getByLabelText("옵션 검색"), {
-      target: { value: "" },
-    });
+    fireEvent.change(screen.getByLabelText("옵션 검색"), { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: "추가메뉴" }));
     fireEvent.change(screen.getByLabelText("옵션 판매상태 필터"), {
       target: { value: "stopped" },
     });

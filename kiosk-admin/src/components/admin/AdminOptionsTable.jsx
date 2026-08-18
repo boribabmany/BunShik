@@ -1,6 +1,6 @@
 // adminmenu 옵션테이블
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useOptionStore from "../../store/optionStore";
 import { filterOptions } from "../../utils/catalogFilters";
@@ -9,8 +9,14 @@ export default function AdminOptionsTable({ onImageClick }) {
   const navigate = useNavigate();
   const optionList = useOptionStore((state) => state.optionList);
   const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
   const [status, setStatus] = useState("all");
-  const filteredOptions = filterOptions(optionList, { query, status });
+  const categories = useMemo(
+    () => [...new Set(optionList.map((option) => option.category?.trim()).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "ko")),
+    [optionList],
+  );
+  const filteredOptions = filterOptions(optionList, { query, category, status });
 
   return (
     <div className="option-table-box">
@@ -28,6 +34,27 @@ export default function AdminOptionsTable({ onImageClick }) {
           aria-label="옵션 검색"
           onChange={(event) => setQuery(event.target.value)}
         />
+        <div className="catalog-category-tabs" aria-label="옵션 카테고리">
+          <button
+            type="button"
+            className={category === "all" ? "active" : ""}
+            aria-pressed={category === "all"}
+            onClick={() => setCategory("all")}
+          >
+            전체
+          </button>
+          {categories.map((item) => (
+            <button
+              type="button"
+              key={item}
+              className={category === item ? "active" : ""}
+              aria-pressed={category === item}
+              onClick={() => setCategory(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
         <select
           value={status}
           aria-label="옵션 판매상태 필터"

@@ -45,7 +45,7 @@ export const filterMenus = (
 
 export const filterOptions = (
   options,
-  { query = "", status = "all", includeId = true } = {},
+  { query = "", category = "all", status = "all", includeId = true } = {},
 ) =>
   options.filter(
     (option) =>
@@ -55,5 +55,7 @@ export const filterOptions = (
           ? ["option_id", "option_name", "option_name_en"]
           : ["option_name", "option_name_en"],
         query,
-      ) && matchesStatus(option, "option_is_available", status),
+      ) &&
+      (category === "all" || option.category?.trim() === category) &&
+      matchesStatus(option, "option_is_available", status),
   );

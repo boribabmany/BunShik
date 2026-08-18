@@ -89,13 +89,14 @@
 
 .catalog-filter-bar {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) 150px 130px;
+  grid-template-columns: 150px minmax(0, 1fr) 120px;
   gap: 8px;
+  align-items: center;
   margin-bottom: 12px;
 }
 
 .option-table-box .catalog-filter-bar {
-  grid-template-columns: minmax(180px, 1fr) 130px;
+  grid-template-columns: 150px minmax(0, 1fr) 120px;
 }
 
 .catalog-filter-bar input,
@@ -115,6 +116,43 @@
 .catalog-filter-bar select:focus {
   border-color: #6da12f;
   box-shadow: 0 0 0 3px rgba(109, 161, 47, 0.12);
+}
+
+.catalog-category-tabs {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 4px 6px;
+  overflow-x: auto;
+  border-radius: 10px;
+  background: #eef5e7;
+  scrollbar-width: thin;
+}
+
+.catalog-category-tabs button {
+  flex: 0 0 auto;
+  min-width: 68px;
+  height: 30px;
+  padding: 0 15px;
+  border: 1px solid #76a83f;
+  border-radius: 9px;
+  background: #fff;
+  color: #343940;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.catalog-category-tabs button:hover {
+  background: #f7fbf3;
+}
+
+.catalog-category-tabs button.active {
+  border-color: #6da12f;
+  background: #6da12f;
+  color: #fff;
 }
 
 /* 테이블 */
@@ -386,7 +424,15 @@
 .history-title {
   font-size: 18px;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin: 0;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .history-item {
@@ -398,15 +444,68 @@
   border-bottom: none;
 }
 
-.history-item strong {
-  display: block;
-  margin-bottom: 4px;
+.history-item-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.history-item-heading strong {
   font-size: 15px;
 }
 
+.history-item-heading time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+  color: #858d98;
+  font-size: 11px;
+}
+
+.history-item-heading time span {
+  color: #68717e;
+  font-weight: 700;
+}
+
 .history-item p {
+  margin: 0;
   font-size: 14px;
   color: #68717e;
+}
+
+.history-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin: 8px 0 0;
+  font-size: 12px;
+}
+
+.history-meta div { display: flex; gap: 5px; }
+.history-meta dt { color: #858d98; }
+.history-meta dd { margin: 0; color: #414850; font-weight: 600; }
+.history-change dd { display: flex; gap: 5px; }
+
+.history-state {
+  margin: 0;
+  padding: 24px 8px;
+  color: #747d88;
+  font-size: 13px;
+  text-align: center;
+}
+
+.history-error p { margin-bottom: 10px; color: #a33a3a; }
+.history-error button {
+  padding: 6px 12px;
+  border: 1px solid #8994a5;
+  border-radius: 6px;
+  background: #fff;
+  color: #596474;
+  cursor: pointer;
 }
 /* 등록버튼 2개*/
 .add-btn-group {

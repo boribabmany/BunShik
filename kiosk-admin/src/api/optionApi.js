@@ -19,6 +19,7 @@ export const getOptions = async () => {
     option_id: option.optionId,
     option_name: option.optionName,
     option_name_en: option.optionNameEn,
+    category: option.optionCategory ?? option.category ?? "",
     option_price: option.optionPrice,
     option_image: getImageUrl(option.optionImage),
     option_is_available: option.optionIsAvailable,

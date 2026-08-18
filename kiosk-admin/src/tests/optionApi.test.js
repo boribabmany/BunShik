@@ -52,6 +52,7 @@ describe("optionApi", () => {
         option_id: 1,
         option_name: "치즈",
         option_name_en: "Cheese",
+        category: "",
         option_price: 1000,
         option_image: `${API_BASE_URL}/images/cheese.png`,
         option_is_available: true,

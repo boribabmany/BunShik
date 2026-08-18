@@ -137,18 +137,27 @@ export default function AdminMenusTable({ onImageClick }) {
           aria-label="메뉴 검색"
           onChange={(event) => setQuery(event.target.value)}
         />
-        <select
-          value={category}
-          aria-label="메뉴 카테고리 필터"
-          onChange={(event) => setCategory(event.target.value)}
-        >
-          <option value="all">전체 카테고리</option>
+        <div className="catalog-category-tabs" aria-label="메뉴 카테고리">
+          <button
+            type="button"
+            className={category === "all" ? "active" : ""}
+            aria-pressed={category === "all"}
+            onClick={() => setCategory("all")}
+          >
+            전체
+          </button>
           {categories.map((item) => (
-            <option key={item} value={item}>
+            <button
+              type="button"
+              key={item}
+              className={category === item ? "active" : ""}
+              aria-pressed={category === item}
+              onClick={() => setCategory(item)}
+            >
               {item}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
         <select
           value={status}
           aria-label="메뉴 판매상태 필터"

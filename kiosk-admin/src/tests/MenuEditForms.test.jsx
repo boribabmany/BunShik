@@ -93,6 +93,15 @@ describe("관리자 메뉴 편집 폼", () => {
 
     expect(onChange).toHaveBeenCalled();
     expect(onChange.mock.calls[0][0].target.name).toBe("option_name");
+    expect(screen.getByDisplayValue("1,000")).toBeTruthy();
+
+    fireEvent.change(screen.getByDisplayValue("1,000"), {
+      target: { name: "option_price", value: "12,300" },
+    });
+    expect(onChange.mock.calls[1][0].target).toEqual({
+      name: "option_price",
+      value: "12300",
+    });
   });
 
   test("구성 전용 메뉴는 설명·가격·사진 입력을 표시하지 않는다", () => {

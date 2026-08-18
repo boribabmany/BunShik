@@ -1,4 +1,8 @@
+import { createPriceChangeHandler, formatPriceInput } from "../../../utils/priceFormat";
+
 export default function OptionEditorForm({ item, onChange, onImageChange }) {
+  const handlePriceChange = createPriceChangeHandler(onChange);
+
   return (
     <>
       <div className="form-group">
@@ -22,12 +26,11 @@ export default function OptionEditorForm({ item, onChange, onImageChange }) {
       <div className="form-group">
         <label>추가 가격</label>
         <input
-          type="number"
-          step="100"
-          min="0"
+          type="text"
+          inputMode="numeric"
           name="option_price"
-          value={item?.option_price ?? ""}
-          onChange={onChange}
+          value={formatPriceInput(item?.option_price)}
+          onChange={handlePriceChange}
         />
       </div>
 

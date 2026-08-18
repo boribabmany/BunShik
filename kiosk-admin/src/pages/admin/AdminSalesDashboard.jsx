@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import "../../styles/AdminSalesDashboard.css";
 
-import SalesSummary from "../../components/admin/SalesSummary";
-import SalesTrendChart from "../../components/admin/SalesTrendChart";
-import PopularMenu from "../../components/admin/PopularMenu";
-import SalesHistoryTable from "../../components/admin/SalesHistoryTable";
-import PaymentMethodStats from "../../components/admin/PaymentMethodStats";
+import SalesSummary from "../../components/admin/sales-dashboard/SalesSummary";
+import SalesTrendChart from "../../components/admin/sales-dashboard/SalesTrendChart";
+import PopularMenu from "../../components/admin/sales-dashboard/PopularMenu";
+import SalesHistoryTable from "../../components/admin/sales-dashboard/SalesHistoryTable";
+import PaymentMethodStats from "../../components/admin/sales-dashboard/PaymentMethodStats";
 import useSalesStore from "../../store/salesStore";
 import { getKoreaDateString } from "../../utils/date";
 import {

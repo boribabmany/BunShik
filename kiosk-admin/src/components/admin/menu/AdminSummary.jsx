@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import useMenuStore from "../../store/menuStore";
-import useOptionStore from "../../store/optionStore";
-import useSalesStore from "../../store/salesStore";
+import useMenuStore from "../../../store/menuStore";
+import useOptionStore from "../../../store/optionStore";
+import useSalesStore from "../../../store/salesStore";
 import UpdateHistory from "./UpdateHistory";
 
 export default function AdminSummary({ onMoveOrder }) {

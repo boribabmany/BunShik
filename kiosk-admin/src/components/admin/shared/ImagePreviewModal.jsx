@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import "../../styles/ImagePreviewModal.css";
+import "../../../styles/ImagePreviewModal.css";
 
 export default function ImagePreviewModal({ imageUrl, alt, onClose }) {
   useEffect(() => {

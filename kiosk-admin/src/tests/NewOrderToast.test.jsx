@@ -3,7 +3,7 @@
  * 테스트 내용: 신규 주문 토스트 표시, 주문 화면 이동 및 알림음 재생을 검증한다.
  */
 import { fireEvent, render, screen } from "@testing-library/react";
-import NewOrderToast from "../components/admin/NewOrderToast";
+import NewOrderToast from "../components/admin/shared/NewOrderToast";
 import useAdminOrderStore from "../store/adminOrderStore";
 import { playNewOrderSound } from "../utils/newOrderSound";
 

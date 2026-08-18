@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { getHistory } from "../../api/historyAPI";
+import { getHistory } from "../../../api/historyAPI";
 
 const firstValue = (history, keys) => {
   for (const key of keys) {

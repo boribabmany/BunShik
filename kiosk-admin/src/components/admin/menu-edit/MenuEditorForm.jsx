@@ -1,4 +1,5 @@
 import SetComponentsField from "./SetComponentsField";
+import { createPriceChangeHandler, formatPriceInput } from "../../../utils/priceFormat";
 
 const MENU_CATEGORIES = [
   "세트", "떡볶이", "떡볶이맛", "라면", "김밥", "순대구성", "사이드", "음료",
@@ -8,6 +9,7 @@ export default function MenuEditorForm({
   item, menus, isComponentsLoading, selectedComponentIds, componentSettings, onChange,
   onImageChange, onComponentToggle, onComponentSettingChange,
 }) {
+  const handlePriceChange = createPriceChangeHandler(onChange);
   const isComponent = item?.menu_type === "COMPONENT";
   const regularMenus = menus.filter(
     (menu) => menu.category?.trim() !== "세트",
@@ -73,7 +75,13 @@ export default function MenuEditorForm({
         <>
           <div className="form-group">
             <label>가격</label>
-            <input type="number" step="100" min="0" name="price" value={item?.price ?? ""} onChange={onChange}/>
+            <input
+              type="text"
+              inputMode="numeric"
+              name="price"
+              value={formatPriceInput(item?.price)}
+              onChange={handlePriceChange}
+            />
           </div>
 
           <div className="form-group">

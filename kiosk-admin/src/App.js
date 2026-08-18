@@ -4,7 +4,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminMenu from "./pages/admin/AdminMenu";
 import AdminOrder from "./pages/admin/AdminOrder";
 import AdminMenuEdit from "./pages/admin/AdminMenuEdit";
-import ProtectedRoute from "./components/admin/ProtectedRoute";
+import ProtectedRoute from "./components/admin/shared/ProtectedRoute";
 import AdminSalesDashboard from "./pages/admin/AdminSalesDashboard";
 
 function App() {

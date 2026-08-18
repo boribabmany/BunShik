@@ -1,374 +1,223 @@
 # 🍽️ BunShik - 분식집 키오스크 프로젝트
 
-무인 분식집 키오스크 프로젝트입니다. **고객용 주문 키오스크**와 **관리자용 관리 페이지**로 구성되어 있으며, 각각 독립된 React 프로젝트로 분리되어 있습니다.
+무인 분식집의 주문부터 결제, 관리자 운영까지 다루는 프론트엔드 프로젝트입니다. 고객용 키오스크와 관리자용 페이지가 각각 독립된 React 애플리케이션으로 구성되어 있습니다.
 
-```
+## 프로젝트 구성
+
+```text
 BunShik/
 ├── kiosk-customer/   # 고객용 주문 키오스크
 ├── kiosk-admin/      # 관리자용 관리 페이지
-├── .gitignore
+├── docs/             # 작업일지 및 산출 문서
 └── README.md
 ```
 
----
-
-## 목차
-
-- [프로젝트 소개](#프로젝트-소개)
-- [기술 스택](#기술-스택)
-- [화면 구성](#화면-구성)
-- [관리자 프론트엔드 구현 현황](#관리자-프론트엔드-구현-현황)
-- [팝업 컴포넌트](#팝업-컴포넌트)
-- [상태 관리](#상태-관리)
-- [결제 시뮬레이션](#결제-시뮬레이션)
-- [시작하기](#시작하기)
-- [DB 설계](#db-설계)
-- [API 엔드포인트](#api-엔드포인트)
-- [환경 변수](#환경-변수)
-- [Git 사용법](#git-사용법)
-- [문서](#문서)
-
----
-
 ## 기술 스택
 
-- **Framework**: React 19 (Create React App)
-- **Language**: JavaScript
-- **Routing**: react-router-dom
-- **State Management**: Zustand
-- **HTTP Client**: axios (백엔드 연동 시 사용 예정)
-- **Database**: MySQL
+- React 19, JavaScript, Create React App
+- React Router DOM 7
+- Zustand 5
+- Axios 및 Fetch API
+- Toss Payments SDK, QR Code
+- Recharts
+- Jest, React Testing Library, Playwright
+- 백엔드 연동: REST API, MySQL
 
----
+## 고객용 키오스크
 
-## 화면 구성
+### 화면과 라우트
 
-### 고객용 (kiosk-customer)
+| 경로 | 화면 | 주요 기능 |
+| --- | --- | --- |
+| `/` | 주문 시작 | 한국어·영어 선택, 매장 식사·포장 선택 |
+| `/menu` | 메뉴 선택 | 카테고리 탐색, 판매 상태 표시, 세트 구성·옵션 선택, 장바구니 담기 |
+| `/cart` | 장바구니 | 수량 변경, 항목 삭제, 주문 금액 확인 |
+| `/payment` | 결제 | 주문 생성, 카드·간편결제 선택, 오류 안내와 재시도 |
+| `/complete` | 주문 완료 | 주문번호와 결제 금액 안내 |
+| `/payment/toss/success` | 토스 승인 | 토스 결제 승인 후 주문 완료 처리 |
+| `/payment/toss/fail` | 토스 실패 | 결제 실패 기록 및 사용자 안내 |
 
-| 화면      | 파일                            | 설명                                                                                   |
-| --------- | ------------------------------- | -------------------------------------------------------------------------------------- |
-| 홈        | `pages/kiosk/Home.jsx`          | 매장식사/포장 선택. 선택한 주문 유형은 `useOrderStore`에 저장되어 이후 화면까지 유지됨 |
-| 메뉴 선택 | `pages/kiosk/Menu.jsx`          | 카테고리별 메뉴 목록 조회(로딩/에러/재시도 처리 포함), 메뉴 클릭 시 옵션 팝업          |
-| 장바구니  | `pages/kiosk/Cart.jsx`          | 담은 메뉴 수량 조절/삭제, 총 금액 확인                                                 |
-| 결제      | `pages/kiosk/Payment.jsx`       | 주문내역 확인 + 결제 수단 선택(네이버페이/카카오페이/카드결제)                         |
-| 주문완료  | `pages/kiosk/OrderComplete.jsx` | 주문번호 안내, 영수증/주문번호 인쇄                                                    |
+### 주요 기능
 
-### 관리자용 (kiosk-admin)
+- 1080 × 1920 키오스크 화면을 브라우저 크기에 맞춰 자동 축소합니다.
+- 한국어와 영어 UI를 지원합니다.
+- 카테고리 탭은 좌우 버튼, 마우스 드래그, 터치 슬라이드를 지원합니다.
+- 메뉴 조회 중 로딩, 빈 목록, 오류와 재시도 상태를 구분합니다.
+- 일반 메뉴의 옵션과 세트 메뉴의 구성 항목을 각각 선택할 수 있습니다.
+- 장바구니에서 동일 구성 메뉴를 합산하고 수량·총액을 관리합니다.
+- 빈 장바구니로 결제 화면에 접근하면 메뉴 화면으로 안내합니다.
+- 홈 이외 화면에서 90초간 조작이 없으면 마지막 10초 동안 경고한 뒤 장바구니와 주문 상태를 초기화합니다.
+- 주문 생성과 결제 요청의 타임아웃은 8초이며, 네트워크 오류와 타임아웃은 최대 2회 자동 재시도합니다.
+- 카드 결제, 네이버페이 데모 QR, 토스페이·카카오페이 결제 흐름을 지원합니다.
 
-| 화면                 | 파일                                  | 설명                                                          |
-| -------------------- | ------------------------------------- | ------------------------------------------------------------- |
-| 관리자 로그인        | `pages/admin/AdminLogin.jsx`          | 아이디/비밀번호 로그인, `ProtectedRoute`로 비로그인 접근 차단 |
-| 관리자 메인          | `pages/admin/AdminMenu.jsx`           | 요약 정보, 인기 메뉴와 관리자 변경 이력 확인                  |
-| 관리자 매출관리      | `pages/admin/AdminSalesDashboard.jsx` | 매출 요약, 매출 추이 차트와 매출 내역 확인                    |
-| 관리자 주문관리      | `pages/admin/AdminOrder.jsx`          | 주문 목록·상세 조회, 주문 상태 변경 및 취소                   |
-| 관리자 메뉴·옵션관리 | `pages/admin/AdminMenuEdit.jsx`       | 메뉴·옵션 조회·등록·수정, 판매 중지 및 판매 재개              |
+### 주요 컴포넌트
 
----
+| 컴포넌트 | 역할 |
+| --- | --- |
+| `CategoryTabs.jsx` | 메뉴 카테고리 탐색 |
+| `MenuCard.jsx` | 메뉴 정보와 판매 상태 표시 |
+| `OptionModal.jsx` | 단품 옵션 및 구성 선택 |
+| `SetMenuModal.jsx` | 세트 메뉴 그룹별 구성 선택 |
+| `CartBar.jsx`, `CartItem.jsx` | 장바구니 요약과 항목 관리 |
+| `PaymentMethodModal.jsx` | 결제 수단 선택 |
+| `EasyPayQRModal.jsx` | 네이버페이 데모 QR 표시 |
+| `PaymentFailCard.jsx` | 결제 실패 유형별 안내와 재시도 |
+| `IdleResetHandler.jsx` | 무조작 감지와 초기화 |
 
-## 관리자 프론트엔드 구현 현황
+### 상태 관리
 
-`kiosk-admin`은 관리자 로그인부터 메뉴·옵션·주문·매출 관리까지 백엔드 API와 연동된 별도의 React 애플리케이션입니다.
+| Store | 관리 대상 |
+| --- | --- |
+| `useCartStore` | 장바구니 항목, 수량, 옵션·세트 구성, 총액 |
+| `useOrderStore` | 주문 유형, 주문번호, 결제 금액, 진행 중 주문 ID |
+| `useLanguageStore` | 한국어·영어 선택 |
 
-### 화면 및 라우트
+## 관리자 페이지
 
-| 경로             | 화면              | 주요 기능                                    |
-| ---------------- | ----------------- | -------------------------------------------- |
-| `/adminlogin`    | 관리자 로그인     | 아이디/비밀번호 로그인, JWT 저장, 오류 안내  |
-| `/adminmenu`     | 관리자 메인       | 요약 정보, 인기 메뉴, 변경 이력 확인         |
-| `/adminsales`    | 매출 대시보드     | 매출 요약, 매출 추이, 매출 내역 확인         |
-| `/adminorder`    | 주문 관리         | 주문 목록·상세 조회, 주문 상태 변경 및 취소  |
-| `/adminmenuedit` | 메뉴 및 옵션 관리 | 메뉴·옵션 등록, 수정, 판매 중지 및 판매 재개 |
+### 화면과 라우트
 
-로그인 화면을 제외한 관리자 경로는 `ProtectedRoute`로 보호합니다. 로그인 성공 시 `accessToken`과 로그인 여부를 `sessionStorage`에 저장하며, API 요청마다 JWT를 `Authorization: Bearer <token>` 헤더에 자동으로 추가합니다. 서버가 `401` 또는 `403`을 반환하면 저장된 인증 정보를 삭제하고 로그인 화면으로 이동합니다.
+| 경로 | 화면 | 주요 기능 |
+| --- | --- | --- |
+| `/adminlogin` | 관리자 로그인 | 계정 인증, JWT와 로그인 상태 저장, 오류 안내 |
+| `/adminmenu` | 관리자 메인 | 운영 요약, 메뉴·옵션 조회, 검색·카테고리·판매 상태 필터, 변경 이력 |
+| `/adminmenuedit` | 메뉴·옵션 관리 | 등록·수정, 이미지 미리보기, 판매 중지·재개, 세트 구성 관리 |
+| `/adminorder` | 주문 관리 | 주문 목록·상세, 상태별 표시, 개별·일괄 상태 변경과 취소 |
+| `/adminsales` | 매출 대시보드 | 매출 요약·추이·인기 메뉴·결제 수단·내역, 기간 조회와 내보내기 |
 
-### API 연동
+### 주요 기능
 
-| 구분      | 엔드포인트                                           | 기능                       |
-| --------- | ---------------------------------------------------- | -------------------------- |
-| 로그인    | `POST /api/admin/login`                              | 관리자 인증 및 JWT 발급    |
-| 메뉴      | `/api/admin/menus`                                   | 조회, 등록, 수정           |
-| 메뉴 상태 | `/api/admin/menus/{id}/stop`, `/resume`              | 판매 중지 및 재개          |
-| 옵션      | `/api/admin/options`                                 | 조회, 등록, 수정           |
-| 옵션 상태 | `/api/admin/options/{id}/stop`, `/resume`            | 판매 중지 및 재개          |
-| 주문      | `/api/admin/orders`, `/api/admin/orders/{id}/detail` | 주문 목록 및 상세 조회     |
-| 주문 상태 | `/api/admin/orders/{id}/status`, `/cancel`           | 주문 상태 변경 및 취소     |
-| 매출      | `/api/admin/sales/summary`, `/popular`, `/history`   | 매출 요약, 인기 메뉴, 내역 |
-| 이력      | `GET /api/admin/history`                             | 관리자 변경 이력 조회      |
+- 로그인 화면을 제외한 경로는 `ProtectedRoute`로 보호합니다.
+- API 요청에 JWT를 자동으로 추가하며, `401` 또는 `403` 응답 시 인증 정보를 지우고 로그인 화면으로 이동합니다.
+- 1시간 동안 조작이 없으면 자동 로그아웃하고, 종료 1분 전에 남은 시간을 안내합니다.
+- 관리자 메인에서 메뉴명·옵션명 검색, 카테고리 선택, 판매 상태 필터를 한 줄에서 사용할 수 있습니다.
+- 메뉴·옵션·주문 데이터 중 일부 조회만 실패해도 정상 데이터는 유지하고, 실패 항목만 안내·재조회할 수 있습니다.
+- 메뉴와 옵션의 이미지 등록·수정 및 원본 이미지 미리보기를 지원합니다.
+- 메뉴·옵션 가격 입력란은 천 단위 쉼표를 표시하고 저장 시 숫자로 변환합니다.
+- 작업 결과를 성공·실패 메시지로 표시하고, 주문 상태는 상태별 색상으로 구분합니다.
+- 변경 이력에는 작업 내용, 처리자와 처리 시간을 표시합니다.
+- 새 주문을 주기적으로 확인하고 관리자 화면에 알림과 선택적 알림음을 제공합니다.
 
-메뉴와 옵션의 이미지 등록·수정 요청은 `multipart/form-data`를 사용합니다. API 기본 주소는 `REACT_APP_API_BASE_URL` 환경 변수로 설정하며, 지정하지 않으면 `http://localhost:8080`을 사용합니다.
+### 컴포넌트 구조
 
-### 상태 관리 및 검증
+```text
+kiosk-admin/src/components/admin/
+├── menu/               # AdminMenu 전용 컴포넌트
+├── menu-edit/          # AdminMenuEdit 전용 컴포넌트
+├── sales-dashboard/    # AdminSalesDashboard 전용 컴포넌트
+└── shared/             # 보호 라우트, 세션 모달, 주문 알림, 이미지 모달
+```
 
-- Zustand 스토어로 메뉴, 옵션, 주문, 매출 데이터를 화면과 분리해 관리합니다.
-- 로그인 아이디의 앞뒤 공백을 제거하고, 빈 입력 제출과 토큰이 없는 로그인 응답을 차단합니다.
-- 로그인 실패 시 저장된 인증 정보를 초기화하고 서버가 전달한 오류 메시지를 표시합니다.
-- 메뉴·옵션 API와 입력값 검증, 관리자 로그인 API에 대한 프론트엔드 테스트를 포함합니다.
+`AdminLogin`과 `AdminOrder`는 현재 별도 하위 컴포넌트가 없어 페이지 파일에서 화면을 구성합니다.
 
----
+### 상태 관리
 
-## 팝업 컴포넌트
+| Store | 관리 대상 |
+| --- | --- |
+| `menuStore` | 메뉴 목록과 조회 |
+| `optionStore` | 옵션 목록과 조회 |
+| `adminOrderStore` | 주문 목록, 상태 변경, 새 주문 감지 |
+| `salesStore` | 매출 요약, 인기 메뉴, 내역과 분석 |
+
+## API 연동
+
+API 응답은 백엔드의 실제 데이터를 사용합니다. 이미지 등록·수정 요청은 `multipart/form-data` 형식입니다.
 
 ### 고객용
 
-| 컴포넌트                 | 설명                                                                                                                                   |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `OptionModal.jsx`        | 메뉴 선택화면에서 옵션이 있는 메뉴(라면, 떡볶이) 클릭 시 표시. 옵션 최대 2개 선택 제한                                                 |
-| `PaymentMethodModal.jsx` | 결제 수단 선택 팝업 — 네이버페이 / 카카오페이 / 카드결제                                                                               |
-| `PaymentFailCard.jsx`    | 결제 시도 실패 시 표시. 실패 유형(카드오류/거절/네트워크오류/타임아웃)에 따라 재시도 버튼 또는 뒤로가기 버튼만 노출되도록 props로 분기 |
-| `EmptyCartModal.jsx`     | 장바구니가 빈 채로 결제 화면 진입 시 5초 카운트다운 후 메뉴 화면 자동 이동                                                             |
-| `IdleWarningModal.jsx`   | 90초 무조작 시 10초 카운트다운 경고, 이후 자동 초기화(홈 화면 복귀)                                                                    |
-| `CategoryTabs.jsx`       | 카테고리 탭 — 마우스 드래그 및 터치 슬라이드, 좌우 화살표 버튼 지원                                                                    |
+| Method | Endpoint | 기능 |
+| --- | --- | --- |
+| GET | `/api/menus` | 메뉴·옵션·세트 구성 조회 |
+| GET | `/api/options` | 옵션 조회 |
+| POST | `/api/orders` | 주문 생성 |
+| PATCH | `/api/orders/{orderId}/cancel` | 진행 중 주문 취소 |
+| POST | `/api/payments` | 카드·네이버페이 결제 요청 |
+| POST | `/api/toss/confirm` | 토스 결제 승인 |
+| POST | `/api/toss/fail` | 토스 결제 실패 기록 |
 
----
+### 관리자용
 
-## 상태 관리
+| Method | Endpoint | 기능 |
+| --- | --- | --- |
+| POST | `/api/admin/login` | 관리자 인증 및 JWT 발급 |
+| GET·POST·PUT | `/api/admin/menus` | 메뉴 조회·등록·수정 |
+| GET·PUT | `/api/admin/menus/{id}/components` | 세트 구성 조회·수정 |
+| PATCH | `/api/admin/menus/{id}/stop`, `/resume` | 메뉴 판매 중지·재개 |
+| GET·POST·PUT | `/api/admin/options` | 옵션 조회·등록·수정 |
+| PATCH | `/api/admin/options/{id}/stop`, `/resume` | 옵션 판매 중지·재개 |
+| GET | `/api/admin/orders`, `/api/admin/orders/{id}/detail` | 주문 목록·상세 조회 |
+| PATCH | `/api/admin/orders/{id}/status`, `/cancel` | 주문 상태 변경·취소 |
+| PATCH | `/api/admin/orders/bulk/status`, `/bulk/cancel` | 주문 일괄 처리 |
+| GET | `/api/admin/sales/summary`, `/popular`, `/history`, `/analytics` | 매출 조회와 분석 |
+| GET | `/api/admin/history` | 관리자 변경 이력 조회 |
 
-Zustand로 관리되는 전역 상태입니다.
-
-| Store           | 위치                                        | 관리하는 값                                                          |
-| --------------- | ------------------------------------------- | -------------------------------------------------------------------- |
-| `useCartStore`  | `kiosk-customer/src/store/useCartStore.js`  | 장바구니 항목(items), 수량 조절/삭제, 총액 계산(`getTotalPrice`)     |
-| `useOrderStore` | `kiosk-customer/src/store/useOrderStore.js` | 주문 유형(orderType), 주문번호(orderNumber), 총 결제금액(totalPrice) |
-
----
-
-## 결제 시뮬레이션
-
-백엔드 연동 전까지 `api/orderApi.js`의 `submitPayment()`가 결제 API를 흉내냅니다.
-
-| 결과                | 확률         | 처리                                      |
-| ------------------- | ------------ | ----------------------------------------- |
-| 성공                | 35%          | 주문번호 발급 → 완료 화면 이동            |
-| 카드 인식 오류      | 30%          | 재시도 불가, 카드 재삽입 안내             |
-| 승인 거절           | 30%          | 재시도 가능, 실패 사유 표시(예: 잔액부족) |
-| 네트워크 오류       | 5%           | 재시도 가능                               |
-| 응답 지연(타임아웃) | 10초 초과 시 | 재시도 가능                               |
-
----
-
-## 시작하기
-
-```bash
-git clone https://github.com/boribabmany/BunShik.git
-cd BunShik
-```
-
-고객용/관리자용을 각각 독립적으로 설치·실행합니다.
-
-```bash
-# 고객용 키오스크
-cd kiosk-customer
-npm install
-npm start
-```
-
-```bash
-# 관리자용 페이지
-cd kiosk-admin
-npm install
-npm start
-```
-
-`http://localhost:3000`에서 확인 가능합니다.
-
----
-
-## DB 설계
-
-MySQL 기준, 기본 7개 테이블 + 관리자 기능 확장용 2개 테이블(총 9개)로 구성됩니다.
-
-### ERD 구조
-
-- `menus` : 메뉴 기본 정보
-- `options` : 옵션 목록 (치즈, 계란, 라면사리)
-- `menu_options` : 메뉴-옵션 다대다 연결
-- `orders` : 주문 (1건 = 1줄)
-- `order_items` : 주문에 담긴 메뉴들
-- `order_item_options` : 주문 항목에 붙은 옵션
-- `payments` : 결제 시도/결과 기록 (거절/재시도 로그)
-- `admin_user` : 관리자 계정
-- `admin_history` : 관리자 작업 변경 이력
-
-### 1. menus
-
-| 컬럼명                  | 타입                     | 설명                    |
-| ----------------------- | ------------------------ | ----------------------- |
-| menu_id                 | INT (PK, AUTO_INCREMENT) | 메뉴 고유 ID            |
-| menu_name               | VARCHAR(50)              | 메뉴명                  |
-| price                   | INT                      | 가격                    |
-| category                | VARCHAR(30)              | 카테고리                |
-| image_url               | VARCHAR(255)             | 메뉴 사진 경로/URL      |
-| description             | VARCHAR(200)             | 메뉴 한 줄 설명         |
-| is_available            | BOOLEAN                  | 판매 상태 (TRUE=판매중) |
-| sold_out_reason         | VARCHAR(100)             | 미판매 사유             |
-| created_at / updated_at | DATETIME                 | 생성/수정일시           |
-
-### 2. options
-
-| 컬럼명              | 타입                     | 설명                 |
-| ------------------- | ------------------------ | -------------------- |
-| option_id           | INT (PK, AUTO_INCREMENT) | 옵션 고유 ID         |
-| option_name         | VARCHAR(50)              | 옵션명               |
-| option_price        | INT                      | 옵션 가격            |
-| option_image        | VARCHAR(255)             | 옵션 이미지 경로/URL |
-| option_is_available | BOOLEAN                  | 옵션 판매 상태       |
-
-### 3. menu_options (다대다 연결)
-
-| 컬럼명    | 타입         | 설명                   |
-| --------- | ------------ | ---------------------- |
-| menu_id   | INT (PK, FK) | menus.menu_id 참조     |
-| option_id | INT (PK, FK) | options.option_id 참조 |
-
-### 4. orders (주문)
-
-| 컬럼명       | 타입                     | 설명                             |
-| ------------ | ------------------------ | -------------------------------- |
-| order_id     | INT (PK, AUTO_INCREMENT) | 주문 고유 ID                     |
-| order_number | VARCHAR(20)              | 화면 표시용 주문번호 (예: A-015) |
-| order_type   | ENUM                     | 매장 / 포장                      |
-| total_price  | INT                      | 총 결제 금액                     |
-| order_status | ENUM                     | 접수 / 조리중 / 완료 / 취소      |
-| created_at   | DATETIME                 | 주문 생성일시                    |
-
-### 5. order_items (주문 항목)
-
-| 컬럼명         | 타입                     | 설명                    |
-| -------------- | ------------------------ | ----------------------- |
-| order_item_id  | INT (PK, AUTO_INCREMENT) | 주문 항목 ID            |
-| order_id       | INT (FK)                 | orders 참조             |
-| menu_id        | INT (FK)                 | menus 참조              |
-| quantity       | INT                      | 수량                    |
-| price_at_order | INT                      | 주문 당시 가격 (스냅샷) |
-
-### 6. order_item_options (주문 항목 옵션)
-
-| 컬럼명        | 타입         | 설명             |
-| ------------- | ------------ | ---------------- |
-| order_item_id | INT (PK, FK) | order_items 참조 |
-| option_id     | INT (PK, FK) | options 참조     |
-
-### 7. payments (결제 시도/결과)
-
-| 컬럼명         | 타입                     | 설명                                       |
-| -------------- | ------------------------ | ------------------------------------------ |
-| payment_id     | INT (PK, AUTO_INCREMENT) | 결제 시도 ID                               |
-| order_id       | INT (FK)                 | orders 참조                                |
-| amount         | INT                      | 결제 금액                                  |
-| payment_method | ENUM                     | 카드 / 현금 / 간편결제                     |
-| payment_status | ENUM                     | 성공 / 카드오류 / 거절 / 시스템오류 / 취소 |
-| fail_reason    | VARCHAR(100)             | 거절/실패 사유 (잔액부족 등)               |
-| attempted_at   | DATETIME                 | 결제 시도 일시                             |
-
-### 8. admin_user (관리자 계정)
-
-| 컬럼명        | 타입                     | 설명               |
-| ------------- | ------------------------ | ------------------ |
-| id            | INT (PK, AUTO_INCREMENT) | 관리자 고유 ID     |
-| username      | VARCHAR(50)              | 로그인 ID (UNIQUE) |
-| password_hash | VARCHAR(255)             | 암호화된 비밀번호  |
-| is_active     | BOOLEAN                  | 계정 활성 여부     |
-| created_at    | DATETIME                 | 생성일시           |
-
-### 9. admin_history (관리자 변경 이력)
-
-| 컬럼명      | 타입                     | 설명                                |
-| ----------- | ------------------------ | ----------------------------------- |
-| id          | INT (PK, AUTO_INCREMENT) | 이력 ID                             |
-| admin_id    | INT (FK, nullable)       | admin_user 참조                     |
-| title       | VARCHAR(100)             | 예: 메뉴 등록, 가격 변경, 품절 처리 |
-| description | VARCHAR(255)             | 상세 설명                           |
-| created_at  | DATETIME                 | 발생일시                            |
-
-### 전체 테이블 생성 SQL
-
-전체 CREATE TABLE / INSERT 문은 `bunshik_db_setup.sql` 파일 및 DevProject Hub DB 모델러 문서를 참고하세요.
-
-### 참고 사항
-
-- `price_at_order`를 따로 저장하는 이유: 나중에 메뉴 가격이 바뀌어도 과거 주문 기록은 변하지 않아야 하기 때문
-- `payments`는 한 주문에 여러 번 결제 시도(거절 후 재시도)가 쌓일 수 있으므로 1:N 관계
-- 옵션이 없는 메뉴(김밥, 순대, 오뎅, 콜라)는 `menu_options`에 데이터 없음
-- 관리자 인증(`admin_user`)과 변경 이력(`admin_history`)은 관리자 페이지 개발에 맞춰 추가된 테이블
-
----
-
-## API 엔드포인트
-
-### 고객용
-
-| Method | Endpoint                          | 설명           |
-| ------ | --------------------------------- | -------------- |
-| GET    | `/api/menus`                      | 메뉴 목록 조회 |
-| GET    | `/api/options`                    | 옵션 목록 조회 |
-| POST   | `/api/orders`                     | 주문 생성      |
-| POST   | `/api/orders/{order_id}/payments` | 결제 시도      |
-| GET    | `/api/orders/{order_id}`          | 주문 상세 조회 |
-
-관리자용 API(로그인, 메뉴/옵션 CRUD, 주문 관리, 이력 조회)는 DevProject Hub API 명세서에 별도로 정리되어 있습니다.
-
-> 현재 프론트엔드는 실제 서버 없이 `data/`, `api/` 폴더 내 목업 데이터와 더미 함수로 동작합니다. 백엔드 연동 시 각 API 함수(`getMenus`, `getOptions` 등) 내부만 실제 fetch/axios 호출로 교체하면 되도록 설계되어 있습니다.
-
----
+자세한 요청·응답 명세는 DevProject Hub의 API 명세서를 기준으로 합니다.
 
 ## 환경 변수
 
-관리자 프론트의 백엔드 주소를 변경할 때만 `kiosk-admin/.env` 파일을 생성합니다. 환경 변수를 지정하지 않으면 기본 주소인 `http://localhost:8080`을 사용하므로 로컬 개발 시 `.env`는 필수가 아닙니다.
+각 앱의 루트에 `.env`를 생성합니다.
 
-### kiosk-admin/.env
+### `kiosk-customer/.env`
 
+```env
+REACT_APP_API_BASE_URL=http://localhost:8080
+REACT_APP_TOSS_CLIENT_KEY=토스_클라이언트_키
 ```
+
+### `kiosk-admin/.env`
+
+```env
 REACT_APP_API_BASE_URL=http://localhost:8080
 ```
 
-배포 환경에서는 값을 실제 백엔드 서버 주소로 교체합니다. 환경 변수를 변경한 경우 개발 서버를 다시 실행해야 적용됩니다.
+환경 변수 변경 후 개발 서버를 다시 시작해야 합니다. `.env`와 실제 인증 키는 Git에 커밋하지 않습니다.
 
-> ⚠️ **`.env`는 커밋하지 마세요.** `.env`는 `.gitignore`에 등록되어 있으므로 각 환경에서 직접 생성합니다.
+## 설치와 실행
 
----
-
-## Git 사용법
-
-### 브랜치 전략
-
-- `main` : 배포 가능한 안정 버전
-- `feature/기능명` : 기능별 작업 브랜치
-
-### 작업 규칙
-
-- `kiosk-customer/`, `kiosk-admin/`는 각자 담당 폴더만 수정합니다. 상대방 폴더는 수정하지 않습니다.
-- 작업 시작 전 항상 `git pull origin main`으로 최신 상태를 먼저 받아옵니다.
-- 커밋 전 `git status`로 변경 파일 목록을 확인하고, 특히 `.env`처럼 민감한 파일이 포함되지 않았는지 확인합니다.
-- 커밋 메시지는 `feat:`, `fix:`, `chore:`, `docs:` 등 접두사를 붙여 어떤 종류의 변경인지 구분합니다.
-
-### 클론 및 설치
+고객용과 관리자용은 각각 의존성을 설치하고 실행합니다.
 
 ```bash
 git clone https://github.com/boribabmany/BunShik.git
-cd BunShik/kiosk-customer   # 또는 kiosk-admin
+cd BunShik/kiosk-customer
 npm install
+npm start
 ```
-
-### 커밋 후 푸시
 
 ```bash
-git checkout main
-git pull origin main
-
-# 작업...
-
-git add kiosk-customer   # 또는 kiosk-admin
-git status               # 올라갈 파일 확인
-git commit -m "fix: 메뉴 화면 카테고리 탭 버그 수정"
-git push origin main
+cd BunShik/kiosk-admin
+npm install
+npm start
 ```
 
----
+두 앱을 동시에 실행하려면 포트가 겹치지 않도록 한쪽 앱에 다른 포트를 지정합니다.
 
-## 문서
+## 테스트
 
-- **DB 스키마 / ERD**: DevProject Hub → DB 설계(Modeler)
-- **API 명세서**: DevProject Hub → API 명세서
-- **사용자 시나리오**: DevProject Hub → 사용자 시나리오
-- **요구사항 정의서**: DevProject Hub → 요구사항 정의서
-- **화면 설계**: DevProject Hub → 화면 설계 / Figma
+각 앱 폴더에서 다음 명령을 실행합니다.
+
+```bash
+npm test -- --watchAll=false
+npm run test:e2e
+```
+
+2026-08-18 기준 단위·컴포넌트 테스트 결과:
+
+- 고객용: 13개 테스트 스위트, 62개 테스트 통과
+- 관리자용: 22개 테스트 스위트, 78개 테스트 통과
+- 합계: 35개 테스트 스위트, 140개 테스트 통과
+
+## 데이터베이스와 문서
+
+주요 테이블은 `menus`, `options`, `menu_options`, `orders`, `order_items`, `order_item_options`, `payments`, `admin_user`, `admin_history`입니다. 세트 구성과 관리자 기능에 필요한 확장 구조는 백엔드 스키마를 기준으로 합니다.
+
+- DB 스키마·ERD: DevProject Hub → DB 설계(Modeler)
+- API 명세서: DevProject Hub → API 명세서
+- 요구사항·테스트·WBS: DevProject Hub의 각 관리 메뉴
+- 화면 설계: DevProject Hub → 화면 설계 / Figma
+- 작업일지: `docs/`
+
+## Git 작업 규칙
+
+- `main`: 배포 가능한 안정 버전
+- `feature/기능명`: 기능 단위 작업 브랜치
+- 작업 전에 최신 변경을 받고, 커밋 전에 `git status`와 민감 파일 포함 여부를 확인합니다.
+- 커밋 메시지는 `feat:`, `fix:`, `test:`, `docs:`, `chore:` 등의 접두사로 구분합니다.

@@ -1,8 +1,8 @@
 // adminmenu 메뉴테이블
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useMenuStore from "../../store/menuStore";
-import { filterMenus } from "../../utils/catalogFilters";
+import useMenuStore from "../../../store/menuStore";
+import { filterMenus } from "../../../utils/catalogFilters";
 
 export default function AdminMenusTable({ onImageClick }) {
   const navigate = useNavigate();

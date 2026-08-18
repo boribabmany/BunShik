@@ -98,6 +98,25 @@ describe("관리자 주문 관리", () => {
 
   const renderPage = () => render(<AdminOrder />);
 
+  test("주문 상태를 색상 배지로 표시한다", () => {
+    renderPage();
+
+    expect(
+      screen
+        .getByText("접수", { selector: "span" })
+        .classList.contains("order-status-received"),
+    ).toBe(true);
+  });
+
+  test("상태 변경 성공 결과를 화면에 표시한다", async () => {
+    renderPage();
+    fireEvent.click(screen.getByRole("button", { name: "조리 시작" }));
+
+    expect(
+      await screen.findByText("A-001 상태가 조리중(으)로 변경되었습니다."),
+    ).toBeTruthy();
+  });
+
   test("주문 행을 누르면 상세 메뉴와 옵션을 펼쳐 표시한다", async () => {
     getOrderDetail.mockResolvedValue(detail);
     renderPage();
@@ -129,11 +148,9 @@ describe("관리자 주문 관리", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "조리 시작" }));
 
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        "허용되지 않는 상태 전이입니다.",
-      );
-    });
+    expect(
+      await screen.findByText("허용되지 않는 상태 전이입니다."),
+    ).toBeTruthy();
   });
 
   test("같은 상태의 주문 여러 건을 선택해 조리를 시작한다", async () => {
@@ -214,11 +231,9 @@ describe("관리자 주문 관리", () => {
     expect(window.confirm).toHaveBeenCalledWith(
       "주문을 취소하시겠습니까?\n결제 완료 건은 자동으로 전액 환불됩니다.",
     );
-    await waitFor(() => {
-      expect(window.alert).toHaveBeenCalledWith(
-        "완료된 주문은 취소할 수 없습니다.",
-      );
-    });
+    expect(
+      await screen.findByText("완료된 주문은 취소할 수 없습니다."),
+    ).toBeTruthy();
   });
 
   test("10초마다 갱신하고 신규 접수 주문이 생기면 알림음을 재생한다", async () => {

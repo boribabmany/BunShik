@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import UpdateHistory from "../components/admin/UpdateHistory";
+import UpdateHistory from "../components/admin/menu/UpdateHistory";
 import { getHistory } from "../api/historyAPI";
 
 jest.mock("../api/historyAPI", () => ({ getHistory: jest.fn() }));

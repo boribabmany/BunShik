@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import useAdminOrderStore from "../../store/adminOrderStore";
-import { playNewOrderSound } from "../../utils/newOrderSound";
-import "../../styles/NewOrderToast.css";
+import useAdminOrderStore from "../../../store/adminOrderStore";
+import { playNewOrderSound } from "../../../utils/newOrderSound";
+import "../../../styles/NewOrderToast.css";
 
 const SOUND_SETTING_KEY = "adminOrderSoundEnabled";
 const POLLING_INTERVAL = 5000;

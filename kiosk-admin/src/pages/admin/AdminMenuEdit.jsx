@@ -4,7 +4,7 @@ import { validateMenu, validateOption } from "../../utils/validation";
 import { createMenuFormData } from "../../utils/menuFormData";
 import useMenuStore from "../../store/menuStore";
 import useOptionStore from "../../store/optionStore";
-import ImagePreviewModal from "../../components/admin/ImagePreviewModal";
+import ImagePreviewModal from "../../components/admin/shared/ImagePreviewModal";
 import MenuListSection from "../../components/admin/menu-edit/MenuListSection";
 import OptionListSection from "../../components/admin/menu-edit/OptionListSection";
 import MenuEditorForm from "../../components/admin/menu-edit/MenuEditorForm";

@@ -35,10 +35,20 @@ export default function AdminOrder() {
   const [unreadOrderIds, setUnreadOrderIds] = useState(() => new Set());
   const [selectedOrderIds, setSelectedOrderIds] = useState(() => new Set());
   const [currentTime, setCurrentTime] = useState(() => Date.now());
+  const [actionResult, setActionResult] = useState(null);
+  const actionResultTimerRef = useRef(null);
   const knownOrderIdsRef = useRef(new Set());
   const isFirstOrderLoadRef = useRef(true);
   const isPollingRef = useRef(false);
   const soundEnabledRef = useRef(isSoundEnabled);
+
+  const showActionResult = (type, message) => {
+    clearTimeout(actionResultTimerRef.current);
+    setActionResult({ type, message });
+    actionResultTimerRef.current = setTimeout(() => setActionResult(null), 4000);
+  };
+
+  useEffect(() => () => clearTimeout(actionResultTimerRef.current), []);
 
   useEffect(() => {
     let isActive = true;
@@ -291,8 +301,10 @@ export default function AdminOrder() {
       );
       selectedOrders.forEach((order) => markOrderAsRead(order.order_id));
       setSelectedOrderIds(new Set());
+      showActionResult("success", `선택한 주문 ${selectedOrders.length}건이 ${actionLabel} 처리되었습니다.`);
     } catch (error) {
-      alert(
+      showActionResult(
+        "error",
         error.response?.data?.message ||
           "선택한 주문의 상태를 변경하지 못했습니다.",
       );
@@ -314,8 +326,10 @@ export default function AdminOrder() {
       );
       selectedOrders.forEach((order) => markOrderAsRead(order.order_id));
       setSelectedOrderIds(new Set());
+      showActionResult("success", `선택한 주문 ${selectedOrders.length}건이 취소되었습니다.`);
     } catch (error) {
-      alert(
+      showActionResult(
+        "error",
         error.response?.data?.message ||
           "선택한 주문 취소 또는 결제 환불에 실패했습니다.",
       );
@@ -337,8 +351,11 @@ export default function AdminOrder() {
     try {
       await changeOrderStatus(orderId, nextStatus);
       markOrderAsRead(orderId);
+      const orderNumber = orders.find((order) => order.order_id === orderId)?.order_number;
+      showActionResult("success", `${orderNumber || "주문"} 상태가 ${nextStatus}(으)로 변경되었습니다.`);
     } catch (error) {
-      alert(
+      showActionResult(
+        "error",
         error.response?.data?.message ||
           "주문 상태를 변경하지 못했습니다.",
       );
@@ -357,8 +374,11 @@ export default function AdminOrder() {
 
     try {
       await storeCancelOrder(orderId);
+      const orderNumber = orders.find((order) => order.order_id === orderId)?.order_number;
+      showActionResult("success", `${orderNumber || "주문"}이 취소되었습니다.`);
     } catch (error) {
-      alert(
+      showActionResult(
+        "error",
         error.response?.data?.message ||
           "주문 취소 또는 결제 환불에 실패했습니다.",
       );
@@ -412,6 +432,16 @@ export default function AdminOrder() {
           </button>
         </div>
       </header>
+
+      {actionResult && (
+        <div
+          className={`order-action-result ${actionResult.type}`}
+          role={actionResult.type === "error" ? "alert" : "status"}
+          aria-live="polite"
+        >
+          {actionResult.message}
+        </div>
+      )}
 
       {delayedOrderCount > 0 && (
         <div className="delayed-order-alert" role="status">
@@ -553,7 +583,21 @@ export default function AdminOrder() {
                   <td>{order.created_at}</td>
                   <td>{order.order_type}</td>
                   <td>{order.payment_method}</td>
-                  <td>{order.order_status}</td>
+                  <td>
+                    <span
+                      className={`order-status-badge order-status-${
+                        order.order_status === "접수"
+                          ? "received"
+                          : order.order_status === "조리중"
+                            ? "cooking"
+                            : order.order_status === "완료"
+                              ? "completed"
+                              : "cancelled"
+                      }`}
+                    >
+                      {order.order_status}
+                    </span>
+                  </td>
                   <td>{order.total_price.toLocaleString()}원</td>
 
                   <td>

@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useOptionStore from "../../store/optionStore";
-import { filterOptions } from "../../utils/catalogFilters";
+import useOptionStore from "../../../store/optionStore";
+import { filterOptions } from "../../../utils/catalogFilters";
 
 export default function AdminOptionsTable({ onImageClick }) {
   const navigate = useNavigate();

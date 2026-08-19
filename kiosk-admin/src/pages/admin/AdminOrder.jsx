@@ -2,7 +2,12 @@ import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useRef, useState } from "react";
 import useAdminOrderStore from "../../store/adminOrderStore";
 import { getOrderDetail } from "../../api/adminOrderApi";
-import { getKoreaDateString } from "../../utils/date";
+import {
+  getKoreaDateString,
+  getKoreaMonthString,
+  getKoreaWeekString,
+  isDateInPeriod,
+} from "../../utils/date";
 import { playNewOrderSound } from "../../utils/newOrderSound";
 import "../../styles/AdminOrder.css";
 import bunshikLogo from "../../images/bunshiklogo.png";
@@ -22,6 +27,7 @@ export default function AdminOrder() {
   } = useAdminOrderStore();
 
   const [date, setDate] = useState(getKoreaDateString());
+  const [period, setPeriod] = useState("day");
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
   const [visibleCount, setVisibleCount] = useState(5);
@@ -187,7 +193,7 @@ export default function AdminOrder() {
 
   const filteredOrders = orders
     .filter((order) => {
-      const matchDate = date === "" || order.created_at.startsWith(date);
+      const matchDate = isDateInPeriod(order.created_at, period, date);
 
       const matchType = type === "전체" || order.order_type === type;
 
@@ -451,9 +457,43 @@ export default function AdminOrder() {
       )}
 
       <section className="search-area">
+        <div className="order-period-tabs" aria-label="조회 기간 단위">
+          {[
+            ["day", "일"],
+            ["week", "주"],
+            ["month", "월"],
+          ].map(([value, label]) => (
+            <button
+              type="button"
+              key={value}
+              className={period === value ? "active" : ""}
+              aria-pressed={period === value}
+              onClick={() => {
+                setPeriod(value);
+                setDate(
+                  value === "week"
+                    ? getKoreaWeekString()
+                    : value === "month"
+                      ? getKoreaMonthString()
+                      : getKoreaDateString(),
+                );
+                setVisibleCount(5);
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <input
-          type="date"
+          type={period === "week" ? "week" : period === "month" ? "month" : "date"}
           value={date}
+          aria-label={
+            period === "week"
+              ? "조회 주"
+              : period === "month"
+                ? "조회 월"
+                : "조회 날짜"
+          }
           onChange={(e) => {
             setDate(e.target.value);
             setVisibleCount(5);

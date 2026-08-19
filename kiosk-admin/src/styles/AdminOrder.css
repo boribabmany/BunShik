@@ -114,7 +114,7 @@
 
 .search-area {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: auto 1fr 1fr 1fr;
   gap: 12px;
 
   background: #eaf4de;
@@ -123,6 +123,30 @@
   border-radius: 8px;
 
   margin-bottom: 15px;
+}
+
+.order-period-tabs {
+  display: inline-flex;
+  height: 40px;
+  padding: 3px;
+  border: 1px solid #c4c7c7;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.order-period-tabs button {
+  min-width: 42px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #596258;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.order-period-tabs button.active {
+  background: #6da12f;
+  color: #fff;
 }
 
 .search-area input,
@@ -527,6 +551,10 @@
 }
 
 @media (max-width: 700px) {
+  .search-area {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .order-header {
     align-items: flex-start;
     flex-direction: column;

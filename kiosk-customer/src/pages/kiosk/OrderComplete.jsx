@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
 import { translations, formatPrice } from "../../i18n/translations";
+import { requestPrintJob } from "../../api/orderApi";
 import checkIcon from "../../images/check.png";
 import "../../styles/OrderComplete.css";
 
@@ -14,15 +16,27 @@ function OrderComplete() {
   const language = useLanguageStore((state) => state.language);
   const t = translations[language].orderComplete;
 
-  const handleReceiptPrint = () => {
-    resetOrder();
-    navigate("/");
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  const handlePrint = async (type) => {
+    if (isPrinting) return;
+    setIsPrinting(true);
+
+    try {
+      await requestPrintJob(Number(orderNumber), type);
+    } catch (error) {
+      // 출력 요청이 실패해도 손님은 다음 화면으로 진행할 수 있어야 한다.
+      // (프린터 문제는 카운터 직원이 별도로 대응)
+      console.error("출력 요청 실패:", error);
+    } finally {
+      setIsPrinting(false);
+      resetOrder();
+      navigate("/");
+    }
   };
 
-  const handleOrderNumberPrint = () => {
-    resetOrder();
-    navigate("/");
-  };
+  const handleReceiptPrint = () => handlePrint("RECEIPT");
+  const handleOrderNumberPrint = () => handlePrint("ORDER_NUMBER");
 
   return (
     <div className="complete-screen">
@@ -52,6 +66,7 @@ function OrderComplete() {
         type="button"
         onClick={handleReceiptPrint}
         className="complete-receipt-button"
+        disabled={isPrinting}
       >
         {t.printReceipt}
       </button>
@@ -60,6 +75,7 @@ function OrderComplete() {
         type="button"
         onClick={handleOrderNumberPrint}
         className="complete-home-button"
+        disabled={isPrinting}
       >
         {t.printNumberOnly}
       </button>

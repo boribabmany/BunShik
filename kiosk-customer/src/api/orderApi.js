@@ -4,6 +4,7 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const ORDER_URL = `${API_BASE_URL}/api/orders`;
 const PAYMENT_URL = `${API_BASE_URL}/api/payments`;
 const TOSS_URL = `${API_BASE_URL}/api/toss`;
+const PRINT_JOB_URL = `${API_BASE_URL}/api/print-jobs`;
 
 const REQUEST_TIMEOUT = 8000; // 8초
 
@@ -143,5 +144,24 @@ export const failTossPayment = async (request) => {
     await axios.post(`${TOSS_URL}/fail`, request, { timeout: REQUEST_TIMEOUT });
   } catch (error) {
     console.error("토스 결제 실패 기록 실패:", error);
+  }
+};
+
+/**
+ * 영수증/주문번호표 출력 요청
+ * @param {number} orderId
+ * @param {"RECEIPT"|"ORDER_NUMBER"} type
+ */
+export const requestPrintJob = async (orderId, type) => {
+  try {
+    const response = await axios.post(
+      PRINT_JOB_URL,
+      { order_id: orderId, type },
+      { timeout: REQUEST_TIMEOUT },
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("출력 요청 실패:", error);
+    throw normalizeError(error);
   }
 };

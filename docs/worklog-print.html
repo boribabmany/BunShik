@@ -29,10 +29,10 @@
 </head>
 <body>
   <h1>분식집 키오스크 프로젝트 작업일지</h1>
-  <div class="subtitle">담당자: 강민준 · 기간: 2026-07-13 ~ 2026-08-19</div>
+  <div class="subtitle">담당자: 강민준 · 기간: 2026-07-13 ~ 2026-08-20</div>
   <div class="summary">
-    <div class="card"><strong>확인 가능한 작업일</strong>26일</div>
-    <div class="card"><strong>단독 담당 WBS</strong>37건 · 모두 DONE</div>
+    <div class="card"><strong>확인 가능한 작업일</strong>27일</div>
+    <div class="card"><strong>단독 담당 WBS</strong>38건 · 모두 DONE</div>
     <div class="card"><strong>공동 담당 WBS</strong>3건 · 모두 DONE</div>
   </div>
   <h2>날짜별 상세 작업일지</h2>
@@ -63,7 +63,8 @@
 <tr><td class="no">23</td><td class="date">2026-08-13</td><td>관리자 프론트 자동 테스트 19개 파일에 테스트 목적과 검증 범위를 설명하는 주석을 추가하여 테스트 코드의 가독성과 유지보수성을 높임. 고객 키오스크 Playwright E2E 실행 환경을 점검하고 매장식사·포장·옵션·세트 메뉴의 핵심 주문 흐름 4건이 모두 통과하는 것을 확인했으며, VS Code의 @ts-check 커스텀 fixture 타입 경고가 실제 테스트 실패와 무관함을 분석함. 프로젝트 결과 보고서와 발표 PPT의 내용 구성·검토 및 작성 작업에 협력함.</td></tr>
 <tr><td class="no">24</td><td class="date">2026-08-14</td><td>관리자 키오스크에 Playwright E2E를 구성하여 비로그인 접근 차단, 정상 로그인, 메뉴 등록·수정·판매중단, 주문 상세 및 상태 변경 흐름을 검증함. 주문관리 화면에 체크박스 기반 다중 선택을 추가하고 동일 상태 주문의 일괄 조리 시작·완료와 접수·조리중 혼합 주문의 다중 취소를 구현함. 백엔드에 다중 상태 변경·다중 취소 API와 전체 사전 검증, Toss·카카오 주문별 전액 환불 및 관리자 이력 저장을 적용함. 관리자 프론트 테스트 69건, E2E 6건, 프로덕션 빌드와 백엔드 전체 테스트 통과를 확인함. 프론트·백엔드 전체 구조와 기술 버전을 재검수하여 시스템 구조 이미지를 수정하고 DevProject Hub에 요구사항 PLAN-ORDER-028, API 명세, QA, 시나리오와 WBS 완료 기록을 최신화함.</td></tr>
 <tr><td class="no">25</td><td class="date">2026-08-18</td><td>기업 실무자 피드백 PDF를 검토하고 관리자 프론트 개선 항목을 구현함. 관리자 변경 이력에 처리자·처리시간과 로딩·빈 목록·오류 재시도를 추가하고, 메뉴·옵션 목록의 검색·카테고리·판매상태 필터 UI를 정리함. 주문 상태를 접수·조리중·완료·취소 색상 배지로 구분하고 상태 변경·취소 성공 및 실패 결과 메시지를 적용함. 관리자 무동작 59분에 사전 경고를 표시하고 60분에 자동 로그아웃하도록 개선했으며, 관리자 메인의 메뉴·옵션·주문 조회 실패를 항목별로 다시 시도할 수 있게 구현함. 관련 자동 테스트와 프로덕션 빌드를 통과시키고 DevProject Hub에 요구사항 5건, WBS 5건, 테스트 5건과 관리자 화면 설계 3건을 최신화함.</td></tr>
-<tr><td class="no">26</td><td class="date">2026-08-19</td><td>관리자 주문관리에서 한국시간을 기준으로 일·주·월 단위의 주문을 조회할 수 있도록 기간 선택 필터를 구현하고 관련 자동 테스트 16건을 통과시킴. WSL2 Ubuntu에서 FreeRTOS POSIX 기반 BunShik_RTOS를 구축하고 관리자·고객 코드를 단일 프로젝트 구조로 통합함. 관리자 JWT 자동 로그인, 주문 목록·상세 조회, 상태 변경·취소, 10초 주기 주문 감시, 지연 주문 감지, 네트워크 재시도와 날짜별 로그를 구현했으며, 고객 연결·인쇄 감시·인쇄 Worker Task 및 Mutex·Semaphore·Task Notification 기반 동기화를 구성함. Windows에서 실행 중인 Spring Boot 백엔드와 연결하여 실제 주문 111건 동기화를 검증하고, Windows 호스트 주소 탐색과 CMake 재구성·빌드·실행을 자동화한 Makefile을 추가했으며 RTOS 자동 테스트 4건을 모두 통과시킴. 새 데이터베이스의 print_jobs 테이블과 영수증·주문표 인쇄 작업 API 구조를 확인하고, 대기 작업 조회 API의 HTTP 500 오류를 발견하여 미완료 점검 항목으로 기록함.</td></tr></tbody>
+<tr><td class="no">26</td><td class="date">2026-08-19</td><td>관리자 주문관리에서 한국시간을 기준으로 일·주·월 단위의 주문을 조회할 수 있도록 기간 선택 필터를 구현하고 관련 자동 테스트 16건을 통과시킴. WSL2 Ubuntu에서 FreeRTOS POSIX 기반 BunShik_RTOS를 구축하고 관리자·고객 코드를 단일 프로젝트 구조로 통합함. 관리자 JWT 자동 로그인, 주문 목록·상세 조회, 상태 변경·취소, 10초 주기 주문 감시, 지연 주문 감지, 네트워크 재시도와 날짜별 로그를 구현했으며, 고객 연결·인쇄 감시·인쇄 Worker Task 및 Mutex·Semaphore·Task Notification 기반 동기화를 구성함. Windows에서 실행 중인 Spring Boot 백엔드와 연결하여 실제 주문 111건 동기화를 검증하고, Windows 호스트 주소 탐색과 CMake 재구성·빌드·실행을 자동화한 Makefile을 추가했으며 RTOS 자동 테스트 4건을 모두 통과시킴. 새 데이터베이스의 print_jobs 테이블과 영수증·주문표 인쇄 작업 API 구조를 확인하고, 대기 작업 조회 API의 HTTP 500 오류를 발견하여 미완료 점검 항목으로 기록함.</td></tr>
+<tr><td class="no">27</td><td class="date">2026-08-20</td><td>BunShik_RTOS Git 기록에서 관리자 기능 커밋 dc5c2ef와 관리자 감시 중복 오류 수정 커밋 04026f0을 확인함. admin_catalog_monitor 모듈을 추가하여 메뉴·옵션의 등록, 이름, 가격, 품절 및 판매 상태 변경을 주기적으로 감지하고 이벤트와 날짜별 로그로 기록하도록 구현함. 관리자 JWT 자동 로그인 이후 주문 감시와 카탈로그 감시가 함께 동작하도록 admin_service와 backend_client의 응답 파서를 보강하고, 네트워크 장애 재시도와 JWT 만료 시 자동 재로그인 흐름 및 중복 알림 방지를 정리함. backend_parser_test를 통과시키고 RTOS 회귀 테스트로 관리자 기능의 정상 동작을 확인했으며, DevProject Hub에 관리자 RTOS 요구사항 PLAN-SYS-026, WBS-083 및 테스트 TC-083을 최신화함. 박유진 담당 고객 키오스크·영수증·프린터 작업은 강민준 일지에서 제외함.</td></tr></tbody>
   </table>
   <h2>핵심 담당 영역</h2>
   <div class="areas"><div class="area"><b>관리자 프론트엔드</b><br>관리자 React 화면 전반, 메뉴·옵션·세트 관리 UI, 주문 관리, 매출 대시보드</div>
@@ -73,6 +74,6 @@
 <div class="area"><b>주문 운영</b><br>주문 상세 조회, 상태 변경·취소, 신규 주문 배지, 지연 경고, 전역 토스트</div>
 <div class="area"><b>품질 관리</b><br>프론트·백엔드 자동 테스트, 조회 실패·재시도 예외 처리, API 명세와 DevProject Hub 현행화</div></div>
   <div class="note"><b>업무 요약</b><br>관리자 키오스크의 프론트엔드 전반과 관련 백엔드 API를 담당하고, 메뉴·옵션·세트 관리, 주문 처리, JWT 인증·자동 로그아웃, 매출 대시보드, 신규 주문 알림, 예외 처리·재시도, 자동 테스트, 실기기 체크리스트 및 빌드·문서화를 수행함.</div>
-  <div class="source">작성 근거: DevProject Hub 워크스페이스 ID 5 WBS, 프론트·백엔드 Git 커밋 기록 및 2026-08-19 실제 작업 결과.</div>
+  <div class="source">작성 근거: DevProject Hub 워크스페이스 ID 5 WBS, 프론트·백엔드·RTOS Git 커밋 기록 및 2026-08-20 실제 작업 결과.</div>
 </body>
 </html>

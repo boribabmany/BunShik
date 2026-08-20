@@ -42,6 +42,7 @@ function Payment() {
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
   const pendingOrderId = useOrderStore((state) => state.pendingOrderId);
   const setPendingOrderId = useOrderStore((state) => state.setPendingOrderId);
+  const setCompletedOrderId = useOrderStore((state) => state.setCompletedOrderId);
 
   const language = useLanguageStore((state) => state.language);
   const t = translations[language].payment;
@@ -123,6 +124,7 @@ function Payment() {
       if (paymentResult.status === "성공") {
         setOrderNumber(orderNumber ?? String(orderId));
         setTotalPrice(totalPrice);
+        setCompletedOrderId(orderId);
         setPendingOrderId(null);
         clearCart();
         navigate("/complete");

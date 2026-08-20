@@ -11,6 +11,7 @@ function OrderComplete() {
   const navigate = useNavigate();
   const orderNumber = useOrderStore((state) => state.orderNumber);
   const totalPrice = useOrderStore((state) => state.totalPrice);
+  const completedOrderId = useOrderStore((state) => state.completedOrderId);
   const resetOrder = useOrderStore((state) => state.resetOrder);
 
   const language = useLanguageStore((state) => state.language);
@@ -23,7 +24,10 @@ function OrderComplete() {
     setIsPrinting(true);
 
     try {
-      await requestPrintJob(Number(orderNumber), type);
+      if (!completedOrderId) {
+        throw new Error("주문 ID를 찾을 수 없어 출력을 요청할 수 없습니다.");
+      }
+      await requestPrintJob(completedOrderId, type);
     } catch (error) {
       // 출력 요청이 실패해도 손님은 다음 화면으로 진행할 수 있어야 한다.
       // (프린터 문제는 카운터 직원이 별도로 대응)

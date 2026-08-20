@@ -46,6 +46,19 @@ function Menu() {
     fetchMenus();
   }, []);
 
+  // 관리자가 품절/판매재개 처리한 걸 화면 재진입 없이 실시간 반영
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getMenus()
+        .then(setMenus)
+        .catch((error) => {
+          console.error("메뉴 실시간 갱신 실패:", error);
+        });
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const filteredMenus =
     category === "전체"
       ? menus

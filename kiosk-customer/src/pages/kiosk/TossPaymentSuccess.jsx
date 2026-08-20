@@ -11,6 +11,7 @@ function TossPaymentSuccess() {
   const setOrderNumber = useOrderStore((state) => state.setOrderNumber);
   const setTotalPrice = useOrderStore((state) => state.setTotalPrice);
   const setPendingOrderId = useOrderStore((state) => state.setPendingOrderId);
+  const setCompletedOrderId = useOrderStore((state) => state.setCompletedOrderId);
   const [error, setError] = useState("");
   const [isRetrying, setIsRetrying] = useState(false);
   const isConfirming = useRef(false);
@@ -44,6 +45,7 @@ function TossPaymentSuccess() {
       .then(() => {
         setOrderNumber(orderNumber ?? String(kioskOrderId));
         setTotalPrice(totalPrice);
+        setCompletedOrderId(kioskOrderId);
         setPendingOrderId(null);
         clearCart();
         navigate("/complete", { replace: true });

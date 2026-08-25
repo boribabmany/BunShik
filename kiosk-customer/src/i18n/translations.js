@@ -120,8 +120,8 @@ export const translations = {
     home: {
       guide1: "To start your order,",
       guide2: "please press the button below",
-      dineIn: "Dine\nIn",
-      takeout: "Take\nOut",
+      dineIn: "Dine In",
+      takeout: "Take Out",
     },
     menu: {
       categories: {

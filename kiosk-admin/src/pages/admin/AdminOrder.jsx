@@ -320,8 +320,19 @@ export default function AdminOrder() {
   const handleBulkCancel = async () => {
     if (selectedOrders.length === 0) return;
 
+    const refundableOrders = selectedOrders.filter(
+      (order) => order.payment_method && order.payment_method !== "미확인",
+    );
+    const estimatedRefundAmount = refundableOrders.reduce(
+      (sum, order) => sum + Number(order.total_price || 0),
+      0,
+    );
+    const refundSummary = refundableOrders.length
+      ? `환불 대상 ${refundableOrders.length}건 · 예상 환불 금액 ${estimatedRefundAmount.toLocaleString("ko-KR")}원`
+      : "환불 대상 결제 정보가 없습니다.";
+
     if (!window.confirm(
-      `선택한 주문 ${selectedOrders.length}건을 취소하시겠습니까?\n결제 완료 건은 주문별로 전액 환불됩니다.`,
+      `선택한 주문 ${selectedOrders.length}건을 취소하시겠습니까?\n${refundSummary}\n결제 완료 건은 주문별로 전액 환불됩니다.`,
     )) {
       return;
     }

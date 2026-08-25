@@ -209,11 +209,30 @@ describe("관리자 주문 관리", () => {
     fireEvent.click(screen.getByRole("button", { name: "선택 주문 취소" }));
 
     expect(window.confirm).toHaveBeenCalledWith(
-      "선택한 주문 2건을 취소하시겠습니까?\n결제 완료 건은 주문별로 전액 환불됩니다.",
+      "선택한 주문 2건을 취소하시겠습니까?\n환불 대상 2건 · 예상 환불 금액 13,000원\n결제 완료 건은 주문별로 전액 환불됩니다.",
     );
     await waitFor(() => {
       expect(cancelBulkOrders).toHaveBeenCalledWith([1, 2]);
     });
+  });
+
+  test("결제 정보가 없는 선택 주문은 환불 대상 없음으로 안내한다", () => {
+    useAdminOrderStore.mockReturnValue({
+      orders: [{ ...order, payment_method: "미확인" }],
+      loadOrders,
+      changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
+      cancelOrder,
+    });
+    renderPage();
+
+    fireEvent.click(screen.getByLabelText("A-001 주문 선택"));
+    fireEvent.click(screen.getByRole("button", { name: "선택 주문 취소" }));
+
+    expect(window.confirm).toHaveBeenCalledWith(
+      "선택한 주문 1건을 취소하시겠습니까?\n환불 대상 결제 정보가 없습니다.\n결제 완료 건은 주문별로 전액 환불됩니다.",
+    );
   });
 
   test("주문 취소 실패 시 백엔드 오류 메시지를 표시한다", async () => {

@@ -133,6 +133,7 @@ API 응답은 백엔드의 실제 데이터를 사용합니다. 이미지 등록
 | POST | `/api/payments` | 카드·네이버페이 결제 요청 |
 | POST | `/api/toss/confirm` | 토스 결제 승인 |
 | POST | `/api/toss/fail` | 토스 결제 실패 기록 |
+| POST | `/api/print-jobs` | 주문 완료 후 영수증·주문번호표 출력 작업 등록 |
 
 ### 관리자용
 
@@ -199,15 +200,19 @@ npm test -- --watchAll=false
 npm run test:e2e
 ```
 
-2026-08-18 기준 단위·컴포넌트 테스트 결과:
+2026-08-25 기준 최신 실행 결과:
 
 - 고객용: 13개 테스트 스위트, 62개 테스트 통과
-- 관리자용: 22개 테스트 스위트, 78개 테스트 통과
-- 합계: 35개 테스트 스위트, 140개 테스트 통과
+- 관리자용: 22개 테스트 스위트, 80개 테스트 통과
+- 프론트 합계: 35개 테스트 스위트, 142개 테스트 통과
+- 별도 `BunShik_RTOS` 저장소: CTest 12개 통과. 관리자 주문·카탈로그 감시와 고객 출력 Worker, 프린터 오류·완료 요청 재시도·복구 흐름을 검증함.
+- DevProject Hub QA: 84건 모두 PASS (2026-08-25 조회 기준)
 
 ## 데이터베이스와 문서
 
-주요 테이블은 `menus`, `options`, `menu_options`, `orders`, `order_items`, `order_item_options`, `payments`, `admin_user`, `admin_history`입니다. 세트 구성과 관리자 기능에 필요한 확장 구조는 백엔드 스키마를 기준으로 합니다.
+주요 테이블은 `menus`, `options`, `menu_options`, `orders`, `order_items`, `order_item_options`, `payments`, `admin_user`, `admin_history`, `print_jobs`입니다. 세트 구성과 관리자 기능에 필요한 확장 구조는 백엔드 스키마를 기준으로 합니다.
+
+`print_jobs`는 주문 완료 뒤 영수증·주문번호표 출력 요청을 `PENDING` 상태로 저장하고, RTOS 출력 Worker가 조회·처리한 뒤 `COMPLETED`와 처리 결과를 반영하는 출력 작업 큐입니다. RTOS 태스크·IPC·출력 흐름은 [RTOS 아키텍처 문서](docs/rtos-architecture-ipc.md)를 참고합니다.
 
 - DB 스키마·ERD: DevProject Hub → DB 설계(Modeler)
 - API 명세서: DevProject Hub → API 명세서

@@ -204,6 +204,12 @@ export default function AdminOrder() {
     .sort((a, b) => b.order_id - a.order_id);
 
   const delayedOrderCount = filteredOrders.filter(isDelayedOrder).length;
+  const receivedOrderCount = filteredOrders.filter(
+    (order) => order.order_status === "접수",
+  ).length;
+  const cookingOrderCount = filteredOrders.filter(
+    (order) => order.order_status === "조리중",
+  ).length;
   const visibleOrders = filteredOrders.slice(0, visibleCount);
   const bulkSelectableStatus = status === "접수" || status === "조리중"
     ? status
@@ -466,6 +472,15 @@ export default function AdminOrder() {
           <span>접수 후 10분이 지난 주문을 확인해 주세요.</span>
         </div>
       )}
+
+      <section className="order-status-summary" aria-label="현재 조회 주문 현황">
+        <strong>현재 조회 주문</strong>
+        <div>
+          <span className="order-summary-received">접수 {receivedOrderCount}건</span>
+          <span className="order-summary-cooking">조리중 {cookingOrderCount}건</span>
+          <span className="order-summary-delayed">지연 {delayedOrderCount}건</span>
+        </div>
+      </section>
 
       <section className="search-area">
         <div className="order-period-tabs" aria-label="조회 기간 단위">

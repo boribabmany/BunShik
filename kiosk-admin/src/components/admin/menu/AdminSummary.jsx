@@ -28,6 +28,20 @@ export default function AdminSummary({ onMoveOrder }) {
   // 총 옵션 수
   const totalOptions = optionList.length;
 
+  const menuStoppedCount = menuList.filter(
+    (menu) => menu.is_visible === false,
+  ).length;
+  const menuSoldOutCount = menuList.filter(
+    (menu) => menu.is_visible !== false && menu.is_available === false,
+  ).length;
+  const optionStoppedCount = optionList.filter(
+    (option) => option.is_visible === false,
+  ).length;
+  const optionSoldOutCount = optionList.filter(
+    (option) =>
+      option.is_visible !== false && option.option_is_available === false,
+  ).length;
+
   // 매출 대시보드와 동일한 완료 주문 기준 요약
   const todayOrdersCount = salesSummary?.todayOrders ?? 0;
   const todaySales = salesSummary?.todaySales ?? 0;
@@ -37,13 +51,25 @@ export default function AdminSummary({ onMoveOrder }) {
       <h2 className="summary-title">메뉴 관리</h2>
 
       <div className="summary-card">
-        <p>등록된 메인메뉴 수</p>
-        <strong>{totalMenus}개</strong>
+        <p>메뉴 운영 현황</p>
+        <div className="summary-card-row">
+          <strong>전체 {totalMenus}개</strong>
+          <div className="summary-status-tags" aria-label="메뉴 판매 상태">
+            <span className="summary-stopped">중단 {menuStoppedCount}</span>
+            <span className="summary-soldout">품절 {menuSoldOutCount}</span>
+          </div>
+        </div>
       </div>
 
       <div className="summary-card">
-        <p>등록된 옵션 수</p>
-        <strong>{totalOptions}개</strong>
+        <p>옵션 운영 현황</p>
+        <div className="summary-card-row">
+          <strong>전체 {totalOptions}개</strong>
+          <div className="summary-status-tags" aria-label="옵션 판매 상태">
+            <span className="summary-stopped">중단 {optionStoppedCount}</span>
+            <span className="summary-soldout">품절 {optionSoldOutCount}</span>
+          </div>
+        </div>
       </div>
 
       <div className="summary-card">

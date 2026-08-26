@@ -108,6 +108,28 @@ describe("관리자 주문 관리", () => {
     ).toBe(true);
   });
 
+  test("현재 조회 주문의 접수와 조리중 건수를 표시한다", () => {
+    const cookingOrder = {
+      ...order,
+      order_id: 2,
+      order_number: "A-002",
+      order_status: "조리중",
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [order, cookingOrder],
+      loadOrders,
+      changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
+      cancelOrder,
+    });
+
+    renderPage();
+
+    expect(screen.getByText("접수 1건")).toBeTruthy();
+    expect(screen.getByText("조리중 1건")).toBeTruthy();
+  });
+
   test("상태 변경 성공 결과를 화면에 표시한다", async () => {
     renderPage();
     fireEvent.click(screen.getByRole("button", { name: "조리 시작" }));

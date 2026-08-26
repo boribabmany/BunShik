@@ -21,10 +21,21 @@ describe("AdminSummary", () => {
     const loadSalesSummary = jest.fn().mockResolvedValue(undefined);
 
     useMenuStore.mockImplementation((selector) =>
-      selector({ menuList: [{ menu_id: 1 }, { menu_id: 2 }] }),
+      selector({
+        menuList: [
+          { menu_id: 1, is_visible: true, is_available: true },
+          { menu_id: 2, is_visible: false, is_available: true },
+          { menu_id: 3, is_visible: true, is_available: false },
+        ],
+      }),
     );
     useOptionStore.mockImplementation((selector) =>
-      selector({ optionList: [{ option_id: 1 }] }),
+      selector({
+        optionList: [
+          { option_id: 1, is_visible: false, option_is_available: true },
+          { option_id: 2, is_visible: true, option_is_available: false },
+        ],
+      }),
     );
     useSalesStore.mockImplementation((selector) =>
       selector({
@@ -38,8 +49,10 @@ describe("AdminSummary", () => {
 
     render(<AdminSummary onMoveOrder={jest.fn()} />);
 
-    expect(screen.getByText("2개")).toBeTruthy();
-    expect(screen.getByText("1개")).toBeTruthy();
+    expect(screen.getByText("전체 3개")).toBeTruthy();
+    expect(screen.getByText("전체 2개")).toBeTruthy();
+    expect(screen.getAllByText("중단 1")).toHaveLength(2);
+    expect(screen.getAllByText("품절 1")).toHaveLength(2);
     expect(screen.getByText("5건")).toBeTruthy();
     expect(screen.getByText("54,500원")).toBeTruthy();
     await waitFor(() => expect(loadSalesSummary).toHaveBeenCalledTimes(1));

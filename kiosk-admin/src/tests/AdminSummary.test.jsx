@@ -49,8 +49,8 @@ describe("AdminSummary", () => {
 
     render(<AdminSummary onMoveOrder={jest.fn()} />);
 
-    expect(screen.getByText("전체 3개")).toBeTruthy();
-    expect(screen.getByText("전체 2개")).toBeTruthy();
+    expect(screen.getByText("3개")).toBeTruthy();
+    expect(screen.getByText("2개")).toBeTruthy();
     expect(screen.getAllByText("중단 1")).toHaveLength(2);
     expect(screen.getAllByText("품절 1")).toHaveLength(2);
     expect(screen.getByText("5건")).toBeTruthy();

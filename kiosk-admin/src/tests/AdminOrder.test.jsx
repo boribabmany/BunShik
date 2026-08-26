@@ -130,6 +130,36 @@ describe("관리자 주문 관리", () => {
     expect(screen.getByText("조리중 1건")).toBeTruthy();
   });
 
+  test("취소 주문을 취소 필터에서 이력으로 조회한다", () => {
+    const canceledOrder = {
+      ...order,
+      order_id: 2,
+      order_number: "A-002",
+      order_status: "취소",
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [order, canceledOrder],
+      loadOrders,
+      changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
+      cancelOrder,
+    });
+
+    renderPage();
+    fireEvent.change(screen.getAllByRole("combobox")[1], {
+      target: { value: "취소" },
+    });
+
+    expect(screen.getByText("A-002")).toBeTruthy();
+    expect(screen.queryByText("A-001")).toBeNull();
+    expect(
+      screen
+        .getByText("취소", { selector: "span" })
+        .classList.contains("order-status-cancelled"),
+    ).toBe(true);
+  });
+
   test("상태 변경 성공 결과를 화면에 표시한다", async () => {
     renderPage();
     fireEvent.click(screen.getByRole("button", { name: "조리 시작" }));
@@ -150,12 +180,17 @@ describe("관리자 주문 관리", () => {
 
     expect(getOrderDetail).toHaveBeenCalledWith(1);
     expect(await screen.findByText("참치김밥")).toBeTruthy();
+    expect(screen.getByText("주문번호 A-001")).toBeTruthy();
+    expect(screen.getByText("메뉴")).toBeTruthy();
+    expect(screen.getByText("수량")).toBeTruthy();
+    expect(screen.getByText("금액")).toBeTruthy();
     expect(screen.getByText(/치즈 추가/)).toBeTruthy();
+    expect(screen.getByText("옵션")).toBeTruthy();
     expect(screen.getByText("세트 구성")).toBeTruthy();
     expect(screen.getByText("떡볶이")).toBeTruthy();
     expect(screen.getByText("순대")).toBeTruthy();
     expect(screen.getByText("총 결제금액")).toBeTruthy();
-    expect(screen.getByText(/결제: 카드/)).toBeTruthy();
+    expect(screen.getByText("결제 카드")).toBeTruthy();
   });
 
   test("상태 변경 실패 시 백엔드 오류 메시지를 표시한다", async () => {

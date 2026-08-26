@@ -715,12 +715,19 @@ export default function AdminOrder() {
                           <>
                             <div className="order-detail-heading">
                               <strong>주문 상세</strong>
-                              <span>
-                                {detail.order_number} · {detail.order_type} · 결제: {detail.payment_method}
-                              </span>
+                              <div className="order-detail-meta">
+                                <span>주문번호 {detail.order_number}</span>
+                                <span>{detail.order_type}</span>
+                                <span>결제 {detail.payment_method}</span>
+                              </div>
                             </div>
 
                             <div className="order-detail-items">
+                              <div className="order-detail-item-labels" aria-hidden="true">
+                                <span>메뉴</span>
+                                <span>수량</span>
+                                <span>금액</span>
+                              </div>
                               {detail.items.length > 0 ? (
                                 detail.items.map((item) => (
                                   <div
@@ -755,6 +762,7 @@ export default function AdminOrder() {
 
                                     {item.options.length > 0 && (
                                       <div className="order-detail-options">
+                                        <strong>옵션</strong>
                                         {item.options.map((option) => (
                                           <span key={option.option_id}>
                                             + {option.option_name} (

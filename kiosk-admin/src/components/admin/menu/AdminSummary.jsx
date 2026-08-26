@@ -53,7 +53,7 @@ export default function AdminSummary({ onMoveOrder }) {
       <div className="summary-card">
         <p>메뉴 운영 현황</p>
         <div className="summary-card-row">
-          <strong>전체 {totalMenus}개</strong>
+          <strong>{totalMenus}개</strong>
           <div className="summary-status-tags" aria-label="메뉴 판매 상태">
             <span className="summary-stopped">중단 {menuStoppedCount}</span>
             <span className="summary-soldout">품절 {menuSoldOutCount}</span>
@@ -64,7 +64,7 @@ export default function AdminSummary({ onMoveOrder }) {
       <div className="summary-card">
         <p>옵션 운영 현황</p>
         <div className="summary-card-row">
-          <strong>전체 {totalOptions}개</strong>
+          <strong>{totalOptions}개</strong>
           <div className="summary-status-tags" aria-label="옵션 판매 상태">
             <span className="summary-stopped">중단 {optionStoppedCount}</span>
             <span className="summary-soldout">품절 {optionSoldOutCount}</span>

@@ -157,7 +157,7 @@
 
 .search-area {
   display: grid;
-  grid-template-columns: auto 1fr 1fr 1fr;
+  grid-template-columns: auto minmax(150px, 1.2fr) repeat(3, minmax(120px, 1fr));
   gap: 12px;
 
   background: #eaf4de;

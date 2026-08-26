@@ -449,4 +449,28 @@ describe("관리자 주문 관리", () => {
 
     expect(screen.queryByText(/처리 지연/)).toBeNull();
   });
+
+  test("주문번호로 현재 조회 조건 안에서 주문을 바로 찾는다", () => {
+    const secondOrder = {
+      ...order,
+      order_id: 2,
+      order_number: "B-245",
+    };
+    useAdminOrderStore.mockReturnValue({
+      orders: [order, secondOrder],
+      loadOrders,
+      changeOrderStatus,
+      changeBulkOrderStatus,
+      cancelBulkOrders,
+      cancelOrder,
+    });
+
+    renderPage();
+    fireEvent.change(screen.getByRole("searchbox", { name: "주문번호 검색" }), {
+      target: { value: "245" },
+    });
+
+    expect(screen.getByText("B-245")).toBeTruthy();
+    expect(screen.queryByText("A-001")).toBeNull();
+  });
 });

@@ -30,6 +30,7 @@ export default function AdminOrder() {
   const [period, setPeriod] = useState("day");
   const [type, setType] = useState("전체");
   const [status, setStatus] = useState("전체");
+  const [orderNumberQuery, setOrderNumberQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState(5);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [orderDetails, setOrderDetails] = useState({});
@@ -199,7 +200,11 @@ export default function AdminOrder() {
 
       const matchStatus = status === "전체" || order.order_status === status;
 
-      return matchDate && matchType && matchStatus;
+      const matchOrderNumber = String(order.order_number ?? "")
+        .toLowerCase()
+        .includes(orderNumberQuery.trim().toLowerCase());
+
+      return matchDate && matchType && matchStatus && matchOrderNumber;
     })
     .sort((a, b) => b.order_id - a.order_id);
 
@@ -510,6 +515,16 @@ export default function AdminOrder() {
             </button>
           ))}
         </div>
+        <input
+          type="search"
+          value={orderNumberQuery}
+          placeholder="주문번호 검색"
+          aria-label="주문번호 검색"
+          onChange={(e) => {
+            setOrderNumberQuery(e.target.value);
+            setVisibleCount(5);
+          }}
+        />
         <input
           type={period === "week" ? "week" : period === "month" ? "month" : "date"}
           value={date}

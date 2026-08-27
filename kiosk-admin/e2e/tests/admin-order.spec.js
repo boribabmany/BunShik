@@ -1,9 +1,25 @@
 const { test, expect } = require("@playwright/test");
 
+const getKoreaDateString = () => {
+  const values = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    })
+      .formatToParts(new Date())
+      .filter(({ type }) => type !== "literal")
+      .map(({ type, value }) => [type, value]),
+  );
+
+  return `${values.year}-${values.month}-${values.day}`;
+};
+
 const order = {
   orderId: 101,
   orderNumber: "E2E-101",
-  createdAt: "2026-08-14T10:30:00",
+  createdAt: `${getKoreaDateString()}T10:30:00`,
   orderType: "매장",
   paymentMethod: "카드",
   orderStatus: "접수",
@@ -164,5 +180,25 @@ test.describe("관리자 주문 처리", () => {
     await expect(page.locator("tr.order-row").filter({ hasText: "E2E-102" }))
       .toContainText("취소");
     await expect(page.getByText("선택 0건")).toBeVisible();
+  });
+
+  test("주문번호 검색 결과가 없으면 빈 목록을 안내하고 검색 해제 시 목록을 복원한다", async ({ page }) => {
+    await page.route("**/api/admin/orders", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: [order] }),
+      }),
+    );
+
+    await page.goto("/adminorder");
+    const searchInput = page.getByRole("searchbox", { name: "주문번호 검색" });
+
+    await searchInput.fill("없는주문");
+    await expect(page.getByText("조회된 주문이 없습니다.")).toBeVisible();
+
+    await searchInput.fill("");
+    await expect(page.locator("tr.order-row").filter({ hasText: "E2E-101" }))
+      .toBeVisible();
   });
 });

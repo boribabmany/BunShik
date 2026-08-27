@@ -572,6 +572,16 @@ export default function AdminOrder() {
       <section className="bulk-order-actions" aria-label="다중 주문 처리">
         <div>
           <strong>선택 {selectedOrderIds.size}건</strong>
+          <label className="bulk-select-all-control">
+            <input
+              type="checkbox"
+              aria-label="현재 화면 주문 전체 선택"
+              checked={areAllVisibleSelected}
+              onChange={handleSelectAllVisible}
+              disabled={!bulkSelectableStatus || visibleSelectableOrders.length === 0}
+            />
+            전체 선택
+          </label>
           <span>상태 변경은 같은 상태끼리, 취소는 접수·조리중을 섞어서 처리할 수 있습니다.</span>
         </div>
         <button
@@ -595,19 +605,15 @@ export default function AdminOrder() {
         </button>
       </section>
 
+      <div className="order-table-guide" role="note">
+        <strong>주문 상세</strong>
+        <span>주문 행을 누르면 메뉴·옵션·결제 내역을 확인할 수 있습니다.</span>
+      </div>
+
       <div className="order-table-box">
         <table className="order-table">
           <thead>
             <tr>
-              <th className="order-select-column">
-                <input
-                  type="checkbox"
-                  aria-label="현재 화면 주문 전체 선택"
-                  checked={areAllVisibleSelected}
-                  onChange={handleSelectAllVisible}
-                  disabled={!bulkSelectableStatus || visibleSelectableOrders.length === 0}
-                />
-              </th>
               <th>주문번호</th>
               <th>주문시간</th>
               <th>주문유형</th>
@@ -641,19 +647,6 @@ export default function AdminOrder() {
                   tabIndex={0}
                   aria-expanded={isExpanded}
                 >
-                  <td className="order-select-column">
-                    <input
-                      type="checkbox"
-                      aria-label={`${order.order_number} 주문 선택`}
-                      checked={selectedOrderIds.has(order.order_id)}
-                      disabled={
-                        order.order_status !== "접수" &&
-                        order.order_status !== "조리중"
-                      }
-                      onClick={(event) => event.stopPropagation()}
-                      onChange={() => handleOrderSelection(order)}
-                    />
-                  </td>
                   <td>
                     <div className="order-number-cell">
                       <span>{order.order_number}</span>
@@ -683,6 +676,24 @@ export default function AdminOrder() {
 
                   <td>
                     <div className="order-action">
+                      <label
+                        className="order-selection-control"
+                        title="다중 선택"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        <input
+                          type="checkbox"
+                          aria-label={`${order.order_number} 주문 선택`}
+                          checked={selectedOrderIds.has(order.order_id)}
+                          disabled={
+                            order.order_status !== "접수" &&
+                            order.order_status !== "조리중"
+                          }
+                          onChange={() => handleOrderSelection(order)}
+                        />
+                        <span>선택</span>
+                      </label>
+
                       <button
                         type="button"
                         onClick={(e) => {

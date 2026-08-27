@@ -248,19 +248,59 @@
   background: #a93226;
 }
 
-.order-select-column {
-  width: 48px;
-  text-align: center;
+.order-table-guide {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0 8px;
+  color: #5d6b59;
+  font-size: 14px;
 }
 
-.order-select-column input {
-  width: 18px;
-  height: 18px;
+.order-table-guide strong {
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #eaf4de;
+  color: #315b35;
+  font-size: 13px;
+}
+
+.bulk-select-all-control,
+.order-selection-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #42563f;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.order-select-column input:disabled {
+.bulk-select-all-control input,
+.order-selection-control input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #4f7a44;
+  cursor: pointer;
+}
+
+.bulk-select-all-control input:disabled,
+.order-selection-control input:disabled {
   cursor: not-allowed;
+}
+
+.order-selection-control {
+  padding: 7px 9px;
+  border: 1px solid #cbdcc4;
+  border-radius: 7px;
+  background: #f7fbf5;
+}
+
+.order-selection-control:hover {
+  background: #eaf4de;
 }
 
 /* =========================
@@ -537,7 +577,7 @@
 
 .order-action {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
 }
 

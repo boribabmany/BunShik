@@ -591,12 +591,27 @@
   font-weight: 500;
 }
 
-.order-action button:first-child {
-  background: #6da12f;
-  color: #fff;
+.order-action .order-status-action-received {
+  background: #e7f0ff;
+  color: #2866ad;
 }
 
-.order-action button:last-child {
+.order-action .order-status-action-cooking {
+  background: #fff1d6;
+  color: #9b5a00;
+}
+
+.order-action .order-status-action-completed {
+  background: #e7f6e5;
+  color: #3d7a36;
+}
+
+.order-action .order-status-action-cancelled {
+  background: #fde8e8;
+  color: #b23b3b;
+}
+
+.order-action .order-cancel-action-button {
   background: #f05c5c;
   color: #fff;
 }
@@ -609,6 +624,12 @@
   cursor: not-allowed;
   box-shadow: none;
   opacity: 1;
+}
+
+.order-action .order-status-action-button:disabled,
+.order-action .order-status-action-button:disabled:hover {
+  border-color: transparent;
+  cursor: not-allowed;
 }
 
 /* =========================

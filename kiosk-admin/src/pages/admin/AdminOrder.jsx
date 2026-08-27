@@ -696,6 +696,15 @@ export default function AdminOrder() {
 
                       <button
                         type="button"
+                        className={`order-status-action-button order-status-action-${
+                          order.order_status === "접수"
+                            ? "received"
+                            : order.order_status === "조리중"
+                              ? "cooking"
+                              : order.order_status === "완료"
+                                ? "completed"
+                                : "cancelled"
+                        }`}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleStatusChange(
@@ -710,6 +719,7 @@ export default function AdminOrder() {
 
                       <button
                         type="button"
+                        className="order-cancel-action-button"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCancel(order.order_id);
@@ -723,7 +733,7 @@ export default function AdminOrder() {
                 </tr>
                 {isExpanded && (
                   <tr className="order-detail-row">
-                    <td colSpan="8">
+                    <td colSpan="7">
                       <div className="order-detail-panel">
                         {detailLoadingId === order.order_id && (
                           <p className="order-detail-message">

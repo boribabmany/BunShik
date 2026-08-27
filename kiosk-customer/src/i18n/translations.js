@@ -111,6 +111,8 @@ export const translations = {
       totalLabel: "총 결제 금액",
       printReceipt: "영수증 출력",
       printNumberOnly: "주문번호만 출력",
+      printingReceipt: "영수증을 출력하고 있습니다...",
+      printingNumber: "주문번호표를 출력하고 있습니다...",
     },
   },
   en: {
@@ -225,6 +227,8 @@ export const translations = {
       totalLabel: "Total Paid",
       printReceipt: "Print Receipt",
       printNumberOnly: "Print Number Only",
+      printingReceipt: "Printing your receipt...",
+      printingNumber: "Printing your order number...",
     },
   },
 };

@@ -4,8 +4,11 @@ import useOrderStore from "../../store/useOrderStore";
 import useLanguageStore from "../../store/useLanguageStore";
 import { translations, formatPrice } from "../../i18n/translations";
 import { requestPrintJob } from "../../api/orderApi";
+import PrintingModal from "../../components/kiosk/PrintingModal";
 import checkIcon from "../../images/check.png";
 import "../../styles/OrderComplete.css";
+
+const PRINT_DISPLAY_DURATION_MS = 2500;
 
 function OrderComplete() {
   const navigate = useNavigate();
@@ -18,10 +21,12 @@ function OrderComplete() {
   const t = translations[language].orderComplete;
 
   const [isPrinting, setIsPrinting] = useState(false);
+  const [printingType, setPrintingType] = useState(null); // "RECEIPT" | "ORDER_NUMBER"
 
   const handlePrint = async (type) => {
     if (isPrinting) return;
     setIsPrinting(true);
+    setPrintingType(type);
 
     try {
       if (!completedOrderId) {
@@ -33,9 +38,12 @@ function OrderComplete() {
       // (프린터 문제는 카운터 직원이 별도로 대응)
       console.error("출력 요청 실패:", error);
     } finally {
-      setIsPrinting(false);
-      resetOrder();
-      navigate("/");
+      // 실제 프린터가 종이를 뽑는 동안(RTOS가 비동기로 처리하는 시간) 손님이
+      // "출력 중"임을 인지할 수 있도록 팝업을 잠시 보여준 뒤 홈으로 이동한다.
+      setTimeout(() => {
+        resetOrder();
+        navigate("/");
+      }, PRINT_DISPLAY_DURATION_MS);
     }
   };
 
@@ -83,6 +91,8 @@ function OrderComplete() {
       >
         {t.printNumberOnly}
       </button>
+
+      {isPrinting && <PrintingModal type={printingType} language={language} />}
     </div>
   );
 }

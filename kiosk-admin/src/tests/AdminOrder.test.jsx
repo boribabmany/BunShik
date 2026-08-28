@@ -210,6 +210,26 @@ describe("관리자 주문 관리", () => {
     ).toBeTruthy();
   });
 
+  test("주문 상태 변경 처리 중에는 연속 요청을 막는다", async () => {
+    let resolveStatusChange;
+    changeOrderStatus.mockImplementation(
+      () => new Promise((resolve) => {
+        resolveStatusChange = resolve;
+      }),
+    );
+    renderPage();
+
+    const statusButton = screen.getByRole("button", { name: "조리 시작" });
+    fireEvent.click(statusButton);
+    fireEvent.click(statusButton);
+
+    expect(changeOrderStatus).toHaveBeenCalledTimes(1);
+    expect(statusButton.disabled).toBe(true);
+
+    resolveStatusChange();
+    await waitFor(() => expect(statusButton.disabled).toBe(false));
+  });
+
   test("같은 상태의 주문 여러 건을 선택해 조리를 시작한다", async () => {
     const secondOrder = {
       ...order,
@@ -263,7 +283,10 @@ describe("관리자 주문 관리", () => {
 
     fireEvent.click(screen.getByLabelText("A-001 주문 선택"));
     fireEvent.click(screen.getByLabelText("A-002 주문 선택"));
-    fireEvent.click(screen.getByRole("button", { name: "선택 주문 취소" }));
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "선택 주문 취소" }));
+      await Promise.resolve();
+    });
 
     expect(window.confirm).toHaveBeenCalledWith(
       "선택한 주문 2건을 취소하시겠습니까?\n환불 대상 2건 · 예상 환불 금액 13,000원\n결제 완료 건은 주문별로 전액 환불됩니다.",
@@ -271,9 +294,12 @@ describe("관리자 주문 관리", () => {
     await waitFor(() => {
       expect(cancelBulkOrders).toHaveBeenCalledWith([1, 2]);
     });
+    expect(
+      await screen.findByText("선택한 주문 2건이 취소되었습니다."),
+    ).toBeTruthy();
   });
 
-  test("결제 정보가 없는 선택 주문은 환불 대상 없음으로 안내한다", () => {
+  test("결제 정보가 없는 선택 주문은 환불 대상 없음으로 안내한다", async () => {
     useAdminOrderStore.mockReturnValue({
       orders: [{ ...order, payment_method: "미확인" }],
       loadOrders,
@@ -290,6 +316,9 @@ describe("관리자 주문 관리", () => {
     expect(window.confirm).toHaveBeenCalledWith(
       "선택한 주문 1건을 취소하시겠습니까?\n환불 대상 결제 정보가 없습니다.\n결제 완료 건은 주문별로 전액 환불됩니다.",
     );
+    expect(
+      await screen.findByText("선택한 주문 1건이 취소되었습니다."),
+    ).toBeTruthy();
   });
 
   test("주문 취소 실패 시 백엔드 오류 메시지를 표시한다", async () => {

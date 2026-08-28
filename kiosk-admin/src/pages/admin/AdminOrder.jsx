@@ -43,7 +43,9 @@ export default function AdminOrder() {
   const [selectedOrderIds, setSelectedOrderIds] = useState(() => new Set());
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const [actionResult, setActionResult] = useState(null);
+  const [isActionProcessing, setIsActionProcessing] = useState(false);
   const actionResultTimerRef = useRef(null);
+  const actionInFlightRef = useRef(false);
   const knownOrderIdsRef = useRef(new Set());
   const isFirstOrderLoadRef = useRef(true);
   const isPollingRef = useRef(false);
@@ -53,6 +55,19 @@ export default function AdminOrder() {
     clearTimeout(actionResultTimerRef.current);
     setActionResult({ type, message });
     actionResultTimerRef.current = setTimeout(() => setActionResult(null), 4000);
+  };
+
+  const beginOrderAction = () => {
+    if (actionInFlightRef.current) return false;
+
+    actionInFlightRef.current = true;
+    setIsActionProcessing(true);
+    return true;
+  };
+
+  const finishOrderAction = () => {
+    actionInFlightRef.current = false;
+    setIsActionProcessing(false);
   };
 
   useEffect(() => () => clearTimeout(actionResultTimerRef.current), []);
@@ -311,6 +326,8 @@ export default function AdminOrder() {
       return;
     }
 
+    if (!beginOrderAction()) return;
+
     try {
       await changeBulkOrderStatus(
         selectedOrders.map((order) => order.order_id),
@@ -325,6 +342,8 @@ export default function AdminOrder() {
         error.response?.data?.message ||
           "선택한 주문의 상태를 변경하지 못했습니다.",
       );
+    } finally {
+      finishOrderAction();
     }
   };
 
@@ -348,6 +367,8 @@ export default function AdminOrder() {
       return;
     }
 
+    if (!beginOrderAction()) return;
+
     try {
       await storeCancelBulkOrders(
         selectedOrders.map((order) => order.order_id),
@@ -361,11 +382,15 @@ export default function AdminOrder() {
         error.response?.data?.message ||
           "선택한 주문 취소 또는 결제 환불에 실패했습니다.",
       );
+    } finally {
+      finishOrderAction();
     }
   };
 
   // 상태 변경: 접수 → 조리중 → 완료
   const handleStatusChange = async (orderId, currentStatus) => {
+    if (actionInFlightRef.current) return;
+
     let nextStatus;
 
     if (currentStatus === "접수") {
@@ -375,6 +400,8 @@ export default function AdminOrder() {
     } else {
       return;
     }
+
+    if (!beginOrderAction()) return;
 
     try {
       await changeOrderStatus(orderId, nextStatus);
@@ -387,11 +414,15 @@ export default function AdminOrder() {
         error.response?.data?.message ||
           "주문 상태를 변경하지 못했습니다.",
       );
+    } finally {
+      finishOrderAction();
     }
   };
 
   // 주문 취소
   const handleCancel = async (orderId) => {
+    if (actionInFlightRef.current) return;
+
     if (
       !window.confirm(
         "주문을 취소하시겠습니까?\n결제 완료 건은 자동으로 전액 환불됩니다.",
@@ -399,6 +430,8 @@ export default function AdminOrder() {
     ) {
       return;
     }
+
+    if (!beginOrderAction()) return;
 
     try {
       await storeCancelOrder(orderId);
@@ -410,6 +443,8 @@ export default function AdminOrder() {
         error.response?.data?.message ||
           "주문 취소 또는 결제 환불에 실패했습니다.",
       );
+    } finally {
+      finishOrderAction();
     }
   };
 
@@ -578,7 +613,11 @@ export default function AdminOrder() {
               aria-label="현재 화면 주문 전체 선택"
               checked={areAllVisibleSelected}
               onChange={handleSelectAllVisible}
-              disabled={!bulkSelectableStatus || visibleSelectableOrders.length === 0}
+              disabled={
+                isActionProcessing ||
+                !bulkSelectableStatus ||
+                visibleSelectableOrders.length === 0
+              }
             />
             전체 선택
           </label>
@@ -587,7 +626,11 @@ export default function AdminOrder() {
         <button
           type="button"
           onClick={handleBulkStatusChange}
-          disabled={selectedOrderIds.size === 0 || !selectedStatus}
+          disabled={
+            isActionProcessing ||
+            selectedOrderIds.size === 0 ||
+            !selectedStatus
+          }
         >
           {selectedStatus === "조리중"
             ? "선택 주문 조리 완료"
@@ -599,7 +642,7 @@ export default function AdminOrder() {
           type="button"
           className="bulk-cancel-button"
           onClick={handleBulkCancel}
-          disabled={selectedOrderIds.size === 0}
+          disabled={isActionProcessing || selectedOrderIds.size === 0}
         >
           선택 주문 취소
         </button>
@@ -686,6 +729,7 @@ export default function AdminOrder() {
                           aria-label={`${order.order_number} 주문 선택`}
                           checked={selectedOrderIds.has(order.order_id)}
                           disabled={
+                            isActionProcessing ||
                             order.order_status !== "접수" &&
                             order.order_status !== "조리중"
                           }
@@ -712,7 +756,7 @@ export default function AdminOrder() {
                             order.order_status,
                           );
                         }}
-                        disabled={isFinished}
+                        disabled={isFinished || isActionProcessing}
                       >
                         {getStatusButtonText(order.order_status)}
                       </button>
@@ -724,7 +768,7 @@ export default function AdminOrder() {
                           e.stopPropagation();
                           handleCancel(order.order_id);
                         }}
-                        disabled={isFinished}
+                        disabled={isFinished || isActionProcessing}
                       >
                         취소
                       </button>
